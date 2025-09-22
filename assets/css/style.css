@@ -1,0 +1,11 @@
+:root{--accent:#0b84ff}
+body{font-family:system-ui,Arial;padding:0;margin:0;background:white;color:#111;direction:rtl}
+.site-header{display:flex;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #eee}
+.site-header .logo{font-weight:700;margin-right:auto}
+nav a{margin-left:8px}
+.hero{padding:40px;text-align:center}
+.apps{display:flex;gap:16px;padding:20px;flex-wrap:wrap}
+.app-card{border:1px solid #ddd;padding:10px;border-radius:8px;width:220px}
+.btn, .cta{display:inline-block;padding:8px 12px;margin-top:8px;background:var(--accent);color:#fff;border-radius:6px;text-decoration:none}
+footer{padding:16px;text-align:center;color:#666;border-top:1px solid #eee}
+@media (max-width:600px){.apps{flex-direction:column}}

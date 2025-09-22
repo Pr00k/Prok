@@ -1,0 +1,13 @@
+db.collection("posts").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+  const blogContainer = document.getElementById("blogPosts");
+  blogContainer.innerHTML = "";
+  snapshot.forEach(doc => {
+    const post = doc.data();
+    blogContainer.innerHTML += `
+      <article>
+        <h2>${post.title}</h2>
+        <p>${post.content}</p>
+      </article>
+    `;
+  });
+});

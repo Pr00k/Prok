@@ -1,0 +1,240 @@
+// Prok/assets/js/dashboard.js
+
+// متغيرات عامة
+let currentUser = null;
+let postsListener = null;
+
+// تهيئة لوحة التحكم
+async function initDashboard() {
+    try {
+        // الانتظار حتى يصبح Firebase جاهزاً
+        await checkFirebaseReady();
+        
+        // التحقق من تسجيل الدخول
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                showUserInfo();
+                setupEventListeners();
+                loadPosts();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+    } catch (error) {
+        console.error('خطأ في تهيئة لوحة التحكم:', error);
+        alert('حدث خطأ في تحميل لوحة التحكم');
+    }
+}
+
+// عرض معلومات المستخدم
+function showUserInfo() {
+    const userInfo = document.getElementById('userInfo');
+    if (userInfo && currentUser) {
+        userInfo.innerHTML = `
+            <div>
+                <strong>${currentUser.email}</strong>
+                <small>${new Date().toLocaleDateString('ar-SA')}</small>
+            </div>
+        `;
+    }
+}
+
+// إعداد مستمعي الأحداث
+function setupEventListeners() {
+    // تسجيل الخروج
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    
+    // التنقل بين الأقسام
+    document.querySelectorAll('.nav-item').forEach(item => {
+        if (item.id !== 'logoutBtn') {
+            item.addEventListener('click', () => {
+                const section = item.getAttribute('data-section');
+                switchSection(section);
+                
+                // تحديث النشاط في القائمة
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        }
+    });
+    
+    // إضافة مقال جديد
+    document.getElementById('addPostForm').addEventListener('submit', addNewPost);
+}
+
+// تبديل الأقسام
+function switchSection(section) {
+    // إخفاء جميع الأقسام
+    document.getElementById('postsSection').classList.add('hidden');
+    document.getElementById('addPostSection').classList.add('hidden');
+    document.getElementById('statsSection').classList.add('hidden');
+    
+    // إظهار القسم المطلوب
+    document.getElementById(section + 'Section').classList.remove('hidden');
+    
+    // إذا كان قسم المقالات، قم بتحميل المقالات
+    if (section === 'posts') {
+        loadPosts();
+    }
+    
+    // إذا كان قسم الإحصائيات، قم بتحميل الإحصائيات
+    if (section === 'stats') {
+        loadStats();
+    }
+}
+
+// تسجيل الخروج
+function logout() {
+    if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+        auth.signOut()
+            .then(() => {
+                window.location.href = 'index.html';
+            })
+            .catch((error) => {
+                console.error('خطأ في تسجيل الخروج:', error);
+                alert('حدث خطأ أثناء تسجيل الخروج');
+            });
+    }
+}
+
+// تحميل المقالات
+function loadPosts() {
+    const postsList = document.getElementById('postsList');
+    
+    // إيقاف أي مستمع سابق
+    if (postsListener) {
+        postsListener();
+    }
+    
+    postsList.innerHTML = '<p>جاري تحميل المقالات...</p>';
+    
+    // الاستماع للتحديثات في الوقت الحقيقي
+    postsListener = db.collection('posts')
+        .orderBy('createdAt', 'desc')
+        .onSnapshot((snapshot) => {
+            if (snapshot.empty) {
+                postsList.innerHTML = '<p>لا توجد مقالات حتى الآن</p>';
+                return;
+            }
+            
+            postsList.innerHTML = '';
+            snapshot.forEach((doc) => {
+                const post = doc.data();
+                const postId = doc.id;
+                const postDate = post.createdAt ? post.createdAt.toDate() : new Date();
+                
+                const postElement = document.createElement('div');
+                postElement.className = 'post-item';
+                postElement.innerHTML = `
+                    <h3>${post.title}</h3>
+                    <p>${post.content.substring(0, 150)}...</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                        <small>نشر في: ${postDate.toLocaleDateString('ar-SA')} | بواسطة: ${post.author || 'مستخدم'}</small>
+                        <button class="btn btn-danger" onclick="deletePost('${postId}')">حذف</button>
+                    </div>
+                `;
+                postsList.appendChild(postElement);
+            });
+        }, (error) => {
+            console.error('خطأ في تحميل المقالات:', error);
+            postsList.innerHTML = '<p>حدث خطأ في تحميل المقالات</p>';
+        });
+}
+
+// إضافة مقال جديد
+async function addNewPost(e) {
+    e.preventDefault();
+    
+    const title = document.getElementById('postTitle').value.trim();
+    const content = document.getElementById('postContent').value.trim();
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    
+    if (!title || !content) {
+        alert('يرجى إدخال عنوان ومحتوى للمقال');
+        return;
+    }
+    
+    try {
+        // تغيير حالة الزر
+        submitBtn.textContent = 'جاري النشر...';
+        submitBtn.disabled = true;
+        
+        // إضافة المقال إلى قاعدة البيانات
+        await db.collection('posts').add({
+            title: title,
+            content: content,
+            createdAt: new Date(),
+            author: currentUser.email,
+            status: 'published'
+        });
+        
+        // إعادة تعيين النموذج
+        document.getElementById('addPostForm').reset();
+        alert('تم نشر المقال بنجاح!');
+        
+        // العودة إلى قائمة المقالات
+        switchSection('posts');
+        
+    } catch (error) {
+        console.error('خطأ في إضافة المقال:', error);
+        alert('حدث خطأ أثناء إضافة المقال: ' + error.message);
+    } finally {
+        // إعادة حالة الزر
+        submitBtn.textContent = 'نشر المقال';
+        submitBtn.disabled = false;
+    }
+}
+
+// حذف مقال
+async function deletePost(postId) {
+    if (confirm('هل أنت متأكد من حذف هذا المقال؟')) {
+        try {
+            await db.collection('posts').doc(postId).delete();
+            alert('تم حذف المقال بنجاح');
+        } catch (error) {
+            console.error('خطأ في حذف المقال:', error);
+            alert('حدث خطأ أثناء حذف المقال');
+        }
+    }
+}
+
+// تحميل الإحصائيات
+async function loadStats() {
+    const statsContent = document.getElementById('statsContent');
+    statsContent.innerHTML = '<p>جاري تحميل الإحصائيات...</p>';
+    
+    try {
+        // جلب عدد المقالات
+        const postsSnapshot = await db.collection('posts').get();
+        const postsCount = postsSnapshot.size;
+        
+        // يمكنك إضافة المزيد من الإحصائيات هنا
+        
+        statsContent.innerHTML = `
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px; text-align: center;">
+                    <h3>${postsCount}</h3>
+                    <p>مقال منشور</p>
+                </div>
+                <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; text-align: center;">
+                    <h3>0</h3>
+                    <p>تعليق</p>
+                </div>
+                <div style="background: #d4edda; padding: 1rem; border-radius: 8px; text-align: center;">
+                    <h3>1</h3>
+                    <p>مشرف</p>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        console.error('خطأ في تحميل الإحصائيات:', error);
+        statsContent.innerHTML = '<p>حدث خطأ في تحميل الإحصائيات</p>';
+    }
+}
+
+// جعل الدوال متاحة globally
+window.deletePost = deletePost;
+
+// بدء التهيئة عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', initDashboard);
