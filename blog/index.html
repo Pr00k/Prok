@@ -1,13 +1,276 @@
-db.collection("posts").orderBy("createdAt", "desc").onSnapshot(snapshot => {
-  const blogContainer = document.getElementById("blogPosts");
-  blogContainer.innerHTML = "";
-  snapshot.forEach(doc => {
-    const post = doc.data();
-    blogContainer.innerHTML += `
-      <article>
-        <h2>${post.title}</h2>
-        <p>${post.content}</p>
-      </article>
-    `;
-  });
-});
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدونة Prok</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .blog-container {
+            max-width: 1000px;
+            margin: 100px auto 50px;
+            padding: 0 1rem;
+        }
+        
+        .blog-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .blog-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-card {
+            background: var(--card-light);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .blog-card-content {
+            padding: 1.5rem;
+        }
+        
+        .blog-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .blog-card p {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .blog-read-more {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        body.dark-mode .blog-card {
+            background: var(--card-dark);
+        }
+        
+        body.dark-mode .blog-card p {
+            color: #ccc;
+        }
+        
+        body.dark-mode .blog-meta {
+            color: #aaa;
+        }
+        
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="../index.html" style="text-decoration: none; color: inherit;">
+                Prok <span class="logo-icon">✨</span>
+            </a>
+        </div>
+        
+        <nav class="nav-links">
+            <a href="../index.html">الرئيسية</a>
+            <a href="../index.html#apps">التطبيقات</a>
+            <a href="../index.html#games">الألعاب</a>
+            <a href="#blog" class="active">المدونة</a>
+            <a href="../contact.html">اتصل بنا</a>
+        </nav>
+        
+        <div class="user-actions">
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i>
+            </div>
+            <div class="user-profile" onclick="toggleAuthForms()" id="userProfile">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="blog-container">
+        <div class="blog-header">
+            <h1>مدونة Prok</h1>
+            <p>أحدث المقالات والأخبار عن التطبيقات والألعاب</p>
+        </div>
+        
+        <div class="blog-grid" id="blogPosts">
+            <!-- سيتم ملؤها بواسطة JavaScript -->
+        </div>
+        
+        <div id="loadingIndicator" style="text-align: center; margin: 2rem 0;">
+            <div class="loading-spinner"></div>
+            <p>جاري تحميل المقالات...</p>
+        </div>
+        
+        <div id="noPostsMessage" style="text-align: center; display: none;">
+            <i class="fas fa-file-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+            <h3>لا توجد مقالات حتى الآن</h3>
+            <p>كن أول من يكتب مقالاً في مدونتنا</p>
+        </div>
+    </div>
+
+    <!-- تحميل Firebase -->
+    <script src="../assets/js/auth.js"></script>
+    
+    <script>
+        // حالة النظام
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        let isLoggedIn = false;
+        let userData = null;
+        let blogPosts = [];
+        
+        // تهيئة المدونة
+        async function initializeBlog() {
+            // تطبيق السمة المحفوظة
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+            }
+            
+            // تحميل المقالات
+            await loadBlogPosts();
+        }
+        
+        // تحميل المقالات من Firebase
+        async function loadBlogPosts() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const noPostsMessage = document.getElementById('noPostsMessage');
+            const blogPostsContainer = document.getElementById('blogPosts');
+            
+            try {
+                if (typeof db !== 'undefined') {
+                    const querySnapshot = await db.collection('posts')
+                        .orderBy('createdAt', 'desc')
+                        .get();
+                    
+                    blogPosts = [];
+                    querySnapshot.forEach(doc => {
+                        blogPosts.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    displayBlogPosts();
+                } else {
+                    // بيانات افتراضية إذا لم يكن Firebase متاحاً
+                    blogPosts = [
+                        {
+                            title: 'كيفية اختيار التطبيقات المناسبة',
+                            content: 'دليل شامل لاختيار التطبيقات التي تناسب احتياجاتك الخاصة. تعلم كيفية تقييم التطبيقات قبل تحميلها وما هي المعايير التي يجب أن تبحث عنها.',
+                            createdAt: new Date(),
+                            author: 'فريق Prok',
+                            image: '📱'
+                        },
+                        {
+                            title: 'أفضل الألعاب لعام 2023',
+                            content: 'استعرض معنا أفضل الألعاب التي تم إصدارها هذا العام. من الألعاب المستقلة إلى الألعاب الضخمة، لدينا قائمة شاملة لكل الأذواق.',
+                            createdAt: new Date(Date.now() - 86400000),
+                            author: 'فريق Prok',
+                            image: '🎮'
+                        }
+                    ];
+                    
+                    displayBlogPosts();
+                }
+            } catch (error) {
+                console.error('خطأ في تحميل المقالات:', error);
+                loadingIndicator.style.display = 'none';
+                blogPostsContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--error-color); margin-bottom: 1rem;"></i>
+                        <h3>حدث خطأ في تحميل المقالات</h3>
+                        <p>يرجى المحاولة مرة أخرى لاحقاً</p>
+                        <button class="btn" onclick="loadBlogPosts()"><i class="fas fa-sync-alt"></i> إعادة المحاولة</button>
+                    </div>
+                `;
+            }
+        }
+        
+        // عرض المقالات
+        function displayBlogPosts() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const noPostsMessage = document.getElementById('noPostsMessage');
+            const blogPostsContainer = document.getElementById('blogPosts');
+            
+            loadingIndicator.style.display = 'none';
+            
+            if (blogPosts.length === 0) {
+                noPostsMessage.style.display = 'block';
+                return;
+            }
+            
+            noPostsMessage.style.display = 'none';
+            
+            blogPostsContainer.innerHTML = blogPosts.map(post => `
+                <div class="blog-card">
+                    <div style="font-size: 100px; text-align: center; padding: 20px 0; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white;">
+                        ${post.image || '📄'}
+                    </div>
+                    <div class="blog-card-content">
+                        <h3>${post.title}</h3>
+                        <p>${post.content.substring(0, 150)}...</p>
+                        <div class="blog-meta">
+                            <span>بواسطة: ${post.author}</span>
+                            <span>${post.createdAt.toDate ? post.createdAt.toDate().toLocaleDateString('ar-SA') : new Date(post.createdAt).toLocaleDateString('ar-SA')}</span>
+                        </div>
+                        <a href="post.html?id=${post.id}" class="blog-read-more">
+                            اقرأ المزيد <i class="fas fa-arrow-left"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // تبديل السمة
+        function toggleTheme() {
+            if (document.body.classList.contains('dark-mode')) {
+                document.body.classList.remove('dark-mode');
+                document.querySelector('.theme-toggle i').className = 'fas fa-moon';
+                currentTheme = 'light';
+            } else {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+                currentTheme = 'dark';
+            }
+            localStorage.setItem('theme', currentTheme);
+        }
+        
+        // تهيئة المدونة عند التحميل
+        document.addEventListener('DOMContentLoaded', initializeBlog);
+    </script>
+</body>
+</html>
