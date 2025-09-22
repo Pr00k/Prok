@@ -1,36 +1,1037 @@
-<!doctype html>
-<html lang="ar">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Prok - متجر التطبيقات</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <script defer src="assets/js/main.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prok - متجر التطبيقات المتميز</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-color: #2d3748;
+            --bg-light: #ffffff;
+            --bg-dark: #1a202c;
+            --card-light: #ffffff;
+            --card-dark: #2d3748;
+            --text-light: #2d3748;
+            --text-dark: #e2e8f0;
+            --success-color: #48bb78;
+            --error-color: #f56565;
+            --warning-color: #ecc94b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            --text-color: var(--text-dark);
+            --bg-light: var(--bg-dark);
+            --card-light: var(--card-dark);
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .header {
+            background: rgba(var(--bg-light), 0.95);
+            padding: 1rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+            display: flex;
+            align-items: center;
+        }
+
+        @keyframes glow {
+            from { 
+                text-shadow: 0 0 10px var(--primary-color),
+                          0 0 20px rgba(102, 126, 234, 0.5);
+            }
+            to { 
+                text-shadow: 0 0 15px var(--accent-color),
+                          0 0 30px rgba(240, 147, 251, 0.5),
+                          0 0 45px rgba(240, 147, 251, 0.3);
+            }
+        }
+
+        .logo-icon {
+            margin-left: 10px;
+            font-size: 1.8rem;
+            animation: spin 5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .user-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .user-profile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-google {
+            background: linear-gradient(135deg, #DB4437, #EA4335);
+        }
+
+        .btn-apple {
+            background: linear-gradient(135deg, #000000, #333333);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 100px auto 50px;
+            padding: 0 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+            animation: slideInDown 1s ease;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease 0.2s both;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.4s both;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.9);
+        }
+
+        .search-bar button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 0.7rem 1.2rem;
+            cursor: pointer;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .app-card {
+            background: var(--card-light);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            animation: zoomIn 0.6s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) rotateX(10deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotateX(0deg);
+            }
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(var(--primary-color), 0.1) 100%);
+            pointer-events: none;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px) scale(1.02) rotateY(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2),
+                      0 0 50px rgba(var(--primary-color), 0.1);
+        }
+
+        .app-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: bounce 2s infinite;
+            border: 2px solid rgba(255,255,255,0.1);
+            object-fit: cover;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        .app-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .app-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        body.dark-mode .app-card p {
+            color: #ccc;
+        }
+
+        .rating {
+            color: #ffd700;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .downloads {
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        body.dark-mode .downloads {
+            color: #aaa;
+        }
+
+        .carousel {
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .carousel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .carousel-title {
+            font-size: 1.5rem;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .carousel-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .filter-btn.active {
+            background: var(--accent-color);
+        }
+
+        .carousel-container {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding: 1rem 0.5rem;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-item {
+            flex: 0 0 auto;
+            width: 250px;
+            background: var(--card-light);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .carousel-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .carousel-item-content {
+            padding: 1rem;
+        }
+
+        .carousel-item h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .carousel-item p {
+            font-size: 0.8rem;
+            color: #777;
+            margin-bottom: 0.5rem;
+        }
+
+        body.dark-mode .carousel-item p {
+            color: #aaa;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .carousel-nav-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .carousel-nav-numbers {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .carousel-nav-number {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .carousel-nav-number.active {
+            background: var(--accent-color);
+        }
+
+        .auth-forms {
+            background: rgba(var(--bg-light), 0.95);
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            z-index: 1001;
+            width: 90%;
+            max-width: 400px;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .auth-forms.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .auth-social {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: rgba(var(--bg-light), 0.1);
+            color: var(--text-color);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(var(--primary-color), 0.2);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        body.dark-mode .auth-forms {
+            background: rgba(var(--bg-dark), 0.95);
+        }
+
+        body.dark-mode .form-group input {
+            background: rgba(var(--bg-dark), 0.1);
+            color: var(--text-dark);
+            border-color: #4a5568;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .auth-social {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header class="site-header">
-    <a class="logo" href="index.html">Prok</a>
-    <nav>
-      <a href="about.html">حول</a>
-      <a href="services.html">التطبيقات</a>
-      <a href="blog/index.html">المدونة</a>
-      <a href="contact.html">اتصل</a>
-      <a href="admin/index.html" class="admin-link">لوحة الادمن</a>
-    </nav>
-  </header>
+    <header class="header">
+        <div class="logo">
+            Prok <span class="logo-icon">✨</span>
+        </div>
+        
+        <nav class="nav-links">
+            <a href="#home">الرئيسية</a>
+            <a href="#apps">التطبيقات</a>
+            <a href="#games">الألعاب</a>
+            <a href="#contact">اتصل بنا</a>
+        </nav>
+        
+        <div class="user-actions">
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i>
+            </div>
+            <div class="user-profile" onclick="toggleAuthForms()" id="userProfile">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+    </header>
 
-  <main>
-    <section class="hero">
-      <h1>أهلاً بك في Prok</h1>
-      <p>المتجر التجريبي لتطبيقاتك — ادخل لوحة الادمن لتحديث المحتوى.</p>
-      <a class="cta" href="services.html">تصفح التطبيقات</a>
-    </section>
+    <div class="container">
+        <section class="hero">
+            <h1>مرحباً بك في Prok</h1>
+            <p>اكتشف عالماً من التطبيقات والألعاب المميزة</p>
+            
+            <div class="search-bar">
+                <input type="text" placeholder="ابحث عن تطبيق أو لعبة...">
+                <button><i class="fas fa-search"></i> بحث</button>
+            </div>
+        </section>
 
-    <section class="apps" id="appsList"></section>
-  </main>
+        <div class="carousel">
+            <div class="carousel-header">
+                <h3 class="carousel-title">التطبيقات الأكثر تحميلاً</h3>
+                <div class="carousel-filters">
+                    <button class="filter-btn active"><i class="fas fa-fire"></i> الشائعة</button>
+                    <button class="filter-btn"><i class="fas fa-star"></i> الأعلى تقييماً</button>
+                    <button class="filter-btn"><i class="fas fa-clock"></i> حديثة</button>
+                </div>
+            </div>
+            
+            <div class="carousel-container" id="popularApps">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+            </div>
+            
+            <div class="carousel-nav">
+                <button class="carousel-nav-btn" onclick="scrollCarousel('popularApps', -250)">❮</button>
+                <div class="carousel-nav-numbers">
+                    <button class="carousel-nav-number active">1</button>
+                    <button class="carousel-nav-number">2</button>
+                    <button class="carousel-nav-number">3</button>
+                </div>
+                <button class="carousel-nav-btn" onclick="scrollCarousel('popularApps', 250)">❯</button>
+            </div>
+        </div>
 
-  <footer>
-    <p>© Prok 2025 — كل الحقوق محفوظة</p>
-  </footer>
+        <div class="carousel">
+            <div class="carousel-header">
+                <h3 class="carousel-title">أحدث الألعاب</h3>
+                <div class="carousel-filters">
+                    <button class="filter-btn active"><i class="fas fa-fire"></i> الشائعة</button>
+                    <button class="filter-btn"><i class="fas fa-star"></i> الأعلى تقييماً</button>
+                    <button class="filter-btn"><i class="fas fa-clock"></i> حديثة</button>
+                </div>
+            </div>
+            
+            <div class="carousel-container" id="latestGames">
+                <!-- سيتم ملؤها بواسطة JavaScript -->
+            </div>
+            
+            <div class="carousel-nav">
+                <button class="carousel-nav-btn" onclick="scrollCarousel('latestGames', -250)">❮</button>
+                <div class="carousel-nav-numbers">
+                    <button class="carousel-nav-number active">1</button>
+                    <button class="carousel-nav-number">2</button>
+                    <button class="carousel-nav-number">3</button>
+                </div>
+                <button class="carousel-nav-btn" onclick="scrollCarousel('latestGames', 250)">❯</button>
+            </div>
+        </div>
+
+        <div class="app-grid" id="featuredApps">
+            <!-- سيتم ملؤها بواسطة JavaScript -->
+        </div>
+    </div>
+
+    <div class="auth-forms" id="authForms">
+        <div id="loginForm">
+            <div class="auth-header">
+                <div class="auth-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h3>تسجيل الدخول</h3>
+            </div>
+            
+            <div class="auth-social">
+                <button class="auth-social-btn btn-google">
+                    <i class="fab fa-google"></i> Google
+                </button>
+                <button class="auth-social-btn btn-apple">
+                    <i class="fab fa-apple"></i> Apple
+                </button>
+            </div>
+            
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور">
+            </div>
+            <button class="btn" onclick="login()"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
+            <p style="text-align: center; margin-top: 1rem;">
+                ليس لديك حساب؟ <a href="#" onclick="showRegister()" style="color: var(--primary-color);">إنشاء حساب</a>
+            </p>
+        </div>
+
+        <div id="registerForm" style="display: none;">
+            <div class="auth-header">
+                <div class="auth-avatar">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h3>إنشاء حساب</h3>
+            </div>
+            
+            <div class="auth-social">
+                <button class="auth-social-btn btn-google">
+                    <i class="fab fa-google"></i> Google
+                </button>
+                <button class="auth-social-btn btn-apple">
+                    <i class="fab fa-apple"></i> Apple
+                </button>
+            </div>
+            
+            <div class="form-group">
+                <label>الاسم الكامل</label>
+                <input type="text" id="registerName" placeholder="أدخل اسمك الكامل">
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="registerEmail" placeholder="أدخل بريدك الإلكتروني">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="registerPassword" placeholder="أنشئ كلمة مرور قوية">
+            </div>
+            <button class="btn" onclick="register()"><i class="fas fa-user-plus"></i> إنشاء حساب</button>
+            <p style="text-align: center; margin-top: 1rem;">
+                لديك حساب بالفعل؟ <a href="#" onclick="showLogin()" style="color: var(--primary-color);">تسجيل الدخول</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hideAuthForms()"></div>
+
+    <script>
+        // بيانات التطبيقات والألعاب
+        const popularApps = [
+            { name: 'تطبيق الملاحظات Pro', icon: '📝', description: 'تطبيق ملاحظات متقدم مع مزامنة سحابية', rating: '★★★★★', downloads: '1M+', badge: 'شائع' },
+            { name: 'مدير المهام الذكي', icon: '✅', description: 'نظم مهامك وزد إنتاجيتك', rating: '★★★★☆', downloads: '500K+', badge: 'جديد' },
+            { name: 'محفظة数字货币', icon: '💰', description: 'أداة متقدمة لإدارة العملات الرقمية', rating: '★★★★★', downloads: '250K+', badge: 'مميز' },
+            { name: 'مترجم فوري', icon: '🌐', description: 'ترجمة فورية لأكثر من 100 لغة', rating: '★★★★☆', downloads: '750K+', badge: 'شائع' },
+            { name: 'محرر الصور Pro', icon: '🖼️', description: 'محرر صور متقدم بفلاتر احترافية', rating: '★★★★★', downloads: '2M+', badge: 'مميز' }
+        ];
+
+        const latestGames = [
+            { name: 'لعبة الألغاز المثيرة', icon: '🎮', description: 'تحدي ألغاز مع رسوم متحركة مذهلة', rating: '★★★★★', downloads: '500K+', badge: 'جديد' },
+            { name: 'مغامرة الفضاء', icon: '🚀', description: 'اكشف أسرار الكون في هذه المغامرة', rating: '★★★★☆', downloads: '300K+', badge: 'شائع' },
+            { name: 'سباق السيارات المتطورة', icon: '🏎️', description: 'سباق سيارات بجرافيك واقعي', rating: '★★★★★', downloads: '1.5M+', badge: 'مميز' },
+            { name: 'تحدي الألغاز الرياضية', icon: '🧩', description: 'اختبر مهاراتك الرياضية مع هذا التحدي', rating: '★★★★☆', downloads: '200K+', badge: 'جديد' },
+            { name: 'معركة الأبطال', icon: '⚔️', description: 'لعبة قتال متعددة اللاعبين', rating: '★★★★★', downloads: '2M+', badge: 'شائع' }
+        ];
+
+        const featuredApps = [
+            { name: 'تطبيق اللياقة البدنية', icon: '💪', description: 'تابع تمارينك وحقق أهدافك الصحية', rating: '★★★★★', downloads: '800K+', badge: 'مميز' },
+            { name: 'مدير المصروفات', icon: '📊', description: 'تتبع مصروفاتك ووفر المال', rating: '★★★★☆', downloads: '400K+', badge: 'جديد' },
+            { name: 'تعلم اللغات', icon: '📚', description: 'تعلم لغات جديدة بطريقة تفاعلية', rating: '★★★★★', downloads: '1.2M+', badge: 'شائع' }
+        ];
+
+        // حالة النظام
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        let currentLanguage = localStorage.getItem('language') || 'ar';
+        let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        let userData = JSON.parse(localStorage.getItem('userData')) || null;
+
+        // تهيئة الموقع
+        function initializeSite() {
+            // تطبيق السمة المحفوظة
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+            }
+
+            // تطبيق حالة تسجيل الدخول
+            if (isLoggedIn && userData) {
+                updateUserProfile();
+            }
+
+            // تحميل المحتوى
+            loadCarousel('popularApps', popularApps);
+            loadCarousel('latestGames', latestGames);
+            loadFeaturedApps();
+
+            // إضافة تأثيرات للعناصر
+            animateElements();
+        }
+
+        // تحميل المحتوى في الكاروسيل
+        function loadCarousel(carouselId, items) {
+            const carousel = document.getElementById(carouselId);
+            carousel.innerHTML = items.map(item => `
+                <div class="carousel-item">
+                    <div class="app-badge">${item.badge}</div>
+                    <div style="font-size: 60px; text-align: center; padding: 20px 0; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white;">${item.icon}</div>
+                    <div class="carousel-item-content">
+                        <h4>${item.name}</h4>
+                        <p>${item.description}</p>
+                        <div class="rating">${item.rating}</div>
+                        <div class="downloads">${item.downloads} تحميل</div>
+                        <button class="btn"><i class="fas fa-download"></i> تحميل</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // تحميل التطبيقات المميزة
+        function loadFeaturedApps() {
+            const featuredGrid = document.getElementById('featuredApps');
+            featuredGrid.innerHTML = featuredApps.map(app => `
+                <div class="app-card">
+                    <div class="app-badge">${app.badge}</div>
+                    <div style="font-size: 60px; text-align: center; margin-bottom: 1.5rem;">${app.icon}</div>
+                    <h3>${app.name}</h3>
+                    <p>${app.description}</p>
+                    <div class="rating">${app.rating}</div>
+                    <div class="downloads">${app.downloads} تحميل</div>
+                    <button class="btn"><i class="fas fa-download"></i> تحميل</button>
+                </div>
+            `).join('');
+        }
+
+        // تبديل السمة
+        function toggleTheme() {
+            if (document.body.classList.contains('dark-mode')) {
+                document.body.classList.remove('dark-mode');
+                document.querySelector('.theme-toggle i').className = 'fas fa-moon';
+                currentTheme = 'light';
+            } else {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+                currentTheme = 'dark';
+            }
+            localStorage.setItem('theme', currentTheme);
+        }
+
+        // التمرير في الكاروسيل
+        function scrollCarousel(carouselId, offset) {
+            const carousel = document.getElementById(carouselId);
+            carousel.scrollBy({ left: offset, behavior: 'smooth' });
+        }
+
+        // إظهار/إخفاء نماذج المصادقة
+        function toggleAuthForms() {
+            if (isLoggedIn) {
+                // عرض قائمة المستخدم
+                alert(`مرحباً ${userData.name}`);
+            } else {
+                // عرض نموذج تسجيل الدخول
+                document.getElementById('authForms').classList.add('active');
+                document.getElementById('overlay').classList.add('active');
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+            }
+        }
+
+        function hideAuthForms() {
+            document.getElementById('authForms').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        }
+
+        function showRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+        }
+
+        // تسجيل الدخول
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (email && password) {
+                isLoggedIn = true;
+                userData = { name: email.split('@')[0], email: email };
+                
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                updateUserProfile();
+                hideAuthForms();
+                
+                alert(`مرحباً بعودتك ${userData.name}`);
+            } else {
+                alert('يرجى ملء جميع الحقول');
+            }
+        }
+
+        // إنشاء حساب
+        function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            if (name && email && password) {
+                isLoggedIn = true;
+                userData = { name: name, email: email };
+                
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                updateUserProfile();
+                hideAuthForms();
+                
+                alert(`تم إنشاء حسابك بنجاح ${userData.name}`);
+            } else {
+                alert('يرجى ملء جميع الحقول');
+            }
+        }
+
+        // تحديث صورة الملف الشخصي
+        function updateUserProfile() {
+            const userProfile = document.getElementById('userProfile');
+            userProfile.innerHTML = userData.name.charAt(0).toUpperCase();
+            userProfile.style.background = 'linear-gradient(135deg, var(--accent-color), var(--primary-color))';
+        }
+
+        // إضافة تأثيرات للعناصر
+        function animateElements() {
+            // تأثيرات للبطاقات عند التمرير
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'zoomIn 0.6s ease forwards';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.app-card').forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        // تهيئة الموقع عند التحميل
+        document.addEventListener('DOMContentLoaded', initializeSite);
+    </script>
 </body>
 </html>
