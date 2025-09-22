@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <title>تسجيل دخول الأدمن</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <form id="loginForm">
-    <h2>لوحة الأدمن</h2>
-    <input type="email" id="email" placeholder="البريد الإلكتروني" required>
-    <input type="password" id="password" placeholder="كلمة المرور" required>
-    <button type="submit">تسجيل الدخول</button>
-  </form>
+  <div class="login-container">
+    <h2>تسجيل دخول الأدمن</h2>
+    <input type="email" id="email" placeholder="الإيميل">
+    <input type="password" id="password" placeholder="كلمة المرور">
+    <button id="loginBtn">تسجيل الدخول</button>
+    <p id="error"></p>
+  </div>
 
   <script type="module" src="../assets/js/auth.js"></script>
 </body>
