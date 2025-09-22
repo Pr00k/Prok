@@ -1,21 +1,28 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-  <meta charset="UTF-8">
-  <title>لوحة التحكم</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <h2>لوحة التحكم</h2>
-  
-  <label>عنوان الموقع:</label>
-  <input type="text" id="siteTitle" placeholder="اكتب عنوان جديد">
-  
-  <label>خلفية الموقع:</label>
-  <input type="text" id="siteBg" placeholder="رابط صورة أو كود لون">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-  <button id="saveBtn">حفظ التغييرات</button>
+const firebaseConfig = {
+  apiKey: "AIzaSyDfy48kwyj8iAu20hx3uJtzcbRGcfcKKn0",
+  authDomain: "prok-58f05.firebaseapp.com",
+  projectId: "prok-58f05",
+  storageBucket: "prok-58f05.appspot.com",
+  messagingSenderId: "978563434886",
+  appId: "1:978563434886:web:d16c70551240a05c81c407",
+  measurementId: "G-PWTGTT2VJT"
+};
 
-  <script type="module" src="../assets/js/dashboard.js"></script>
-</body>
-</html>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// عند الضغط على زر الحفظ
+document.getElementById("saveBtn").addEventListener("click", async () => {
+  const title = document.getElementById("siteTitle").value;
+  const bg = document.getElementById("siteBg").value;
+
+  await setDoc(doc(db, "siteContent", "homepage"), {
+    title: title,
+    background: bg
+  });
+
+  alert("✅ تم حفظ التغييرات");
+});
