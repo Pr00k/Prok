@@ -1,39 +1,118 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title id="hero-title">موقعي</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-  <h1 id="hero-title">موقعي</h1>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDfy48kwyj8iAu20hx3uJtzcbRGcfcKKn0",
-      authDomain: "prok-58f05.firebaseapp.com",
-      projectId: "prok-58f05",
-      storageBucket: "prok-58f05.appspot.com",
-      messagingSenderId: "978563434886",
-      appId: "1:978563434886:web:d16c70551240a05c81c407",
-      measurementId: "G-PWTGTT2VJT"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    async function loadContent() {
-      const snap = await getDoc(doc(db, "siteContent", "homepage"));
-      if (snap.exists()) {
-        document.getElementById("hero-title").innerText = snap.data().title;
-        document.body.style.background = snap.data().background;
-      }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prok - موقع 3D متحرك</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      background: #0d1117;
+      color: #fff;
+      overflow: hidden;
     }
 
-    loadContent();
+    header {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      text-align: center;
+      padding: 20px;
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: #00ffcc;
+      text-shadow: 0px 0px 15px #00ffcc;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    .btn {
+      background: #00ffcc;
+      color: #0d1117;
+      padding: 12px 25px;
+      border-radius: 25px;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #0ff;
+      transform: scale(1.1);
+    }
+
+    .content {
+      position: absolute;
+      bottom: 50px;
+      width: 100%;
+      text-align: center;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🚀 مرحباً بك في Prok</h1>
+  </header>
+
+  <!-- محتوى -->
+  <div class="content">
+    <button class="btn">ابدأ الآن</button>
+  </div>
+
+  <!-- Three.js + GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    // المشهد
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // إضاءة
+    const light = new THREE.PointLight(0xffffff, 1, 100);
+    light.position.set(10, 10, 10);
+    scene.add(light);
+
+    // كرة 3D
+    const geometry = new THREE.SphereGeometry(2, 32, 32);
+    const material = new THREE.MeshStandardMaterial({
+      color: 0x00ffcc,
+      wireframe: false,
+      metalness: 0.7,
+      roughness: 0.2,
+    });
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+
+    camera.position.z = 5;
+
+    // حركة مستمرة
+    function animate() {
+      requestAnimationFrame(animate);
+      sphere.rotation.x += 0.01;
+      sphere.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // حركة GSAP عند الدخول
+    gsap.from(sphere.scale, {
+      x: 0, y: 0, z: 0,
+      duration: 2,
+      ease: "elastic.out(1, 0.3)"
+    });
   </script>
 </body>
 </html>
