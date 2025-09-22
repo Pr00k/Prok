@@ -1,356 +1,39 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Abdullah - التحكم المتكامل (ملف واحد)</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-:root{--primary:#4a00e0;--secondary:#8e2de2;--accent:#ff6b6b;--dark:#1a1a2e;--light:#f8f9fa;--success:#28a745}
-*{box-sizing:border-box;font-family:'Segoe UI',Tahoma,Arial;direction:rtl}
-html,body{height:100%}
-body{
-  margin:0;
-  background:linear-gradient(135deg,#0f1724 0%, #111827 100%);
-  color:var(--light);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  user-select:none; /* منع التحديد عبر CSS */
-  -webkit-user-select:none;
-  -ms-user-select:none;
-  overflow-x:hidden;
-}
-/* منع الطباعة */
-@media print{body{display:none}}
-
-/* Header */
-header{position:fixed;inset:0 0 auto 0;height:64px;background:rgba(10,12,20,0.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:9999}
-.logo{display:flex;align-items:center;gap:10px;font-weight:700}
-.logo i{color:var(--accent)}
-nav{display:flex;gap:14px;align-items:center}
-a.nav{color:var(--light);text-decoration:none;padding:6px 8px;border-radius:8px}
-a.nav:hover{background:rgba(255,255,255,0.03);color:var(--accent)}
-
-/* Buttons */
-.btn{padding:8px 14px;border-radius:20px;border:none;cursor:pointer}
-.btn-ghost{background:transparent;border:2px solid rgba(255,255,255,0.06);color:var(--light)}
-.btn-primary{background:linear-gradient(90deg,var(--primary),var(--secondary));color:#fff}
-
-/* Hero */
-main{padding-top:90px}
-.hero{padding:48px 10%;display:flex;gap:20px;align-items:center;justify-content:space-between}
-.hero .left{max-width:640px}
-h1{font-size:2.6rem;margin-bottom:12px;background:linear-gradient(90deg,#8e2de2,#4a00e0);-webkit-background-clip:text;color:transparent}
-p.lead{color:#cbd5e1;margin-bottom:18px}
-
-/* features */
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;padding:30px 10%}
-.card{background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;backdrop-filter:blur(6px)}
-
-/* admin panel */
-.admin-panel{display:none;margin:20px 10%;padding:16px;border-radius:10px;background:linear-gradient(180deg,rgba(26,26,46,0.95),rgba(12,12,20,0.95));box-shadow:0 10px 30px rgba(0,0,0,0.5)}
-.admin-panel.active{display:block}
-
-/* login modal */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:99999}
-.modal.active{display:flex}
-.form{background:rgba(12,12,18,0.98);padding:20px;border-radius:10px;width:94%;max-width:420px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
-.input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:var(--light);margin-top:8px}
-
-/* watermark overlay - دائم وشفاف */
-.watermark{
-  pointer-events:none;
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:5000;
-  mix-blend-mode:overlay;
-}
-.watermark .text{
-  color:rgba(255,255,255,0.06);
-  font-size:48px;
-  transform:rotate(-25deg);
-  letter-spacing:6px;
-  user-select:none;
-  -webkit-user-select:none;
-  opacity:1;
-  white-space:nowrap;
-}
-
-/* small screens */
-@media(max-width:768px){
-  .hero{flex-direction:column;align-items:flex-start;padding:28px 6%}
-  h1{font-size:2rem}
-}
-
-/* رسالة أمان تظهر عند محاولة تصوير الشاشة */
-#secure-flash{
-  position:fixed;left:50%;top:20px;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 16px;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,0.6);display:none;z-index:100000;font-weight:600
-}
-</style>
+  <meta charset="UTF-8">
+  <title id="hero-title">موقعي</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-<!-- watermark -->
-<div class="watermark" aria-hidden="true"><div class="text" id="wm">Abdullah • Protected</div></div>
+  <h1 id="hero-title">موقعي</h1>
 
-<header>
-  <div class="logo"><i class="fas fa-cube"></i><span>Abdullah</span></div>
-  <nav>
-    <a class="nav" href="#home">الرئيسية</a>
-    <a class="nav" href="#features">الميزات</a>
-    <button class="btn btn-ghost" id="loginBtn">تسجيل الدخول</button>
-    <button class="btn btn-primary" id="cta">ابدأ الآن</button>
-  </nav>
-</header>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-<main>
-  <section class="hero" id="home">
-    <div class="left">
-      <h1>موقع عبدالله المتكامل</h1>
-      <p class="lead">نسخة ملف واحد مع حماية محسنة. للوصول إلى لوحة الإدارة استخدم حسابك في Firebase (ادخل بيانات المشروع داخل السكربت).</p>
-      <div style="display:flex;gap:10px">
-        <button class="btn btn-primary" id="openLogin">دخول الأدمن</button>
-        <button class="btn btn-ghost" id="more">المزيد</button>
-      </div>
-    </div>
-    <div class="right">
-      <!-- placeholder visual -->
-      <div style="width:260px;height:160px;border-radius:12px;background:linear-gradient(90deg,#0b1220,#071029);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,0.6)">
-        <i class="fas fa-shield-alt" style="font-size:56px;color:var(--accent)"></i>
-      </div>
-    </div>
-  </section>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDfy48kwyj8iAu20hx3uJtzcbRGcfcKKn0",
+      authDomain: "prok-58f05.firebaseapp.com",
+      projectId: "prok-58f05",
+      storageBucket: "prok-58f05.appspot.com",
+      messagingSenderId: "978563434886",
+      appId: "1:978563434886:web:d16c70551240a05c81c407",
+      measurementId: "G-PWTGTT2VJT"
+    };
 
-  <section class="features" id="features">
-    <div class="card"><h3>أمان</h3><p>حماية الدخول عبر Firebase + طرق مساعدة لمنع النسخ.</p></div>
-    <div class="card"><h3>لوحة تحكم</h3><p>واجهة إدارة تظهر فقط بعد تسجيل الدخول.</p></div>
-    <div class="card"><h3>تصميم متجاوب</h3><p>يعمل على الجوال والكمبيوتر.</p></div>
-  </section>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  <section style="padding:20px 10%">
-    <div class="admin-panel" id="adminPanel">
-      <h3>لوحة التحكم الإدارية</h3>
-      <p>معلومات حساسة هنا — تظهر فقط للأدمن.</p>
-      <div style="margin-top:12px"><button class="btn btn-ghost" id="logoutBtn">تسجيل الخروج</button></div>
-    </div>
-  </section>
-</main>
-
-<!-- security flash -->
-<div id="secure-flash">تم رصد محاولة تصوير الشاشة — تم إخفاء المحتوى مؤقتًا</div>
-
-<!-- login modal -->
-<div class="modal" id="modal">
-  <div class="form" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-    <h2 id="loginTitle">تسجيل الدخول عبر Firebase</h2>
-    <label>البريد الإلكتروني</label>
-    <input id="email" class="input" type="email" autocomplete="username" placeholder="you@example.com">
-    <label>كلمة المرور</label>
-    <input id="password" class="input" type="password" autocomplete="current-password" placeholder="••••••••">
-    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
-      <button class="btn btn-ghost" id="cancel">إلغاء</button>
-      <button class="btn btn-primary" id="submit">تسجيل الدخول</button>
-    </div>
-    <p style="margin-top:8px;color:#9ca3af;font-size:13px">ضع إعدادات Firebase داخل السكربت (انظر التعليقات).</p>
-  </div>
-</div>
-
-<script>
-/*
-  ملاحظات مهمة وصريحة — اقرأ قبل التشغيل:
-  1) لا يوجد طريقة في الويب تمنع شخص من أخذ سكرين‌شوت على مستوى النظام (PrintScreen، أداة النظام أو كاميرا).
-     هنا قمنا بعمل حاجات تمنع النسخ التقليدي (select/copy/contextmenu/ctrl+c) وتطبيق حجب بصري مؤقت
-     عند محاولة الضغط على زر PrintScreen — لكن هذا حل جزئي ومبني على كشف من المتصفح فقط (ليس مضموناً).
-  2) للحماية الحقيقية: استعمل DRM/Native app أو عرض المحتوى الحساس عبر سيرفر يصدر صوراً موقعة، أو
-     ضع watermark ديناميكي يظهر معلومات المستخدم (email أو id) ليقلل مشاركة الصور.
-  3) ملف هذا واحد (single-file). ضع بيانات Firebase في المكان المحدد أدناه ثم افتح الملف من متصفح.
-*/
-
-/* ====================== إعداد Firebase (ضع بيانات مشروعك هنا) ======================
-   انتبه: يجب أن تستبدل القيم في firebaseConfig بالمعلومات من Firebase Console.
-   هذه القيم لا تُرسل لأي مكان، هي مجرد إعداد للاتصال بخدمات Firebase.
-================================================================================== */
-const firebaseConfig = {
-  apiKey: "REPLACE_API_KEY",
-  authDomain: "REPLACE_AUTH_DOMAIN",
-  projectId: "REPLACE_PROJECT_ID",
-  // storageBucket, messagingSenderId, appId ... if available
-};
-/* ====================== نهاية إعداد Firebase ====================== */
-
-/* === محاولات منع النسخ وأوامر المستخدم === */
-(function hardenUI(){
-  // منع القوائم ومنع السحب لتحديد النص
-  document.addEventListener('selectstart', e=> e.preventDefault(), {passive:false});
-  document.addEventListener('copy', e=> e.preventDefault(), {passive:false});
-  document.addEventListener('cut', e=> e.preventDefault(), {passive:false});
-  document.addEventListener('contextmenu', e=> e.preventDefault(), {passive:false});
-
-  // منع اختصارات نسخ/حفظ/طباعة
-  document.addEventListener('keydown', function(e){
-    // مفاتيح: Ctrl/Cmd + C / S / P / U / Shift+S ...
-    if ((e.ctrlKey || e.metaKey) && ['c','s','p','u','a','x'].includes(e.key.toLowerCase())) {
-      e.preventDefault();
-      showToast('هذا الإجراء محظور');
+    async function loadContent() {
+      const snap = await getDoc(doc(db, "siteContent", "homepage"));
+      if (snap.exists()) {
+        document.getElementById("hero-title").innerText = snap.data().title;
+        document.body.style.background = snap.data().background;
+      }
     }
-    // محاولة كشف زر PrintScreen (جزئي)
-    if (e.key === 'PrintScreen' || e.code === 'PrintScreen') {
-      // محاولة تعريف سريع: نقوم بإخفاء المحتوى للحظات
-      triggerScreenProtection();
-      e.preventDefault();
-    }
-  }, {passive:false});
 
-  // منع السحب المتعمد لوضع عناصر على اليمين
-  document.addEventListener('dragstart', e=> e.preventDefault(), {passive:false});
-
-  // منع السحب باللمس لاختيار النص
-  document.addEventListener('touchstart', e=> {
-    if (e.touches && e.touches.length > 1) e.preventDefault();
-  }, {passive:false});
-})();
-
-/* === رسائل سريعة وتحكم بالـ UI === */
-function showToast(msg, t=1800){
-  const f = document.getElementById('secure-flash');
-  if(!f) return;
-  f.textContent = msg;
-  f.style.display = 'block';
-  setTimeout(()=> f.style.display = 'none', t);
-}
-
-/* === اكتشاف تغيّر الرؤية: لو ترك الصفحة أو ظهر overlay النظامي => اخفاء المحتوى مؤقتاً === */
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    // لو انتقلت النافذة للخلف (مثلاً فتح قائمة شاشة أو غرفه مشاركة) اخفي المحتوى للحظة
-    document.body.style.filter = 'blur(6px) brightness(0.6)';
-  } else {
-    document.body.style.filter = '';
-  }
-});
-
-/* === حماية ضد الـ PrintScreen عن طريق مراقبة clipboard change (جزئي) ===
-   ملاحظة: بعض المتصفحات لا تسمح بالوصول للـ clipboard بدون صلاحيات.
-   الفكرة: لو لاحظنا تغييراً أو حدثاً متعلقاً بـ printscreen نجري flash بعيد المظهر.
-*/
-function triggerScreenProtection(){
-  // إخفاء المحتوى مؤقتاً
-  const body = document.body;
-  const wm = document.getElementById('wm');
-  const old = body.style.opacity;
-  body.style.opacity = '0';
-  setTimeout(()=> { body.style.opacity = old; showToast('تم رصد محاولة تصوير الشاشة'); }, 900);
-}
-
-/* === واجهة الدخول (مبسّطة — تستخدم Firebase Auth عبر مكتبات CDN لو ضفتها) === */
-const loginBtn = document.getElementById('loginBtn');
-const openLogin = document.getElementById('openLogin');
-const modal = document.getElementById('modal');
-const cancel = document.getElementById('cancel');
-const submit = document.getElementById('submit');
-const adminPanel = document.getElementById('adminPanel');
-const logoutBtn = document.getElementById('logoutBtn');
-
-loginBtn.addEventListener('click', ()=> modal.classList.add('active'));
-openLogin.addEventListener('click', ()=> modal.classList.add('active'));
-cancel.addEventListener('click', ()=> modal.classList.remove('active'));
-
-// Firebase integration: If user fills real config, we dynamically load SDK and init auth.
-async function ensureFirebaseAndAuth(){
-  if (!firebaseConfig || !firebaseConfig.apiKey) {
-    throw new Error('Firebase config missing. ضع بيانات مشروع Firebase داخل السكربت.');
-  }
-  // تحميل مكتبات Firebase (فقط عند الحاجة)
-  if (!window.firebaseLoaded) {
-    await loadScript('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
-    await loadScript('https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js');
-    window.firebaseLoaded = true;
-    firebase.initializeApp(firebaseConfig);
-  }
-  return firebase.auth();
-}
-
-function loadScript(src){
-  return new Promise((res, rej)=>{
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = ()=> res();
-    s.onerror = ()=> rej(new Error('Failed to load '+src));
-    document.head.appendChild(s);
-  });
-}
-
-submit.addEventListener('click', async ()=>{
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value.trim();
-  if (!email || !password) { showToast('املا الحقول'); return; }
-  try {
-    const auth = await ensureFirebaseAndAuth();
-    await auth.signInWithEmailAndPassword(email, password);
-    modal.classList.remove('active');
-    showToast('تم تسجيل الدخول', 1200);
-    // اظهار لوحة الادمن
-    adminPanel.classList.add('active');
-    // إظهار خيارات الخروج
-    document.getElementById('logoutBtn').style.display = 'inline-block';
-    // نجعل watermark يظهر ببريد المستخدم لردع المشاركة
-    const wm = document.getElementById('wm');
-    wm.textContent = `Protected • ${email}`;
-  } catch (err) {
-    console.error(err);
-    showToast('فشل الدخول: ' + (err.message || err.code || 'خطأ'));
-  }
-});
-
-// logout
-logoutBtn.addEventListener('click', async ()=>{
-  try {
-    if (window.firebaseLoaded && firebase.auth().currentUser) {
-      await firebase.auth().signOut();
-    }
-  } catch(e){ console.warn(e); }
-  adminPanel.classList.remove('active');
-  showToast('تم تسجيل الخروج');
-});
-
-// utility: disable screenshots on certain events: copy/printscreen etc - also try to clear clipboard (best-effort)
-document.addEventListener('keyup', (e)=>{
-  if (e.key === 'PrintScreen') triggerScreenProtection();
-});
-
-// محاولة مسح الحافظة لو أمكن (على مسؤوليتك)
-async function tryClearClipboard(){
-  try {
-    await navigator.clipboard.writeText('');
-  } catch(e){}
-}
-
-// periodic watermark opacity animation (soft)
-(function animateWatermark(){
-  const wm = document.getElementById('wm');
-  let dir = 1, val = 0.06;
-  setInterval(()=> {
-    val += 0.01*dir;
-    if (val > 0.12) dir = -1;
-    if (val < 0.04) dir = 1;
-    wm.style.color = `rgba(255,255,255,${val})`;
-  }, 220);
-})();
-
-/* small helper for smooth scrolling anchors */
-document.querySelectorAll('a.nav').forEach(a=>{
-  a.addEventListener('click', (e)=>{
-    e.preventDefault();
-    const id = a.getAttribute('href');
-    if (!id) return;
-    const el = document.querySelector(id);
-    if (!el) return;
-    window.scrollTo({top: el.offsetTop - 70, behavior:'smooth'});
-  });
-});
-
-</script>
+    loadContent();
+  </script>
 </body>
 </html>
