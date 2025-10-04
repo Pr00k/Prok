@@ -1,104 +1,69 @@
-// assets/js/main.js
-// مسؤول عن: أزرار الهيدر (sidebar/dark), carousel, وإظهار أيقونات التعديل للأدمن
-document.addEventListener('DOMContentLoaded', () => {
-  // Firebase helpers (تأكد firebase-config.js حمّلت قبل هذا الملف)
-  const FB_AUTH = window.firebase && firebase.auth ? firebase.auth() : null;
-  const FB_DB = window.firebase && firebase.firestore ? firebase.firestore() : null;
-
-  // ---------- Sidebar toggle ----------
+document.addEventListener('DOMContentLoaded', ()=>{
   const sidebar = document.getElementById('sidebar');
   const sidebarToggle = document.getElementById('sidebarToggle');
-  if (sidebarToggle && sidebar) {
-    sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
-  }
-
-  // ---------- Dark mode toggle ----------
+  if(sidebarToggle && sidebar) sidebarToggle.addEventListener('click', ()=> sidebar.classList.toggle('open'));
   const themeToggle = document.getElementById('themeToggle');
   const storedTheme = localStorage.getItem('prok_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', storedTheme);
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', current);
-      localStorage.setItem('prok_theme', current);
+  if(themeToggle) themeToggle.addEventListener('click', ()=>{
+    const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    localStorage.setItem('prok_theme', t);
+  });
+  const adminBtn = document.getElementById('adminBtn');
+  if(adminBtn){
+    adminBtn.addEventListener('click', async ()=>{
+      if(!window.firebase){ alert('Firebase غير مفعّل. ضع إعدادات firebase-config.js'); return; }
+      const auth = firebase.auth();
+      try{
+        await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await auth.signInWithPopup(provider);
+        alert('تم تسجيل الدخول كأدمن (إن لم تظهر أدوات التحرير، حدث الصفحة)');
+      }catch(e){
+        alert('خطأ في تسجيل الدخول: '+ (e.message||e.code));
+        console.error(e);
+      }
     });
   }
-
-  // ---------- Carousel (auto 3s + touch + controls) ----------
   const track = document.getElementById('carouselTrack');
+  const dotsWrap = document.getElementById('dots');
   const prev = document.getElementById('prev');
   const next = document.getElementById('next');
-  const dotsWrap = document.getElementById('dots');
-
-  if (track) {
-    const slides = Array.from(track.querySelectorAll('.slide'));
-    let idx = 0, timer = null;
-    // create dots
-    slides.forEach((_, i) => {
-      const d = document.createElement('div');
-      d.className = 'dot';
-      d.addEventListener('click', () => { goTo(i); });
-      dotsWrap.appendChild(d);
-    });
-    function update() {
-      track.style.transform = `translateX(-${idx * 100}%)`;
-      Array.from(dotsWrap.children).forEach((d, i) => d.classList.toggle('active', i === idx));
-    }
-    function nextSlide(){ idx = (idx+1) % slides.length; update(); }
-    function prevSlide(){ idx = (idx-1+slides.length) % slides.length; update(); }
-    function goTo(i){ idx = i % slides.length; update(); reset(); }
+  if(track){
+    let idx = 0, timer=null;
+    function update(){ track.style.transform = `translateX(-${idx * 100}%)`; Array.from(dotsWrap.children).forEach((d,i)=> d.classList.toggle('active', i===idx)); }
+    function nextSlide(){ idx = (idx+1) % track.children.length; update(); }
+    function prevSlide(){ idx = (idx-1+track.children.length) % track.children.length; update(); }
     function start(){ stop(); timer = setInterval(nextSlide, 3000); }
-    function stop(){ if (timer) clearInterval(timer); timer = null; }
+    function stop(){ if(timer) clearInterval(timer); timer=null; }
+    if(next) next.addEventListener('click', ()=>{ nextSlide(); reset(); });
+    if(prev) prev.addEventListener('click', ()=>{ prevSlide(); reset(); });
     function reset(){ stop(); start(); }
-
-    if (next) next.addEventListener('click', ()=>{ nextSlide(); reset(); });
-    if (prev) prev.addEventListener('click', ()=>{ prevSlide(); reset(); });
-
-    // touch support
-    let sx=0, dx=0;
-    track.addEventListener('touchstart', e => sx = e.touches[0].clientX, {passive:true});
-    track.addEventListener('touchmove', e => dx = e.touches[0].clientX - sx, {passive:true});
-    track.addEventListener('touchend', () => { if (Math.abs(dx)>40) { if (dx<0) nextSlide(); else prevSlide(); } dx=0; reset(); });
-
-    update(); start();
+    track.addEventListener('mouseenter', stop);
+    track.addEventListener('mouseleave', start);
+    let sx=0,dx=0;
+    track.addEventListener('touchstart', e=> sx = e.touches[0].clientX, {passive:true});
+    track.addEventListener('touchmove', e=> dx = e.touches[0].clientX - sx, {passive:true});
+    track.addEventListener('touchend', ()=>{ if(Math.abs(dx) > 40){ if(dx < 0) nextSlide(); else prevSlide(); } dx = 0; reset(); });
+    window.reinitCarousel = function(){ dotsWrap.innerHTML = ''; for(let i=0;i<track.children.length;i++){ const d=document.createElement('div'); d.className='dot'; d.addEventListener('click', ()=>{ idx = i; update(); reset(); }); dotsWrap.appendChild(d); } idx = 0; update(); start(); }
   }
-
-  // ---------- Admin UI: show edit icons when admin ----------
-  function setAdminUI(isAdmin) {
-    if (isAdmin) document.body.classList.add('admin-mode');
-    else document.body.classList.remove('admin-mode');
-  }
-
-  // check auth and show admin UI if email matches (client-only UX)
-  if (FB_AUTH) {
-    FB_AUTH.onAuthStateChanged(async user => {
-      if (!user) { setAdminUI(false); return; }
-      // optionally refresh token to ensure claims are up-to-date
-      try {
-        const idToken = await user.getIdTokenResult(true);
-        // For UX only: show admin UI if user.email equals your admin (safe permission enforced by Firestore rules)
-        const allowedAdminEmail = 'aaaab9957@gmail.com'; // only for UI; actual security enforced server-side
-        if (user.email && user.email.toLowerCase() === allowedAdminEmail.toLowerCase()) {
-          setAdminUI(true);
+  if(window.firebase && firebase.auth){
+    const auth = firebase.auth();
+    auth.onAuthStateChanged(async user => {
+      if(user){
+        const adminEmail = 'aaaab9957@gmail.com';
+        if(user.email && user.email.toLowerCase() === adminEmail.toLowerCase()){
+          document.body.classList.add('admin-mode');
+          const controls = document.querySelectorAll('.admin-controls'); controls.forEach(c=>c.style.display='block');
         } else {
-          setAdminUI(false);
+          document.body.classList.remove('admin-mode');
+          const controls = document.querySelectorAll('.admin-controls'); controls.forEach(c=>c.style.display='none');
         }
-      } catch (e) { console.error('token error', e); setAdminUI(false); }
+      } else {
+        document.body.classList.remove('admin-mode');
+        const controls = document.querySelectorAll('.admin-controls'); controls.forEach(c=>c.style.display='none');
+      }
     });
   }
-
-  // ---------- Delegated click handlers for edit icons (uses admin-controls.js) ----------
-  // admin-controls.js exposes window.adminControls if loaded
-  document.body.addEventListener('click', e => {
-    if (!e.target) return;
-    // edit-icon click
-    if (e.target.matches('.edit-icon') || e.target.closest('.edit-icon')) {
-      const el = e.target.closest('.edit-icon');
-      const targetSelector = el.dataset.target; // selector or data-path
-      const type = el.dataset.type; // 'text','app','banner','animation'
-      // delegate
-      if (window.adminControls) window.adminControls.handleEditClick({ type, targetSelector, el });
-    }
-  });
-
 });
