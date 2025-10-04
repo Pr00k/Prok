@@ -1,83 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Prok — المتجر الشخصي</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/edits.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prok - مقترحات التطبيقات والألعاب</title>
+    <meta name="description" content="اكتشف أفضل التطبيقات والألعاب المقترحة يومياً">
+    <meta name="theme-color" content="#6366f1">
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/edits.css">
 </head>
 <body>
-  <div id="sys-toast" aria-live="polite" class="sys-toast" hidden></div>
-
-  <header class="header">
-    <div class="container header-inner">
-      <a class="logo editable" data-path="header.title" href="index.html">
-        Prok<span class="dot">.</span>
-        <span class="edit-icon" data-type="text" data-target=".logo" title="تعديل الاسم">✏️</span>
-      </a>
-
-      <nav class="top-nav" id="topNav" aria-label="القائمة">
-        <a href="#" class="editable" data-path="nav.home">الرئيسية <span class="edit-icon" data-type="text" data-target="#topNav a:nth-child(1)"></span></a>
-        <a href="#" class="editable" data-path="nav.services">الألعاب <span class="edit-icon" data-type="text" data-target="#topNav a:nth-child(2)"></span></a>
-        <a href="#" class="editable" data-path="nav.apps">التطبيقات <span class="edit-icon" data-type="text" data-target="#topNav a:nth-child(3)"></span></a>
-        <a href="#" class="editable" data-path="nav.about">عنّا <span class="edit-icon" data-type="text" data-target="#topNav a:nth-child(4)"></span></a>
-      </nav>
-
-      <div class="header-actions">
-        <button id="themeToggle" class="btn icon" aria-label="تبديل السمة">🌓</button>
-        <button id="adminBtn" class="btn primary" aria-label="تسجيل أدمن">أدمن</button>
-        <button id="sidebarToggle" class="btn icon" aria-label="القائمة الجانبية">☰</button>
-      </div>
+    <div id="loader" class="loader">
+        <div class="spinner"></div>
     </div>
-  </header>
 
-  <div class="layout container">
-    <aside class="sidebar" id="sidebar" aria-label="قائمة الأقسام">
-      <ul id="sidebarList">
-        <li class="active editable" data-path="sidebar[0]">الأبرز <span class="edit-icon" data-type="text" data-target="#sidebarList li:nth-child(1)"></span></li>
-        <li class="editable" data-path="sidebar[1]">الأكثر تحميلاً <span class="edit-icon" data-type="text" data-target="#sidebarList li:nth-child(2)"></span></li>
-        <li class="editable" data-path="sidebar[2]">الألعاب الجديدة <span class="edit-icon" data-type="text" data-target="#sidebarList li:nth-child(3)"></span></li>
-        <li class="editable" data-path="sidebar[3]">التطبيقات <span class="edit-icon" data-type="text" data-target="#sidebarList li:nth-child(4)"></span></li>
-      </ul>
-    </aside>
+    <div id="toast-container"></div>
 
-    <main class="main">
-      <section class="carousel editable" id="carousel" aria-label="عروض">
-        <div class="carousel-track" id="carouselTrack" role="list"></div>
-        <div class="carousel-controls" aria-hidden="false">
-          <button id="prev" class="ctrl" aria-label="السابق">‹</button>
-          <div class="dots" id="dots" role="tablist" aria-label="نقاط العرض"></div>
-          <button id="next" class="ctrl" aria-label="التالي">›</button>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">Prok</h1>
+                <div class="header-actions">
+                    <button id="theme-toggle" class="icon-btn" aria-label="تبديل الثيم">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                    <button id="admin-login" class="icon-btn admin-only hidden" aria-label="دخول الأدمن">
+                        <span>👤</span>
+                    </button>
+                    <button id="admin-logout" class="icon-btn admin-only hidden" aria-label="خروج">
+                        <span>🚪</span>
+                    </button>
+                </div>
+            </div>
         </div>
-      </section>
+    </header>
 
-      <section class="section head-cards" id="featured">
-        <h2 class="editable" data-path="featured.title">مقترحات اليوم <span class="edit-icon" data-type="text" data-target="#featured h2"></span></h2>
-        <div class="cards" id="cards" aria-live="polite"></div>
-        <div class="admin-controls" style="display:none; margin-top:12px;">
-          <button id="addAppBtn" class="btn primary">أضف تطبيق/لعبة</button>
-          <button id="pickAnimationBtn" class="btn">اختيار الأنيميشن</button>
+    <section class="hero">
+        <div class="container">
+            <div class="carousel-container">
+                <div class="carousel-wrapper" id="carousel-wrapper"></div>
+                <button class="carousel-btn prev" id="carousel-prev" aria-label="السابق">❮</button>
+                <button class="carousel-btn next" id="carousel-next" aria-label="التالي">❯</button>
+                <div class="carousel-dots" id="carousel-dots"></div>
+            </div>
         </div>
-      </section>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="section-header">
+                <h2 id="section-title" class="section-title">مقترحات اليوم</h2>
+                <button class="edit-btn admin-only hidden" data-edit="title" aria-label="تعديل">✏️</button>
+            </div>
+            <div class="apps-grid" id="apps-grid"></div>
+            <button id="add-app-btn" class="add-btn admin-only hidden">+ إضافة تطبيق</button>
+        </div>
     </main>
-  </div>
 
-  <footer class="footer editable" data-path="footer.text">
-    <div class="container" id="footerText">© 2025 Prok — جميع الحقوق محفوظة
-      <span class="edit-icon" data-type="text" data-target="#footerText" title="تعديل حقوق النشر"></span>
-    </div>
-  </footer>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Prok. جميع الحقوق محفوظة.</p>
+            <div class="admin-info admin-only hidden">
+                <span id="admin-email"></span>
+            </div>
+        </div>
+    </footer>
 
-  <!-- Firebase compat SDKs (required) -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-
-  <!-- Project scripts (robust order) -->
-  <script defer src="assets/js/firebase-config.js"></script>
-  <script defer src="assets/js/main.js"></script>
-  <script defer src="assets/js/admin.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    
+    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/admin.js"></script>
 </body>
 </html>
