@@ -164,3 +164,7 @@ footer {
     transform: translateY(0); 
   }
 }
+.animate-show {
+  animation: fadeUp 1.2s ease forwards;
+  will-change: transform, opacity;
+}
