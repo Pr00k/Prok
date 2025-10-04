@@ -1,10 +1,7 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Dashboard — Prok</title>
-<link rel="stylesheet" href="../assets/css/style.css">
-</head>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Dashboard — Prok</title>
+<link rel="stylesheet" href="../assets/css/style.css"></head>
 <body>
 <div class="admin-dashboard container" style="padding-top:90px">
   <div style="display:flex;justify-content:space-between;align-items:center">
@@ -23,7 +20,7 @@
     <textarea id="sub_en"></textarea>
 
     <label>Features (JSON array)</label>
-    <textarea id="features" placeholder='Example: ["Feature 1","Feature 2"]'></textarea>
+    <textarea id="features" placeholder='مثال: ["ميزة 1","ميزة 2"]'></textarea>
 
     <div style="margin-top:10px">
       <button id="saveBtn" class="btn">حفظ</button>
@@ -39,7 +36,7 @@
 <script src="../assets/js/firebase-config.js"></script>
 <script>
 if(!window.firebaseConfig){ alert('Add firebase-config.js'); }
-else{
+else {
   firebase.initializeApp(window.firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
