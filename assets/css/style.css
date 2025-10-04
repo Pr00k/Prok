@@ -1,198 +1,42 @@
-/* ====== الأساس ====== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Tajawal", sans-serif;
+:root{
+  --bg1:#071224; --bg2:#0f2b3d; --accent:#1fb6ff; --accent2:#7c4dff; --muted:#b9c6d0;
 }
-
-body {
-  background: linear-gradient(180deg, #111, #1e1e1e);
-  color: #fff;
-  overflow-x: hidden;
-  transition: background 0.4s, color 0.4s;
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family: 'Tajawal', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(135deg,var(--bg1),var(--bg2)); color: #eef6ff;
+  -webkit-font-smoothing:antialiased;
 }
-
-/* ====== الهيدر ====== */
-.header {
-  background: #222;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header a {
-  color: #fff;
-  text-decoration: none;
-  margin: 0 10px;
-  transition: 0.3s;
-}
-
-.header a:hover {
-  color: #00ffc8;
-}
-
-/* ====== الكاروسيل ====== */
-.carousel {
-  position: relative;
-  overflow: hidden;
-  margin: 20px auto;
-  border-radius: 20px;
-}
-
-.carousel-track {
-  display: flex;
-  transition: transform 1s ease-in-out;
-}
-
-.slide img {
-  width: 100%;
-  border-radius: 20px;
-}
-
-/* ====== الكروت ====== */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.card {
-  background: #222;
-  padding: 1rem;
-  border-radius: 15px;
-  text-align: center;
-  transition: transform 0.3s, background 0.3s;
-  position: relative;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  background: #333;
-}
-
-/* --- إضافات الأدمن والأنيميشن --- */
-
-/* أيقونة القلم (تظهر فقط للأدمن) */
-.edit-icon {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background: rgba(0, 0, 0, 0.45);
-  color: #fff;
-  padding: 6px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  z-index: 40;
-  display: none;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
-.admin-mode .edit-icon {
-  display: inline-flex;
-}
-
-/* وضع الفاتح */
-[data-theme="light"] body {
-  background: linear-gradient(180deg, #f6f6f6, #fff);
-  color: #111;
-}
-
-[data-theme="light"] .header {
-  background: #e0e0e0;
-}
-
-[data-theme="light"] .card {
-  background: #fff;
-  color: #111;
-}
-
-[data-theme="light"] .card:hover {
-  background: #f4f4f4;
-}
-
-/* الأنيميشنات */
-:root {
-  --ani-speed: 800ms;
-}
-
-[data-animation="none"] .card {
-  transition: none;
-  animation: none;
-}
-
-[data-animation="fade"] .card {
-  animation: fadeIn var(--ani-speed) ease both;
-}
-
-[data-animation="slide"] .card {
-  animation: slideIn var(--ani-speed) cubic-bezier(.22, .9, .25, 1) both;
-}
-
-[data-animation="float"] .card {
-  animation: floatUp 1.2s ease infinite alternate;
-}
-
-[data-animation="pulse"] .card {
-  animation: pulse 1.4s ease-in-out infinite;
-}
-
-[data-animation="zoom"] .card {
-  animation: zoomIn .6s ease both;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes floatUp {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-8px);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.03);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes zoomIn {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
+.container{max-width:1100px;margin:0 auto;padding:14px}
+.header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,rgba(0,0,0,0.25),rgba(0,0,0,0.35));backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,0.03)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-weight:900;color:var(--accent);text-decoration:none;font-size:1.25rem}
+.logo .dot{color:var(--accent2)}
+.top-nav{display:flex;gap:14px}
+.top-nav a{color:var(--muted);text-decoration:none;padding:8px;border-radius:8px;font-weight:700}
+.top-nav a:hover{color:#fff;text-shadow:0 6px 18px rgba(124,77,255,0.08)}
+.header-actions{display:flex;gap:10px;align-items:center}
+.btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer;transition:transform .18s,box-shadow .18s}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#071226;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+.layout{display:flex;gap:18px;margin-top:18px;align-items:flex-start}
+.sidebar{width:220px;background:rgba(255,255,255,0.02);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+.sidebar ul{list-style:none;padding:0;margin:0}
+.sidebar li{padding:10px 6px;border-radius:8px;color:var(--muted);cursor:pointer}
+.sidebar li.active{background:linear-gradient(90deg,rgba(31,182,255,0.06),rgba(124,77,255,0.04));color:#fff}
+.main{flex:1}
+.carousel{position:relative;border-radius:12px;overflow:hidden;height:360px;box-shadow:0 30px 60px rgba(2,6,23,0.6)}
+.carousel-track{display:flex;height:100%;transition:transform .7s cubic-bezier(.22,.9,.2,1);will-change:transform}
+.slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(0,0,0,0.1),transparent)}
+.slide img{width:100%;height:100%;object-fit:cover;display:block}
+.carousel-controls{position:absolute;bottom:12px;left:50%;transform:translateX(50%);display:flex;align-items:center;gap:8px}
+.ctrl{background:rgba(0,0,0,0.45);border:0;color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
+.dots{display:flex;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer}
+.dot.active{background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 6px 20px rgba(124,77,255,0.08)}
+.head-cards{margin-top:18px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:10px}
+.card{background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);transition:transform .25s}
+.card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 30px 60px rgba(2,6,23,0.6)}
+.footer{margin-top:22px;text-align:center;color:var(--muted);padding:18px}
+@media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%}.carousel{height:220px}}
