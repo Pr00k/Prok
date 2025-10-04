@@ -1,23 +1,43 @@
-/* خلفية متدرجة متحركة */
-body {
-  background: linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c1c1c);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-  color: #fff;
-  font-family: sans-serif;
-  margin:0;
+:root{
+  --bg1:#071224; --bg2:#0f2b3d; --accent:#1fb6ff; --accent2:#7c4dff; --muted:#b9c6d0;
 }
-@keyframes gradientBG {
-  0% {background-position:0% 50%;}
-  50% {background-position:100% 50%;}
-  100% {background-position:0% 50%;}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family: "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(135deg,var(--bg1),var(--bg2)); color: #eef6ff;
+  -webkit-font-smoothing:antialiased;
+  -webkit-font-variant-ligatures: none;
 }
-
-.container {padding: 0 16px;}
-.header {background: rgba(0,0,0,0.6); padding: 10px 0; position: sticky; top:0;}
-.logo {font-size: 1.5em; font-weight: bold; color: #fff; text-decoration: none;}
-.btn {cursor: pointer; padding: 8px 16px; border: none; border-radius: 8px; transition: all .3s ease;}
-.btn:hover {background: rgba(255,255,255,0.15); transform: scale(1.05);}
-.btn.primary {background: #ff4747; color: #fff;}
-.card {background: rgba(255,255,255,0.1); padding: 16px; border-radius: 12px; transition: transform .3s ease;}
-.card:hover {transform: translateY(-6px) scale(1.02);}
+.container{max-width:1100px;margin:0 auto;padding:14px}
+.header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,rgba(0,0,0,0.25),rgba(0,0,0,0.35));backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,0.03)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-weight:900;color:var(--accent);text-decoration:none;font-size:1.25rem}
+.logo .dot{color:var(--accent2)}
+.top-nav{display:flex;gap:14px}
+.top-nav a{color:var(--muted);text-decoration:none;padding:8px;border-radius:8px;font-weight:700}
+.top-nav a:hover{color:#fff;text-shadow:0 6px 18px rgba(124,77,255,0.08)}
+.header-actions{display:flex;gap:10px;align-items:center}
+.btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer;transition:transform .18s,box-shadow .18s}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#071226;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+.layout{display:flex;gap:18px;margin-top:18px;align-items:flex-start}
+.sidebar{width:220px;background:rgba(255,255,255,0.02);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+.sidebar ul{list-style:none;padding:0;margin:0}
+.sidebar li{padding:10px 6px;border-radius:8px;color:var(--muted);cursor:pointer}
+.sidebar li.active{background:linear-gradient(90deg,rgba(31,182,255,0.06),rgba(124,77,255,0.04));color:#fff}
+.main{flex:1}
+.carousel{position:relative;border-radius:12px;overflow:hidden;height:360px;box-shadow:0 30px 60px rgba(2,6,23,0.6)}
+.carousel-track{display:flex;height:100%;transition:transform .7s cubic-bezier(.22,.9,.2,1);will-change:transform}
+.slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(0,0,0,0.1),transparent)}
+.slide img{width:100%;height:100%;object-fit:cover;display:block}
+.carousel-controls{position:absolute;bottom:12px;left:50%;transform:translateX(50%);display:flex;align-items:center;gap:8px}
+.ctrl{background:rgba(0,0,0,0.45);border:0;color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
+.dots{display:flex;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer}
+.dot.active{background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 6px 20px rgba(124,77,255,0.08)}
+.head-cards{margin-top:18px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:10px}
+.card{background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);transition:transform .25s}
+.card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 30px 60px rgba(2,6,23,0.6)}
+.footer{margin-top:22px;text-align:center;color:var(--muted);padding:18px}
+@media(max-width:900px){.layout{flex-direction:column}.sidebar{width:100%}.carousel{height:220px}}
