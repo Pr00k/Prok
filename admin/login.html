@@ -1,16 +1,25 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Login</title><link rel="stylesheet" href="../assets/css/style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>تسجيل دخول الأدمن</title><link rel="stylesheet" href="../assets/css/style.css"></head>
 <body>
-  <main class="container admin-login" style="padding-top:120px">
-    <h2>تسجيل دخول الأدمن</h2>
-    <p>اضغط أدمن وسجّل بحساب Google المصرح.</p>
+  <main class="container" style="padding:80px 0;text-align:center">
+    <h1>تسجيل دخول الأدمن</h1>
+    <p>اضغط أدمن وسجل بحساب Google المصرح.</p>
     <button id="adminSignBtn" class="btn primary">أدمن — تسجيل دخول</button>
-    <p id="msg" class="error"></p>
-    <p style="margin-top:18px"><a href="../index.html">عودة للموقع</a></p>
+    <p style="margin-top:18px"><a href="../index.html">🔙 العودة للموقع</a></p>
   </main>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="../assets/js/firebase-config.js"></script>
-<script src="../assets/js/admin-auth.js"></script>
-</body></html>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="../assets/js/firebase-config.js"></script>
+  <script>
+    const auth = firebase.auth();
+    document.getElementById('adminSignBtn').addEventListener('click', async ()=>{
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try{
+        const res = await auth.signInWithPopup(provider);
+        window.location.href = 'dashboard.html';
+      }catch(e){ alert('خطأ: '+(e.message||e.code)); }
+    });
+  </script>
+</body>
+</html>
