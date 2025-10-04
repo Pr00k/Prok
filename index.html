@@ -11,24 +11,23 @@
     <div class="nav-container container">
       <a class="logo" href="index.html">Prok</a>
 
-      <button id="menuToggle" class="menu-toggle" aria-label="فتح القائمة">☰</button>
-
-      <nav id="mainNav" class="main-nav">
-        <a href="index.html" data-i18n="nav.home">الرئيسية</a>
-        <a href="about.html" data-i18n="nav.about">عنّا</a>
-        <a href="services.html" data-i18n="nav.services">الخدمات</a>
-        <a href="contact.html" data-i18n="nav.contact">اتصل</a>
-        <a href="admin/index.html" class="admin-link" data-i18n="nav.admin">لوحة الإدارة</a>
-      </nav>
-
       <div class="controls">
+        <button id="themeToggle" class="theme-toggle" aria-label="تبديل الوضع">🌓</button>
         <select id="langSwitcher" aria-label="اختر اللغة">
           <option value="ar">العربية</option>
           <option value="en">English</option>
         </select>
-        <button id="themeToggle" class="theme-toggle" aria-label="تبديل الوضع">🌓</button>
+        <button id="menuToggle" class="menu-toggle" aria-label="فتح القائمة">☰</button>
       </div>
     </div>
+
+    <nav id="mainNav" class="main-nav">
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="about.html" data-i18n="nav.about">عنّا</a>
+      <a href="services.html" data-i18n="nav.services">الخدمات</a>
+      <a href="contact.html" data-i18n="nav.contact">اتصل</a>
+      <a href="admin/index.html" class="admin-link" data-i18n="nav.admin">لوحة الإدارة</a>
+    </nav>
   </header>
 
   <main id="mainContent">
@@ -36,13 +35,13 @@
       <div class="hero-inner">
         <h1 id="heroTitle">جارٍ التحميل...</h1>
         <p id="heroSub">...</p>
-        <a id="ctaBtn" class="btn" href="services.html">استكشف</a>
+        <a id="ctaBtn" class="btn" href="services.html" data-i18n="cta.explore">استكشف</a>
       </div>
 
       <div id="adStrip" class="ad-strip" aria-hidden="true">
-        <div class="ad-card">🔥 ترقية محدودة</div>
-        <div class="ad-card">⭐ قوالب Pro</div>
-        <div class="ad-card">⚡ أداء فائق</div>
+        <div class="ad-card" data-i18n="ads.one">ترقية محدودة</div>
+        <div class="ad-card" data-i18n="ads.two">قوالب Pro</div>
+        <div class="ad-card" data-i18n="ads.three">أداء فائق</div>
       </div>
     </section>
 
@@ -58,12 +57,12 @@
     <p id="footerText">© Prok</p>
   </footer>
 
-  <!-- Firebase (compat build used in admin too) -->
+  <!-- Firebase libs (compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-  <!-- app scripts -->
+  <!-- App scripts -->
   <script src="assets/js/firebase-config.js"></script>
   <script src="assets/js/lang.js"></script>
   <script src="assets/js/darkmode.js"></script>
