@@ -8,21 +8,25 @@
   <link rel="stylesheet" href="assets/css/edits.css" />
 </head>
 <body>
+  <div id="sys-toast" aria-live="polite" class="sys-toast" hidden></div>
+
   <header class="header">
     <div class="container header-inner">
       <a class="logo editable" data-path="header.title" href="index.html">
         Prok<span class="dot">.</span>
-        <span class="edit-icon" data-type="text" data-target=".logo">✏️</span>
+        <span class="edit-icon" data-type="text" data-target=".logo" title="تعديل الاسم">✏️</span>
       </a>
+
       <nav class="top-nav" id="topNav" aria-label="القائمة">
         <a href="#" class="editable" data-path="nav.home">الرئيسية <span class="edit-icon" data-type="text" data-target="#topNav a:nth-child(1)"></span></a>
         <a href="#" class="editable" data-path="nav.services">الألعاب <span class="edit-icon" data-type="text" data-target="#topNav a:nth-child(2)"></span></a>
         <a href="#" class="editable" data-path="nav.apps">التطبيقات <span class="edit-icon" data-type="text" data-target="#topNav a:nth-child(3)"></span></a>
         <a href="#" class="editable" data-path="nav.about">عنّا <span class="edit-icon" data-type="text" data-target="#topNav a:nth-child(4)"></span></a>
       </nav>
+
       <div class="header-actions">
         <button id="themeToggle" class="btn icon" aria-label="تبديل السمة">🌓</button>
-        <button id="adminBtn" class="btn primary">أدمن</button>
+        <button id="adminBtn" class="btn primary" aria-label="تسجيل أدمن">أدمن</button>
         <button id="sidebarToggle" class="btn icon" aria-label="القائمة الجانبية">☰</button>
       </div>
     </div>
@@ -40,20 +44,17 @@
 
     <main class="main">
       <section class="carousel editable" id="carousel" aria-label="عروض">
-        <div class="carousel-track" id="carouselTrack">
-        </div>
+        <div class="carousel-track" id="carouselTrack" role="list"></div>
         <div class="carousel-controls" aria-hidden="false">
-          <button id="prev" class="ctrl">‹</button>
-          <div class="dots" id="dots" role="tablist"></div>
-          <button id="next" class="ctrl">›</button>
+          <button id="prev" class="ctrl" aria-label="السابق">‹</button>
+          <div class="dots" id="dots" role="tablist" aria-label="نقاط العرض"></div>
+          <button id="next" class="ctrl" aria-label="التالي">›</button>
         </div>
-        <span class="edit-icon" data-type="banner" data-banner-index="0">✏️</span>
       </section>
 
       <section class="section head-cards" id="featured">
         <h2 class="editable" data-path="featured.title">مقترحات اليوم <span class="edit-icon" data-type="text" data-target="#featured h2"></span></h2>
-        <div class="cards" id="cards">
-        </div>
+        <div class="cards" id="cards" aria-live="polite"></div>
         <div class="admin-controls" style="display:none; margin-top:12px;">
           <button id="addAppBtn" class="btn primary">أضف تطبيق/لعبة</button>
           <button id="pickAnimationBtn" class="btn">اختيار الأنيميشن</button>
@@ -64,7 +65,7 @@
 
   <footer class="footer editable" data-path="footer.text">
     <div class="container" id="footerText">© 2025 Prok — جميع الحقوق محفوظة
-      <span class="edit-icon" data-type="text" data-target="#footerText"></span>
+      <span class="edit-icon" data-type="text" data-target="#footerText" title="تعديل حقوق النشر"></span>
     </div>
   </footer>
 
@@ -74,9 +75,9 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
-  <!-- Project scripts -->
-  <script src="assets/js/firebase-config.js"></script>
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/admin.js"></script>
+  <!-- Project scripts (robust order) -->
+  <script defer src="assets/js/firebase-config.js"></script>
+  <script defer src="assets/js/main.js"></script>
+  <script defer src="assets/js/admin.js"></script>
 </body>
 </html>
