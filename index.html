@@ -1,25 +1,72 @@
-<header class="site-header">
-  <div class="nav-container">
-    <a class="logo" href="index.html">Prok</a>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prok — المتجر العصري</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="nav-container container">
+      <a class="logo" href="index.html">Prok</a>
 
-    <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة">
-      ☰
-    </button>
+      <button id="menuToggle" class="menu-toggle" aria-label="فتح القائمة">☰</button>
 
-    <nav id="mainNav">
-      <a href="about.html">حول</a>
-      <a href="services.html">التطبيقات</a>
-      <a href="blog/index.html">المدونة</a>
-      <a href="contact.html">اتصل</a>
-      <a href="admin/index.html" class="admin-link">لوحة الادمن</a>
-    </nav>
+      <nav id="mainNav" class="main-nav">
+        <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+        <a href="about.html" data-i18n="nav.about">عنّا</a>
+        <a href="services.html" data-i18n="nav.services">الخدمات</a>
+        <a href="contact.html" data-i18n="nav.contact">اتصل</a>
+        <a href="admin/index.html" class="admin-link" data-i18n="nav.admin">لوحة الإدارة</a>
+      </nav>
 
-    <div class="controls">
-      <select id="langSelect">
-        <option value="ar">العربية</option>
-        <option value="en">English</option>
-      </select>
-      <button id="darkModeToggle" aria-label="الوضع الداكن">🌙</button>
+      <div class="controls">
+        <select id="langSwitcher" aria-label="اختر اللغة">
+          <option value="ar">العربية</option>
+          <option value="en">English</option>
+        </select>
+        <button id="themeToggle" class="theme-toggle" aria-label="تبديل الوضع">🌓</button>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
+
+  <main id="mainContent">
+    <section class="hero container">
+      <div class="hero-inner">
+        <h1 id="heroTitle">جارٍ التحميل...</h1>
+        <p id="heroSub">...</p>
+        <a id="ctaBtn" class="btn" href="services.html">استكشف</a>
+      </div>
+
+      <div id="adStrip" class="ad-strip" aria-hidden="true">
+        <div class="ad-card">🔥 ترقية محدودة</div>
+        <div class="ad-card">⭐ قوالب Pro</div>
+        <div class="ad-card">⚡ أداء فائق</div>
+      </div>
+    </section>
+
+    <section id="features" class="cards container"></section>
+
+    <section class="about container">
+      <h2 id="aboutTitle">عنّا</h2>
+      <p id="aboutText"></p>
+    </section>
+  </main>
+
+  <footer class="footer container">
+    <p id="footerText">© Prok</p>
+  </footer>
+
+  <!-- Firebase (compat build used in admin too) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- app scripts -->
+  <script src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/lang.js"></script>
+  <script src="assets/js/darkmode.js"></script>
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
