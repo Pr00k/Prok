@@ -1,83 +1,40 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Prok — الموقع الأفضل</title>
-
-  <!-- Tailwind -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Animations CSS -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
-  <!-- Custom Style -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prok — الموقع المطوّر</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="bg-gray-50 text-gray-900">
-
-  <!-- خلفية متحركة -->
-  <div id="tsparticles"></div>
-  <!-- شريط التقدم -->
-  <div id="progress"></div>
-
-  <nav class="p-4 flex justify-between items-center bg-white shadow">
-    <a class="text-2xl font-bold">Prok</a>
-    <div class="space-x-4">
-      <a href="index.html">الرئيسية</a>
-      <a href="about.html">عنّا</a>
-      <a href="services.html">خدمات</a>
-      <a href="blog/index.html">المدونة</a>
-      <a href="admin/index.html" class="px-3 py-1 bg-blue-600 text-white rounded">لوحة الإدارة</a>
-    </div>
-  </nav>
-
-  <header class="p-12 text-center">
-    <h1 class="text-4xl font-extrabold hero-title">أفضل موقع على الإطلاق</h1>
-    <p class="mt-4 text-lg hero-sub">واجهة حديثة — لوحة تحكم ذكية — مدونة ديناميكية</p>
-    <div class="mt-6">
-      <a href="blog/index.html" class="px-5 py-3 bg-green-500 text-white rounded cta">شاهد المدونة</a>
-    </div>
+<body>
+  <header class="navbar">
+    <h1 class="logo">⚡ Prok Vision</h1>
+    <nav>
+      <a href="#">الرئيسية</a>
+      <a href="about.html">من نحن</a>
+      <a href="services.html">الخدمات</a>
+      <a href="contact.html">تواصل معنا</a>
+    </nav>
   </header>
 
-  <main class="p-6 max-w-5xl mx-auto">
-    <section class="grid md:grid-cols-2 gap-6">
-      <div class="p-6 bg-white rounded shadow card tilt" data-aos="fade-up">
-        <h2 class="text-2xl font-bold">لماذا Prok؟</h2>
-        <p class="mt-3">تصميم عصري، أداء ممتاز، وسهولة في التوسيع. مثالي للمشاريع الاحترافية.</p>
-      </div>
-      <div class="p-6 bg-white rounded shadow card tilt" data-aos="fade-up">
-        <h2 class="text-2xl font-bold">ميزات</h2>
-        <ul class="list-disc mr-6 mt-3">
-          <li>واجهة متجاوبة</li>
-          <li>لوحة إدارة تفاعلية</li>
-          <li>نظام مدونات Markdown</li>
-        </ul>
-      </div>
-    </section>
+  <section class="hero">
+    <div class="content">
+      <h2 class="animate-text">مرحبا بك في المستقبل 💫</h2>
+      <p>موقع متكامل بتقنيات حديثة وأنيميشن فائق التطور.</p>
+      <button class="glow-btn">ابدأ الآن 🚀</button>
+    </div>
+  </section>
 
-    <section class="mt-8 p-6 bg-white rounded shadow" data-aos="zoom-in">
-      <h3 class="text-xl font-bold">عرض تجريبي للإحصائيات</h3>
-      <canvas id="visitorsChart" class="mt-4"></canvas>
-    </section>
-  </main>
+  <section class="cards">
+    <div class="card"><h3>⚙️ التطوير الذكي</h3><p>أنظمة ذكية تتطور ذاتيًا.</p></div>
+    <div class="card"><h3>🌌 الواجهة المستقبلية</h3><p>تفاعل مذهل وحركة انسيابية.</p></div>
+    <div class="card"><h3>🧠 الذكاء الاصطناعي</h3><p>أفكار تفوق الخيال.</p></div>
+  </section>
 
-  <footer class="p-6 text-center text-sm text-gray-600">
-    © Prok — صمم لأصحاب الذوق الرفيع
+  <footer>
+    <p>© 2025 Prok Vision — جميع الحقوق محفوظة.</p>
   </footer>
 
-  <!-- مكتبات جافاسكربت -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3.5.4/tsparticles.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-  <!-- سكربت الموقع الجديد -->
-  <script src="assets/js/main-advanced.js"></script>
+  <script src="assets/js/script.js"></script>
 </body>
 </html>
