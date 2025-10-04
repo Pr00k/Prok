@@ -1,13 +1,16 @@
-/* Simple modern style for Prok - supports RTL and LTR */
-:root{ --bg:#071224; --panel:rgba(255,255,255,0.04); --muted:#cbd5e1; --accent:#00ffe7; --accent2:#ff00d4; --glass:rgba(255,255,255,0.03); --maxw:1100px; }
+/* Prok — polished modern UI (RTL focused) */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+:root{ --bg:#071224; --panel:rgba(255,255,255,0.03); --muted:#cbd5e1; --accent:#00ffe7; --accent2:#ff00d4; --maxw:1100px; --text:#fff; }
+[data-theme="light"]{ --bg:#f7fafc; --panel:#fff; --muted:#475569; --accent:#0066ff; --accent2:#ff5ea2; --text:#081124; }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;font-family:Cairo,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(135deg,var(--bg),#122033);color:#fff;line-height:1.5}
+body{margin:0;font-family:Cairo,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(135deg,var(--bg),#122033);color:var(--text);line-height:1.5}
 .container{max-width:var(--maxw);margin:0 auto;padding:40px 20px}
 .navbar{position:fixed;top:0;left:0;right:0;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(0,0,0,0.35);backdrop-filter:blur(6px);z-index:60}
 .brand{display:flex;align-items:center;gap:12px}
 .logo{font-weight:800;color:var(--accent);text-decoration:none;font-size:1.1rem}
 .navbar nav a{color:var(--muted);margin-left:16px;text-decoration:none;font-weight:600}
+.controls{display:flex;gap:8px;align-items:center}
 .theme-toggle{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 8px;border-radius:8px;color:var(--muted);cursor:pointer}
 
 /* hero */
@@ -30,13 +33,14 @@ body{margin:0;font-family:Cairo,system-ui,Segoe UI,Roboto,Arial;background:linea
 .card h3{color:var(--accent);margin:0 0 8px}
 .card p{margin:0;color:var(--muted)}
 
-/* admin styles small */
+/* admin small */
 .admin-wrap{max-width:480px;margin:140px auto;padding:20px;background:var(--panel);border-radius:12px}
-.admin-dashboard input, .admin-dashboard textarea{width:100%;padding:8px;margin:6px 0;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff}
+.admin-dashboard input, .admin-dashboard textarea{width:100%;padding:8px;margin:6px 0;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)}
+
+/* progress */
+.progress{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;z-index:9999;transition:width .12s linear}
 
 /* responsive */
 @media (max-width:720px){ .navbar nav a{display:none} .hero h1{font-size:1.8rem} .ad-strip{display:none} }
-
-/* performance hint */
 *{will-change:transform,opacity}
 @keyframes glow{0%{filter:blur(0)}50%{filter:blur(.1px)}100%{filter:blur(0)}}
