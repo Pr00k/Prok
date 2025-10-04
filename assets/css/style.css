@@ -1,62 +1,66 @@
-/* style.css - Prok responsive */
+/* Prok Best — Cyber 3D store (lightweight & optimized) */
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
-
-:root{
-  --bg1:#071224; --bg2:#0f2a36; --card:rgba(255,255,255,0.03);
-  --accent:#00ffe7; --accent2:#ff00d4; --muted:#9fb0bf; --text:#ffffff;
-}
-[data-theme="light"]{
-  --bg1:#f7fafc; --bg2:#e6eef8; --card:#fff; --accent:#0066ff; --accent2:#ff5ea2; --muted:#334155; --text:#081124;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;font-family:'Cairo',sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-.container{max-width:1100px;margin:0 auto;padding:20px}
+:root{--bg:#050512;--panel:rgba(255,255,255,0.03);--accent:#00f0d1;--accent2:#9b00ff;--muted:#9fb0bf}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:'Cairo',sans-serif;background:radial-gradient(800px 400px at 10% 10%, rgba(155,0,255,0.06), transparent), linear-gradient(180deg,var(--bg),#081122);color:#e8f3ff;overflow-x:hidden}
+.container{max-width:1200px;margin:0 auto;padding:16px}
 
 /* header */
-.site-header{position:sticky;top:0;z-index:80;background:rgba(0,0,0,0.25);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,0.04)}
-.nav-container{display:flex;align-items:center;justify-content:space-between;padding:12px}
-.logo{font-weight:900;color:var(--accent);text-decoration:none;font-size:1.15rem}
-.main-nav{display:flex;gap:18px;align-items:center}
-.main-nav a{color:var(--muted);text-decoration:none;padding:8px;border-radius:8px;font-weight:600}
-.main-nav a:hover{color:var(--text);background:rgba(255,255,255,0.03)}
-.controls{display:flex;gap:10px;align-items:center}
-.theme-toggle{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:6px 8px;border-radius:8px;color:var(--muted);cursor:pointer}
-.menu-toggle{display:none;background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:6px}
+.header{position:sticky;top:0;z-index:80;background:linear-gradient(180deg,rgba(0,0,0,0.25),rgba(0,0,0,0.35));backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,0.03)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:12px}
+.logo{font-weight:900;color:var(--accent);text-decoration:none;font-size:1.2rem}
+.logo .dot{color:var(--accent2)}
 
-/* hero */
-.hero{min-height:70vh;display:flex;align-items:center;justify-content:center;position:relative;padding:40px 20px}
-.hero-inner{text-align:center;max-width:900px}
-.hero h1{font-size:2.6rem;margin:0;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}
-.hero p{color:var(--muted);margin:12px 0}
-.btn{display:inline-block;padding:12px 22px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#06202a;font-weight:800;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,0.35);transition:transform .15s}
-.btn:active{transform:scale(.98)}
+/* top nav */
+.top-nav{display:flex;gap:14px}
+.top-nav a{color:var(--muted);text-decoration:none;padding:8px;border-radius:8px;font-weight:700}
+.top-nav a:hover{color:#fff;text-shadow:0 8px 30px rgba(155,0,255,0.08)}
 
-/* ad strip */
-.ad-strip{position:absolute;bottom:18px;left:0;right:0;display:flex;gap:12px;justify-content:center;pointer-events:none}
-.ad-card{background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));padding:10px 14px;border-radius:12px;font-weight:700;animation: float 6s ease-in-out infinite}
-@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+/* header actions */
+.header-actions{display:flex;gap:10px;align-items:center}
+.btn{background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer}
+.btn.icon{font-size:16px;padding:6px 8px}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#041226;box-shadow:0 12px 30px rgba(0,0,0,0.6)}
+
+/* layout */
+.layout{display:flex;gap:18px;padding-top:18px}
+.sidebar{width:220px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.03)}
+.sidebar ul{list-style:none;padding:0;margin:0}
+.sidebar li{padding:10px;border-radius:8px;color:var(--muted);cursor:pointer}
+.sidebar li.active{background:linear-gradient(90deg,rgba(0,255,238,0.06),rgba(155,0,255,0.04));color:#fff;transform:translateZ(8px)}
+
+/* main */
+.main{flex:1}
+
+/* carousel 3D */
+.carousel{position:relative;height:360px;perspective:1200px;overflow:visible;border-radius:14px;margin-bottom:18px}
+.carousel-track{height:100%;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d;transition:transform 0.8s cubic-bezier(.2,.9,.2,1)}
+.slide{min-width:80%;max-width:1000px;margin:0 12px;border-radius:12px;overflow:hidden;flex-shrink:0;box-shadow:0 30px 80px rgba(0,0,0,0.6);transform-origin:center center;transition:transform .6s,opacity .6s;opacity:0.0;transform:scale(.9) translateZ(-120px)}
+.slide img{width:100%;height:360px;object-fit:cover;display:block}
+.slide.active{opacity:1;transform:scale(1) translateZ(0)}
+
+/* controls */
+.carousel-controls{position:absolute;bottom:12px;left:50%;transform:translateX(50%);display:flex;align-items:center;gap:8px}
+.ctrl{background:rgba(0,0,0,0.55);border:0;color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
+.dots{display:flex;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);cursor:pointer}
+.dot.active{background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 6px 20px rgba(155,0,255,0.08)}
 
 /* cards */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;padding:30px 0}
-.card{background:var(--card);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(20px);transition:opacity .45s ease,transform .45s ease}
-.card.show{opacity:1;transform:none}
-.card h3{color:var(--accent);margin:0 0 8px}
-.card p{color:var(--muted);margin:0}
+.section{padding:18px 0}
+.head-cards h2{margin:6px 0 12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);transition:transform .25s,box-shadow .25s;cursor:pointer}
+.card:hover{transform:translateY(-10px) translateZ(12px);box-shadow:0 30px 80px rgba(0,0,0,0.6)}
 
-/* footer */
-.footer{padding:30px 20px;color:var(--muted);text-align:center}
+/* admin pages */
+.admin-login{text-align:center;padding-top:120px}
+.apps-editor{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.app-card{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03)}
+.app-actions{display:flex;gap:8px}
+.icon-edit{width:44px;height:44px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#021;font-weight:900;cursor:pointer;transform-style:preserve-3d}
+
+/* inputs */
+input{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--muted);width:100%}
 
 /* responsive */
-@media (max-width:900px){
-  .hero h1{font-size:2.1rem}
-}
-@media (max-width:768px){
-  .main-nav{display:none;position:absolute;top:64px;left:10px;right:10px;background:var(--bg2);border-radius:12px;padding:14px;flex-direction:column;gap:12px;box-shadow:0 20px 40px rgba(0,0,0,0.4)}
-  .main-nav.show{display:flex}
-  .menu-toggle{display:block}
-  .ad-strip{display:none}
-}
-
-/* small perf hint */
-*{will-change:transform,opacity}
+@media (max-width:900px){ .layout{flex-direction:column} .sidebar{width:100%;order:2} .carousel{height:260px} .slide img{height:260px} .carousel-track{padding:0 24px} }
