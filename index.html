@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="html-element">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/edits.css">
     <link rel="preload" href="assets/img/banner1.svg" as="image">
+    
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
@@ -27,6 +28,50 @@
         <div class="spinner"></div>
     </div>
 
+    <!-- Admin Toolbar (ظهر فقط للمدير) -->
+    <div id="admin-toolbar" class="admin-toolbar" style="display: none;">
+        <div class="admin-toolbar-content">
+            <div class="toolbar-section">
+                <h4>🛠️ أدوات المدير</h4>
+                <button class="toolbar-btn" data-action="edit-texts">
+                    <span class="btn-icon">📝</span>
+                    تحرير النصوص
+                </button>
+                <button class="toolbar-btn" data-action="edit-images">
+                    <span class="btn-icon">🖼️</span>
+                    تحرير الصور
+                </button>
+                <button class="toolbar-btn" data-action="manage-apps">
+                    <span class="btn-icon">📱</span>
+                    إدارة التطبيقات
+                </button>
+                <button class="toolbar-btn" data-action="manage-games">
+                    <span class="btn-icon">🎮</span>
+                    إدارة الألعاب
+                </button>
+            </div>
+            
+            <div class="toolbar-section">
+                <button class="toolbar-btn" data-action="upload-file">
+                    <span class="btn-icon">📤</span>
+                    رفع ملف
+                </button>
+                <button class="toolbar-btn" data-action="change-animation">
+                    <span class="btn-icon">✨</span>
+                    تغيير الحركات
+                </button>
+                <button class="toolbar-btn" data-action="manage-ads">
+                    <span class="btn-icon">📢</span>
+                    إدارة الإعلانات
+                </button>
+                <button class="toolbar-btn btn-danger" data-action="logout-admin">
+                    <span class="btn-icon">🚪</span>
+                    تسجيل خروج
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="header">
         <nav class="nav container">
@@ -39,14 +84,44 @@
                     <li class="nav-item"><a href="#home" class="nav-link">الرئيسية</a></li>
                     <li class="nav-item"><a href="#apps" class="nav-link">التطبيقات</a></li>
                     <li class="nav-item"><a href="#games" class="nav-link">الألعاب</a></li>
-                    <li class="nav-item"><a href="#about" class="nav-link">عن بروك</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link">اتصل بنا</a></li>
+                    
+                    <!-- Languages Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle">
+                            🌐 اللغات
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="dropdown-item" data-lang="ar">العربية</a></li>
+                            <li><a href="#" class="dropdown-item" data-lang="en">English</a></li>
+                            <li><a href="#" class="dropdown-item" data-lang="fr">Français</a></li>
+                            <li><a href="#" class="dropdown-item" data-lang="es">Español</a></li>
+                            <li><a href="#" class="dropdown-item" data-lang="de">Deutsch</a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Admin Menu (ظهر فقط للمدير) -->
+                    <li class="nav-item dropdown" id="admin-menu-item" style="display: none;">
+                        <a href="#" class="nav-link dropdown-toggle admin-menu">
+                            👑 أدمن
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="dropdown-item" data-action="quick-edit">✏️ التحرير السريع</a></li>
+                            <li><a href="#" class="dropdown-item" data-action="add-app">📱 إضافة تطبيق</a></li>
+                            <li><a href="#" class="dropdown-item" data-action="add-game">🎮 إضافة لعبة</a></li>
+                            <li><a href="#" class="dropdown-item" data-action="manage-content">📊 إدارة المحتوى</a></li>
+                            <li><a href="#" class="dropdown-item" data-action="site-settings">⚙️ إعدادات الموقع</a></li>
+                        </ul>
+                    </li>
                 </ul>
                 
                 <div class="nav-actions">
                     <button id="theme-toggle" class="theme-btn" aria-label="تبديل السمة">
                         <span class="theme-icon">🌙</span>
                     </button>
-                    <button id="admin-login-btn" class="admin-btn" style="display: none;">تسجيل المدير</button>
+                    <button id="admin-login-btn" class="admin-btn" style="display: none;">
+                        🔐 أدمن
+                    </button>
                 </div>
             </div>
 
@@ -82,15 +157,15 @@
     <section id="apps" class="section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">التطبيقات الشائعة</h2>
-                <p class="section-subtitle">اكتشف أفضل التطبيقات المجانية</p>
+                <h2 class="section-title" data-translate="apps_title">التطبيقات الشائعة</h2>
+                <p class="section-subtitle" data-translate="apps_subtitle">اكتشف أفضل التطبيقات المجانية</p>
             </div>
             
             <div class="filters">
-                <button class="filter-btn active" data-filter="all">الكل</button>
-                <button class="filter-btn" data-filter="productivity">الإنتاجية</button>
-                <button class="filter-btn" data-filter="social">التواصل</button>
-                <button class="filter-btn" data-filter="tools">الأدوات</button>
+                <button class="filter-btn active" data-filter="all" data-translate="filter_all">الكل</button>
+                <button class="filter-btn" data-filter="productivity" data-translate="filter_productivity">الإنتاجية</button>
+                <button class="filter-btn" data-filter="social" data-translate="filter_social">التواصل</button>
+                <button class="filter-btn" data-filter="tools" data-translate="filter_tools">الأدوات</button>
             </div>
             
             <div class="apps-grid" id="apps-grid">
@@ -103,8 +178,8 @@
     <section id="games" class="section bg-light">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">الألعاب المميزة</h2>
-                <p class="section-subtitle">استمتع بألعاب مجانية رائعة</p>
+                <h2 class="section-title" data-translate="games_title">الألعاب المميزة</h2>
+                <p class="section-subtitle" data-translate="games_subtitle">استمتع بألعاب مجانية رائعة</p>
             </div>
             
             <div class="games-grid" id="games-grid">
@@ -113,27 +188,23 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="section">
+    <!-- Contact Section -->
+    <section id="contact" class="section">
         <div class="container">
-            <div class="about-content">
-                <h2 class="section-title">عن Prok</h2>
-                <div class="about-text">
-                    <p>منصة Prok تقدم أفضل التطبيقات والألعاب المجانية بعالية الجودة وسهولة الاستخدام.</p>
-                </div>
-                
-                <div class="stats">
-                    <div class="stat-item">
-                        <h3>50+</h3>
-                        <p>تطبيق</p>
+            <div class="section-header">
+                <h2 class="section-title" data-translate="contact_title">اتصل بنا</h2>
+                <p class="section-subtitle" data-translate="contact_subtitle">نحن هنا لمساعدتك</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <h3 data-translate="contact_email">البريد الإلكتروني</h3>
+                        <p>aaaab9957@gmail.com</p>
                     </div>
-                    <div class="stat-item">
-                        <h3>30+</h3>
-                        <p>لعبة</p>
-                    </div>
-                    <div class="stat-item">
-                        <h3>10K+</h3>
-                        <p>مستخدم</p>
+                    <div class="contact-item">
+                        <h3 data-translate="contact_support">الدعم الفني</h3>
+                        <p data-translate="support_available">متاح 24/7</p>
                     </div>
                 </div>
             </div>
@@ -146,26 +217,26 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Prok</h3>
-                    <p>منصة التطبيقات والألعاب المجانية</p>
+                    <p data-translate="footer_desc">منصة التطبيقات والألعاب المجانية</p>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>روابط سريعة</h4>
+                    <h4 data-translate="quick_links">روابط سريعة</h4>
                     <ul>
-                        <li><a href="#home">الرئيسية</a></li>
-                        <li><a href="#apps">التطبيقات</a></li>
-                        <li><a href="#games">الألعاب</a></li>
+                        <li><a href="#home" data-translate="menu_home">الرئيسية</a></li>
+                        <li><a href="#apps" data-translate="menu_apps">التطبيقات</a></li>
+                        <li><a href="#games" data-translate="menu_games">الألعاب</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>التواصل</h4>
+                    <h4 data-translate="contact_us">التواصل</h4>
                     <p>aaaab9957@gmail.com</p>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2024 Prok. جميع الحقوق محفوظة.</p>
+                <p>&copy; 2024 Prok. <span data-translate="all_rights">جميع الحقوق محفوظة.</span></p>
             </div>
         </div>
     </footer>
@@ -174,21 +245,74 @@
     <div id="admin-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>لوحة التحكم</h3>
+                <h3>👑 لوحة تحكم المدير</h3>
                 <button class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
                 <div id="admin-login">
-                    <h4>تسجيل الدخول</h4>
-                    <button id="google-login" class="btn btn-primary">التسجيل عبر جوجل</button>
+                    <h4>تسجيل الدخول كمدير</h4>
+                    <button id="google-login" class="btn btn-primary">
+                        🔐 التسجيل عبر جوجل
+                    </button>
                 </div>
                 <div id="admin-panel" style="display: none;">
-                    <h4>أدوات المدير</h4>
-                    <div class="admin-tools">
-                        <button class="admin-tool-btn" data-action="edit-banners">تحرير اللافتات</button>
-                        <button class="admin-tool-btn" data-action="edit-apps">تحرير التطبيقات</button>
-                        <button class="admin-tool-btn" data-action="edit-games">تحرير الألعاب</button>
-                        <button class="admin-tool-btn" data-action="edit-content">تحرير المحتوى</button>
+                    <h4>مرحباً بك في لوحة التحكم</h4>
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <h5>التطبيقات</h5>
+                            <span id="apps-count">0</span>
+                        </div>
+                        <div class="stat-card">
+                            <h5>الألعاب</h5>
+                            <span id="games-count">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modals -->
+    <div id="edit-modal" class="modal edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="edit-modal-title">تحرير المحتوى</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="edit-modal-body">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Animation Selector Modal -->
+    <div id="animation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✨ اختر تأثير الحركة</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="animation-grid">
+                    <div class="animation-option" data-animation="fade-in">
+                        <div class="animation-preview fade-in">تدرج</div>
+                        <span>تدرج</span>
+                    </div>
+                    <div class="animation-option" data-animation="slide-up">
+                        <div class="animation-preview slide-up">انزلاق</div>
+                        <span>انزلاق للأعلى</span>
+                    </div>
+                    <div class="animation-option" data-animation="zoom-in">
+                        <div class="animation-preview zoom-in">تكبير</div>
+                        <span>تكبير</span>
+                    </div>
+                    <div class="animation-option" data-animation="bounce-in">
+                        <div class="animation-preview bounce-in">ارتداد</div>
+                        <span>ارتداد</span>
+                    </div>
+                    <div class="animation-option" data-animation="rotate-in">
+                        <div class="animation-preview rotate-in">دوران</div>
+                        <span>دوران</span>
                     </div>
                 </div>
             </div>
@@ -206,6 +330,7 @@
 
     <!-- App Scripts -->
     <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/languages.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/admin.js"></script>
 </body>
