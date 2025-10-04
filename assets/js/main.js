@@ -1,26 +1,75 @@
-// main.js - loads apps and fetches home content from Firestore if available
+// main.js - loads content from Firestore (site/content) or falls back to local data
 document.addEventListener('DOMContentLoaded', function(){
-  const apps = [
-    {title:'لعبة الجبل', desc:'مغامرة وتسلق', link:'#'},
-    {title:'محرر الصور', desc:'تعديل سريع', link:'#'},
-    {title:'ملاح الأسفار', desc:'خرائط ومسارات', link:'#'}
-  ];
-  const appsList = document.getElementById('appsList');
-  if(appsList){
-    appsList.innerHTML = apps.map(a=>`<article class="app-card"><h3>${a.title}</h3><p>${a.desc}</p><a class="btn" href="${a.link}">تحميل</a></article>`).join('');
+  // small default content
+  const DEFAULT = {
+    heroTitle: "Welcome to Prok — modern, fast, friendly",
+    heroSub: "A lightweight starter with smooth animations.",
+    heroTitle_ar: "مرحبا بك في Prok — عصري وسريع",
+    heroSub_ar: "قالب متعدد اللغات بخفة وسلاسة.",
+    features: [
+      {title:"Modern Design", desc:"Clean, responsive interfaces", title_ar:"تصميم عصري", desc_ar:"واجهات نظيفة ومتجاوبة"},
+      {title:"High Performance", desc:"Optimized for speed", title_ar:"آداء عالي", desc_ar:"محسّن للسرعة"},
+      {title:"Easy to Customize", desc:"Change content from Admin", title_ar:"سهل التخصيص", desc_ar:"عدّل المحتوى من لوحة الإدارة"}
+    ],
+    aboutText: "We build modern websites with speed in mind.",
+    aboutText_ar: "نحن نبني مواقع عصرية مع التركيز على السرعة.",
+    footerText: "© Prok — 2025"
+  };
+
+  // helper to render
+  function render(data){
+    const lang = localStorage.getItem('prok_lang') || (navigator.language && navigator.language.startsWith('ar') ? 'ar' : 'en');
+    document.getElementById('heroTitle').textContent = (lang==='ar' && data.heroTitle_ar) ? data.heroTitle_ar : data.heroTitle;
+    document.getElementById('heroSub').textContent = (lang==='ar' && data.heroSub_ar) ? data.heroSub_ar : data.heroSub;
+    document.getElementById('footerText').textContent = data.footerText || '© Prok';
+
+    // features
+    const container = document.getElementById('features');
+    container.innerHTML = '';
+    const features = data.features || [];
+    features.forEach(f=>{
+      const el = document.createElement('article');
+      el.className = 'card';
+      const title = (localStorage.getItem('prok_lang')==='ar') ? (f.title_ar || f.title) : (f.title || '');
+      const desc = (localStorage.getItem('prok_lang')==='ar') ? (f.desc_ar || f.desc) : (f.desc || '');
+      el.innerHTML = `<h3>${title}</h3><p>${desc}</p>`;
+      container.appendChild(el);
+    });
+    observeCards();
   }
 
-  // Try to load home settings from Firestore (if firebase config present globally)
-  if(window.firebase && firebase.firestore){
-    try{
-      const db = firebase.firestore();
-      db.collection('settings').doc('home').get().then(snap=>{
-        if(snap.exists){
-          const data = snap.data();
-          document.querySelector('.hero h1').textContent = data.title || 'أهلاً بك في Prok';
-          document.querySelector('.hero p').textContent = data.desc || 'المتجر التجريبي لتطبيقاتك — ادخل لوحة الادمن لتحديث المحتوى.';
-        }
+  function observeCards(){
+    const cards = document.querySelectorAll('.card');
+    const obs = new IntersectionObserver((entries, o)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){ en.target.classList.add('show'); o.unobserve(en.target); }
       });
-    }catch(e){}
+    }, {threshold:0.15});
+    cards.forEach(c=>obs.observe(c));
+  }
+
+  // theme toggle
+  (function(){
+    const btn = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('prok_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'dark');
+    document.documentElement.setAttribute('data-theme', saved==='dark'?'dark':'light');
+    if(btn){ btn.addEventListener('click', ()=> {
+      const cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', cur);
+      localStorage.setItem('prok_theme', cur);
+    }); }
+  })();
+
+  // try firestore
+  if(window.firebaseConfig && window.firebase && window.firebase.firestore){
+    try{
+      try{ firebase.initializeApp(window.firebaseConfig); }catch(e){}
+      const db = firebase.firestore();
+      db.collection('site').doc('content').get().then(doc=>{
+        if(doc.exists) render(doc.data()); else render(DEFAULT);
+      }).catch(err=>{ console.warn('Firestore read failed',err); render(DEFAULT); });
+    }catch(e){ console.warn('Firebase init error',e); render(DEFAULT); }
+  } else {
+    render(DEFAULT);
   }
 });
