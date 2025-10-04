@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>لوحة إدارة - تسجيل دخول</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <main class="min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md bg-white p-6 rounded shadow">
+      <h1 class="text-2xl font-bold">تسجيل دخول الإدارة</h1>
+      <p class="text-sm text-gray-600 mt-2">تجريبي — اربط Firebase في /admin/js/config.js</p>
+      <form id="loginForm" class="mt-4">
+        <label class="block">الإيميل<input id="email" class="border p-2 w-full mt-1" required></label>
+        <label class="block mt-3">كلمة المرور<input id="password" type="password" class="border p-2 w-full mt-1" required></label>
+        <button class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">دخول</button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      alert('تسجيل دخول تجريبي — اربط Firebase أو backend حقيقي.');
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>
