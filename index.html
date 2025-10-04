@@ -1,72 +1,25 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Prok — المتجر العصري</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-  <div id="progress" class="progress"></div>
+<header class="site-header">
+  <div class="nav-container">
+    <a class="logo" href="index.html">Prok</a>
 
-  <header class="navbar">
-    <div class="brand">
-      <a id="logo" class="logo" href="index.html">Prok</a>
-      <div class="controls">
-        <select id="langSwitcher" aria-label="language">
-          <option value="ar">العربية</option>
-          <option value="en">English</option>
-        </select>
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌓</button>
-      </div>
-    </div>
-    <nav>
-      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
-      <a href="about.html" data-i18n="nav.about">عنّا</a>
-      <a href="services.html" data-i18n="nav.services">الخدمات</a>
-      <a href="contact.html" data-i18n="nav.contact">اتصل</a>
-      <a href="admin/index.html" class="admin-link" data-i18n="nav.admin">لوحة الإدارة</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة">
+      ☰
+    </button>
+
+    <nav id="mainNav">
+      <a href="about.html">حول</a>
+      <a href="services.html">التطبيقات</a>
+      <a href="blog/index.html">المدونة</a>
+      <a href="contact.html">اتصل</a>
+      <a href="admin/index.html" class="admin-link">لوحة الادمن</a>
     </nav>
-  </header>
 
-  <main id="mainContent">
-    <section class="hero">
-      <div class="hero-inner">
-        <h1 id="heroTitle">جارٍ التحميل...</h1>
-        <p id="heroSub"></p>
-        <div class="cta-row">
-          <a id="ctaBtn" class="btn" href="services.html" data-i18n="cta.explore">استكشف</a>
-        </div>
-      </div>
-
-      <div id="adStrip" class="ad-strip" aria-hidden="true">
-        <div class="ad-card">🔥 <span data-i18n="ads.one">ترقية محدودة — 30 يوم</span></div>
-        <div class="ad-card">⭐ <span data-i18n="ads.two">قوالب Pro</span></div>
-        <div class="ad-card">⚡ <span data-i18n="ads.three">أداء فائق</span></div>
-      </div>
-    </section>
-
-    <section id="features" class="cards container"></section>
-
-    <section id="about" class="about container">
-      <h2 data-i18n="about.title">عنّا</h2>
-      <p id="aboutText"></p>
-    </section>
-  </main>
-
-  <footer class="footer container">
-    <p id="footerText">© Prok</p>
-  </footer>
-
-  <!-- Firebase SDKs (compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-  <!-- Config + scripts -->
-  <script src="assets/js/firebase-config.js"></script>
-  <script src="assets/js/lang.js"></script>
-  <script src="assets/js/darkmode.js"></script>
-  <script src="assets/js/main.js"></script>
-</body>
-</html>
+    <div class="controls">
+      <select id="langSelect">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+      </select>
+      <button id="darkModeToggle" aria-label="الوضع الداكن">🌙</button>
+    </div>
+  </div>
+</header>
