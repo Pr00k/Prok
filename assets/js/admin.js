@@ -1,74 +1,181 @@
-// assets/js/admin.js - admin flows and robust checks
-(function(){ 'use strict';
-  function toast(msg, time=2000){ try{ const t=document.getElementById('sys-toast'); if(!t) return console.log('TOAST:',msg); t.hidden=false; t.textContent=msg; setTimeout(()=>{ t.hidden=true; t.textContent=''; }, time);}catch(e){console.log('toast err',e);} }
+let currentUser = null;
 
-  const ADMIN_EMAIL = 'aaaab9957@gmail.com';
-
-  async function ensureFirebase(){
-    const Prok = window.ProkFirebase || {};
-    if(!Prok.auth || !Prok.db || !Prok.storage) throw new Error('Firebase not ready');
-    return Prok;
-  }
-
-  async function signInAdmin(){
-    try{
-      const Prok = await ensureFirebase();
-      await Prok.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-      const provider = new firebase.auth.GoogleAuthProvider();
-      const res = await Prok.auth.signInWithPopup(provider);
-      if(res && res.user && res.user.email && res.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
-        localStorage.setItem('prok_admin','1'); toast('تم تسجيل دخول الأدمن'); location.reload();
-      } else { toast('هذا الحساب غير مصرح كأدمن'); await Prok.auth.signOut(); }
-    }catch(e){ console.error('signInAdmin',e); toast('خطأ أثناء تسجيل الدخول'); }
-  }
-
-  async function signOutAdmin(){
-    try{ const Prok = window.ProkFirebase || {}; if(Prok.auth) await Prok.auth.signOut(); }catch(e){console.warn(e)} localStorage.removeItem('prok_admin'); toast('تم تسجيل الخروج'); setTimeout(()=>location.reload(),500);
-  }
-
-  async function getSite(){ const Prok = await ensureFirebase(); const snap = await Prok.db.collection('site').doc('content').get(); return snap.exists ? snap.data() : { apps:[], banners:[], settings:{} }; }
-  async function saveSite(payload){ const Prok = await ensureFirebase(); await Prok.db.collection('site').doc('content').set(payload, { merge:true }); }
-
-  window.ProkAdmin = { signInAdmin, signOutAdmin, getSite, saveSite };
-
-  // wire admin button
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const adminBtn = document.getElementById('adminBtn');
-    if(!adminBtn) return;
-    adminBtn.addEventListener('click', async ()=>{
-      const Prok = window.ProkFirebase || {};
-      if(Prok.auth && Prok.auth.currentUser){ toast('مسجل دخول. انقر مزدوجًا للخروج.'); return; }
-      await signInAdmin();
-    });
-    adminBtn.addEventListener('dblclick', async ()=>{ await signOutAdmin(); });
-    // auth watcher
-    if(window.ProkFirebase && window.ProkFirebase.auth){
-      window.ProkFirebase.auth.onAuthStateChanged(user=>{
-        try{
-          if(user && user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
-            document.body.classList.add('admin-mode');
-            document.querySelectorAll('.admin-controls').forEach(el=>el.style.display='block');
-            toast('وضع الأدمن مفعل');
-            // show edit icons (they already exist in DOM) - admin actions will use functions exposed
-            document.querySelectorAll('.edit-icon').forEach(icon=>icon.style.display='inline-flex');
-            // attach click behavior for app/banner edit icons
-            document.body.addEventListener('click', function(e){
-              const el = e.target.closest && e.target.closest('.edit-icon');
-              if(!el) return;
-              const type = el.dataset.type;
-              if(type === 'app') { const i = Number(el.dataset.appIndex); window.open('/admin_placeholder','_self'); /* placeholder, use ProkAdmin.edit flows if UI exists */ }
-              if(type === 'banner') { const i = Number(el.dataset.bannerIndex); window.open('/admin_placeholder','_self'); }
-              if(type === 'animation') { const p = prompt('اختر الانميشن: none, fade, slide, float, pulse, zoom','fade'); if(p) saveSite({ settings: { animation: p } }).then(()=>{ document.documentElement.setAttribute('data-animation', p); toast('تم حفظ الانميشن'); }); }
-              if(type === 'text'){ const target = el.dataset.target; const node = document.querySelector(target); if(!node) return toast('العنصر غير موجود'); const val = prompt('النص الجديد:', node.textContent.trim()); if(val===null) return; node.textContent = val; }
-            });
-          } else {
-            document.body.classList.remove('admin-mode');
-            document.querySelectorAll('.admin-controls').forEach(el=>el.style.display='none');
-            document.querySelectorAll('.edit-icon').forEach(icon=>icon.style.display='none');
-          }
-        }catch(e){console.error('onAuthStateChanged handler',e)}
-      });
+document.addEventListener('DOMContentLoaded', () => {
+    if (!firebaseInitialized) {
+        console.warn('Admin features disabled (Firebase not initialized)');
+        return;
     }
-  });
+    
+    initAuth();
+    initAdminListeners();
+});
 
-})();
+function initAuth() {
+    auth.onAuthStateChanged(user => {
+        currentUser = user;
+        if (user && user.email === ADMIN_EMAIL) {
+            enableAdminMode();
+        } else {
+            disableAdminMode();
+        }
+    });
+}
+
+function enableAdminMode() {
+    document.body.classList.add('admin-mode');
+    document.getElementById('admin-email').textContent = currentUser.email;
+    document.getElementById('admin-login').classList.add('hidden');
+    document.getElementById('admin-logout').classList.remove('hidden');
+    showToast('مرحباً بك في وضع الإدارة', 'success');
+}
+
+function disableAdminMode() {
+    document.body.classList.remove('admin-mode');
+    document.getElementById('admin-login').classList.remove('hidden');
+    document.getElementById('admin-logout').classList.add('hidden');
+}
+
+function initAdminListeners() {
+    document.getElementById('admin-login')?.addEventListener('click', adminLogin);
+    document.getElementById('admin-logout')?.addEventListener('click', adminLogout);
+    
+    document.querySelector('[data-edit="title"]')?.addEventListener('click', editTitle);
+    
+    document.getElementById('add-app-btn')?.addEventListener('click', addApp);
+    
+    document.getElementById('apps-grid')?.addEventListener('click', e => {
+        if (e.target.classList.contains('btn-edit-app')) {
+            editApp(e.target.dataset.id);
+        } else if (e.target.classList.contains('btn-delete-app')) {
+            deleteApp(e.target.dataset.id);
+        }
+    });
+}
+
+async function adminLogin() {
+    try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await auth.signInWithPopup(provider);
+    } catch (error) {
+        console.error('Login error:', error);
+        showToast('فشل تسجيل الدخول', 'error');
+    }
+}
+
+async function adminLogout() {
+    try {
+        await auth.signOut();
+        showToast('تم تسجيل الخروج', 'info');
+    } catch (error) {
+        console.error('Logout error:', error);
+    }
+}
+
+function editTitle() {
+    const currentTitle = window.siteContent?.title || 'مقترحات اليوم';
+    const newTitle = prompt('أدخل العنوان الجديد:', currentTitle);
+    
+    if (newTitle && newTitle !== currentTitle) {
+        updateContent({ title: newTitle });
+    }
+}
+
+function addApp() {
+    const modal = createEditModal('إضافة تطبيق جديد', {
+        name: '',
+        description: '',
+        icon: '',
+        rating: 4.5,
+        downloadUrl: ''
+    }, async (data) => {
+        const newApp = {
+            id: Date.now().toString(),
+            ...data,
+            rating: parseFloat(data.rating),
+            animation: 'fade'
+        };
+        
+        const apps = [...(window.siteContent?.apps || []), newApp];
+        await updateContent({ apps });
+        closeModal(modal);
+    });
+    
+    document.body.appendChild(modal);
+}
+
+function editApp(appId) {
+    const app = window.siteContent?.apps?.find(a => a.id === appId);
+    if (!app) return;
+    
+    const modal = createEditModal('تعديل التطبيق', app, async (data) => {
+        const apps = window.siteContent.apps.map(a => 
+            a.id === appId ? { ...a, ...data, rating: parseFloat(data.rating) } : a
+        );
+        await updateContent({ apps });
+        closeModal(modal);
+    });
+    
+    document.body.appendChild(modal);
+}
+
+async function deleteApp(appId) {
+    if (!confirm('هل أنت متأكد من حذف هذا التطبيق؟')) return;
+    
+    const apps = window.siteContent.apps.filter(a => a.id !== appId);
+    await updateContent({ apps });
+}
+
+function createEditModal(title, data, onSave) {
+    const overlay = document.createElement('div');
+    overlay.className = 'edit-overlay';
+    
+    overlay.innerHTML = `
+        <div class="edit-modal">
+            <h3>${title}</h3>
+            <input type="text" id="edit-name" placeholder="اسم التطبيق" value="${data.name || ''}">
+            <textarea id="edit-description" placeholder="الوصف">${data.description || ''}</textarea>
+            <input type="text" id="edit-icon" placeholder="رابط الأيقونة" value="${data.icon || ''}">
+            <input type="number" id="edit-rating" placeholder="التقييم" value="${data.rating || 4.5}" step="0.1" min="0" max="5">
+            <input type="text" id="edit-url" placeholder="رابط التحميل" value="${data.downloadUrl || ''}">
+            <div class="edit-actions">
+                <button class="btn-cancel">إلغاء</button>
+                <button class="btn-save">حفظ</button>
+            </div>
+        </div>
+    `;
+    
+    overlay.querySelector('.btn-cancel').addEventListener('click', () => closeModal(overlay));
+    overlay.querySelector('.btn-save').addEventListener('click', () => {
+        const formData = {
+            name: overlay.querySelector('#edit-name').value,
+            description: overlay.querySelector('#edit-description').value,
+            icon: overlay.querySelector('#edit-icon').value,
+            rating: overlay.querySelector('#edit-rating').value,
+            downloadUrl: overlay.querySelector('#edit-url').value
+        };
+        onSave(formData);
+    });
+    
+    overlay.addEventListener('click', e => {
+        if (e.target === overlay) closeModal(overlay);
+    });
+    
+    return overlay;
+}
+
+function closeModal(modal) {
+    modal.style.animation = 'fadeOut 0.3s ease-out';
+    setTimeout(() => modal.remove(), 300);
+}
+
+async function updateContent(updates) {
+    try {
+        window.siteContent = { ...window.siteContent, ...updates };
+        await db.collection('site').doc('content').set(window.siteContent);
+        window.renderContent();
+        window.showToast('تم الحفظ بنجاح', 'success');
+    } catch (error) {
+        console.error('Update error:', error);
+        window.showToast('فشل الحفظ', 'error');
+    }
+}
