@@ -1,4 +1,4 @@
-// Firebase configuration (user provided)
+// Replace with your Firebase project config
 window.firebaseConfig = {
   apiKey: "AIzaSyDfy48kwyj8iAu20hx3uJtzcbRGcfcKKn0",
   authDomain: "prok-58f05.firebaseapp.com",
