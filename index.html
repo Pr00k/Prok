@@ -7,21 +7,25 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+  <div id="progress" class="progress"></div>
+
   <header class="navbar">
     <div class="brand">
       <a id="logo" class="logo" href="index.html">Prok</a>
-      <select id="langSwitcher" aria-label="language">
-        <option value="ar">العربية</option>
-        <option value="en">English</option>
-      </select>
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌓</button>
+      <div class="controls">
+        <select id="langSwitcher" aria-label="language">
+          <option value="ar">العربية</option>
+          <option value="en">English</option>
+        </select>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌓</button>
+      </div>
     </div>
     <nav>
       <a href="index.html" data-i18n="nav.home">الرئيسية</a>
       <a href="about.html" data-i18n="nav.about">عنّا</a>
       <a href="services.html" data-i18n="nav.services">الخدمات</a>
       <a href="contact.html" data-i18n="nav.contact">اتصل</a>
-      <a href="admin/login.html" class="admin-link">لوحة الإدارة</a>
+      <a href="admin/index.html" class="admin-link" data-i18n="nav.admin">لوحة الإدارة</a>
     </nav>
   </header>
 
@@ -31,9 +35,10 @@
         <h1 id="heroTitle">جارٍ التحميل...</h1>
         <p id="heroSub"></p>
         <div class="cta-row">
-          <a id="ctaBtn" class="btn" href="services.html">استكشف</a>
+          <a id="ctaBtn" class="btn" href="services.html" data-i18n="cta.explore">استكشف</a>
         </div>
       </div>
+
       <div id="adStrip" class="ad-strip" aria-hidden="true">
         <div class="ad-card">🔥 <span data-i18n="ads.one">ترقية محدودة — 30 يوم</span></div>
         <div class="ad-card">⭐ <span data-i18n="ads.two">قوالب Pro</span></div>
@@ -58,7 +63,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-  <!-- Config + main script -->
+  <!-- Config + scripts -->
   <script src="assets/js/firebase-config.js"></script>
   <script src="assets/js/lang.js"></script>
   <script src="assets/js/main.js"></script>

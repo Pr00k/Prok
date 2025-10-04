@@ -1,23 +1,13 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>عنّا — Prok</title>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>عنّا — Prok</title>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <header class="navbar">
-  <div class="brand">
-    <a class="logo" href="index.html">Prok</a>
-    <select id="langSwitcherHeader"></select>
-  </div>
-  <nav>
-    <a href="index.html">الرئيسية</a>
-    <a href="about.html">عنّا</a>
-    <a href="services.html">الخدمات</a>
-    <a href="contact.html">اتصل</a>
-  </nav>
+  <div class="brand"><a class="logo" href="index.html">Prok</a></div>
+  <nav><a href="index.html">الرئيسية</a><a href="about.html">عنّا</a></nav>
 </header>
 
 <main class="container" style="padding-top:120px">
@@ -27,11 +17,9 @@
 
 <footer class="footer container"><p>© Prok</p></footer>
 
-<script src="assets/js/firebase-config.js"></script>
 <script src="assets/js/lang.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', ()=> {
-  // basic translation hook
   const aboutBody = {
     en: "Prok is a lightweight modern starter built with speed in mind.",
     ar: "Prok هو قالب خفيف وعصري مصمم للسرعة."
@@ -40,13 +28,6 @@ document.addEventListener('DOMContentLoaded', ()=> {
   const lang = localStorage.getItem('prok_lang') || (navigator.language.startsWith('ar') ? 'ar' : 'en');
   document.getElementById('aboutBody').textContent = aboutBody[lang];
   document.getElementById('aboutTitle').textContent = aboutTitle[lang];
-  // init language switcher in header
-  const sel = document.getElementById('langSwitcherHeader');
-  if(sel){
-    sel.innerHTML = '<option value="ar">العربية</option><option value="en">English</option>';
-    sel.value = lang;
-    sel.addEventListener('change', e=>{ localStorage.setItem('prok_lang', e.target.value); location.reload(); });
-  }
 });
 </script>
 </body>
