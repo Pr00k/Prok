@@ -1,16 +1,1 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const sidebar = document.getElementById("sidebar");
-  const sidebarToggle = document.getElementById("sidebarToggle");
-  sidebarToggle.addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-  });
-
-  // Carousel
-  const track = document.getElementById("carouselTrack");
-  const slides = Array.from(track.children);
-  let index = 0;
-  setInterval(() => {
-    index = (index + 1) % slides.length;
-    track.style.transform = `translateX(-${index * 100}%)`;
-  }, 3000);
-});
+document.addEventListener('DOMContentLoaded', ()=>{const sidebar=document.getElementById('sidebar');const sidebarToggle=document.getElementById('sidebarToggle');if(sidebarToggle&&sidebar)sidebarToggle.addEventListener('click',()=>sidebar.classList.toggle('open'));const themeToggle=document.getElementById('themeToggle');const current=localStorage.getItem('prok_theme')||'dark';document.documentElement.setAttribute('data-theme',current);if(themeToggle)themeToggle.addEventListener('click',()=>{const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',t);localStorage.setItem('prok_theme',t);});const track=document.getElementById('carouselTrack');const slides=Array.from(track.children);const dotsWrap=document.getElementById('dots');const prev=document.getElementById('prev');const next=document.getElementById('next');let index=0;let timer=null;const AUTOPLAY_MS=3000;slides.forEach((s,i)=>{const d=document.createElement('div');d.className='dot';d.addEventListener('click',()=>goTo(i));dotsWrap.appendChild(d);});function update(){track.style.transform=`translateX(-${index * 100}%)`;Array.from(dotsWrap.children).forEach((d,i)=>d.classList.toggle('active',i===index));}function nextSlide(){index=(index+1)%slides.length;update()}function prevSlide(){index=(index-1+slides.length)%slides.length;update()}function goTo(i){index=i%slides.length;update();reset()}if(next)next.addEventListener('click',()=>{nextSlide();reset()});if(prev)prev.addEventListener('click',()=>{prevSlide();reset()});function start(){stop();timer=setInterval(nextSlide,AUTOPLAY_MS)}function stop(){if(timer)clearInterval(timer);timer=null}function reset(){if(timer){stop();start()}}track.addEventListener('mouseenter',stop);track.addEventListener('mouseleave',start);let sx=0,dx=0;track.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});track.addEventListener('touchmove',e=>dx=e.touches[0].clientX-sx,{passive:true});track.addEventListener('touchend',()=>{if(Math.abs(dx)>40){if(dx<0)nextSlide();else prevSlide()}dx=0});update();start();});
