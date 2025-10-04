@@ -1,2 +1,122 @@
-/* إضافات CSS خفيفة */
-body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+body {
+  font-family: 'Cairo', sans-serif;
+  margin: 0;
+  color: #fff;
+  background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a1d);
+  background-size: 400% 400%;
+  animation: bgAnim 12s ease infinite;
+  overflow-x: hidden;
+}
+
+@keyframes bgAnim {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  transition: all 0.3s;
+}
+
+.navbar.scrolled {
+  background: rgba(0,0,0,0.9);
+}
+
+.navbar .logo {
+  font-size: 1.5em;
+  color: #00fff0;
+  font-weight: bold;
+}
+
+.navbar nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s;
+}
+
+.navbar nav a:hover {
+  color: #00fff0;
+}
+
+.hero {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.animate-text {
+  font-size: 2.5em;
+  background: linear-gradient(90deg, #00fff0, #ff00d4, #00fff0);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientText 4s infinite linear;
+}
+
+@keyframes gradientText {
+  0% { background-position: 0%; }
+  100% { background-position: 200%; }
+}
+
+.glow-btn {
+  margin-top: 20px;
+  padding: 12px 28px;
+  border: none;
+  background: #00fff0;
+  color: #000;
+  font-size: 1.1em;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 0 20px #00fff0;
+  transition: transform 0.2s;
+}
+
+.glow-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 30px #00fff0, 0 0 60px #ff00d4;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 80px 20px;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 15px;
+  width: 300px;
+  padding: 25px;
+  text-align: center;
+  transition: transform 0.4s, box-shadow 0.4s;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 0 20px #00fff0, 0 0 30px #ff00d4;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background: rgba(0,0,0,0.7);
+}
