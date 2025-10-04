@@ -1,6 +1,5 @@
-// main.js - loads content from Firestore (site/content) or falls back to local data
-document.addEventListener('DOMContentLoaded', function(){
-  // small default content
+// main.js - render content from Firestore or fallback
+document.addEventListener('DOMContentLoaded', ()=>{
   const DEFAULT = {
     heroTitle: "Welcome to Prok — modern, fast, friendly",
     heroSub: "A lightweight starter with smooth animations.",
@@ -16,22 +15,19 @@ document.addEventListener('DOMContentLoaded', function(){
     footerText: "© Prok — 2025"
   };
 
-  // helper to render
   function render(data){
     const lang = localStorage.getItem('prok_lang') || (navigator.language && navigator.language.startsWith('ar') ? 'ar' : 'en');
     document.getElementById('heroTitle').textContent = (lang==='ar' && data.heroTitle_ar) ? data.heroTitle_ar : data.heroTitle;
     document.getElementById('heroSub').textContent = (lang==='ar' && data.heroSub_ar) ? data.heroSub_ar : data.heroSub;
     document.getElementById('footerText').textContent = data.footerText || '© Prok';
 
-    // features
     const container = document.getElementById('features');
     container.innerHTML = '';
-    const features = data.features || [];
-    features.forEach(f=>{
+    (data.features||[]).forEach(f=>{
       const el = document.createElement('article');
-      el.className = 'card';
-      const title = (localStorage.getItem('prok_lang')==='ar') ? (f.title_ar || f.title) : (f.title || '');
-      const desc = (localStorage.getItem('prok_lang')==='ar') ? (f.desc_ar || f.desc) : (f.desc || '');
+      el.className='card';
+      const title = (lang==='ar') ? (f.title_ar||f.title) : (f.title||'');
+      const desc = (lang==='ar') ? (f.desc_ar||f.desc) : (f.desc||'');
       el.innerHTML = `<h3>${title}</h3><p>${desc}</p>`;
       container.appendChild(el);
     });
@@ -40,36 +36,27 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function observeCards(){
     const cards = document.querySelectorAll('.card');
-    const obs = new IntersectionObserver((entries, o)=>{
-      entries.forEach(en=>{
-        if(en.isIntersecting){ en.target.classList.add('show'); o.unobserve(en.target); }
-      });
-    }, {threshold:0.15});
+    const obs = new IntersectionObserver((entries,o)=>{ entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('show'); o.unobserve(en.target); } }); }, {threshold:0.15});
     cards.forEach(c=>obs.observe(c));
   }
 
   // theme toggle
   (function(){
     const btn = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('prok_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'dark');
+    const saved = localStorage.getItem('prok_theme') || 'dark';
     document.documentElement.setAttribute('data-theme', saved==='dark'?'dark':'light');
-    if(btn){ btn.addEventListener('click', ()=> {
-      const cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', cur);
-      localStorage.setItem('prok_theme', cur);
-    }); }
+    if(btn) btn.addEventListener('click', ()=>{ const cur = document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'; document.documentElement.setAttribute('data-theme', cur); localStorage.setItem('prok_theme', cur); });
   })();
 
-  // try firestore
-  if(window.firebaseConfig && window.firebase && window.firebase.firestore){
-    try{
+  // progress bar
+  window.addEventListener('scroll', ()=>{ const h=document.documentElement; const p=document.getElementById('progress'); const w=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100; if(p) p.style.width=w+'%'; });
+
+  // try Firestore read
+  try{
+    if(window.firebaseConfig && window.firebase && window.firebase.firestore){
       try{ firebase.initializeApp(window.firebaseConfig); }catch(e){}
       const db = firebase.firestore();
-      db.collection('site').doc('content').get().then(doc=>{
-        if(doc.exists) render(doc.data()); else render(DEFAULT);
-      }).catch(err=>{ console.warn('Firestore read failed',err); render(DEFAULT); });
-    }catch(e){ console.warn('Firebase init error',e); render(DEFAULT); }
-  } else {
-    render(DEFAULT);
-  }
+      db.collection('site').doc('content').get().then(doc=>{ render(doc.exists?doc.data():DEFAULT); }).catch(e=>{ console.warn(e); render(DEFAULT); });
+    } else { render(DEFAULT); }
+  }catch(e){ console.warn('load error',e); render(DEFAULT); }
 });

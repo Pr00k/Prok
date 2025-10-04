@@ -1,4 +1,4 @@
-// Firebase configuration for Prok (inserted by user)
+// Firebase configuration (user provided)
 window.firebaseConfig = {
   apiKey: "AIzaSyDfy48kwyj8iAu20hx3uJtzcbRGcfcKKn0",
   authDomain: "prok-58f05.firebaseapp.com",
