@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Prok Store — أفضل تجربة</title>
+  <title>Prok Store — متجر التطبيقات</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <header class="header">
     <div class="container header-inner">
       <a class="logo" href="index.html">Prok<span class="dot">.</span></a>
-      <nav class="top-nav" id="topNav" aria-label="القائمة العلوية">
+      <nav class="top-nav" id="topNav">
         <a href="index.html">الرئيسية</a>
         <a href="services.html">الألعاب</a>
         <a href="services.html">التطبيقات</a>
@@ -36,26 +36,22 @@
     </aside>
 
     <main class="main">
-      <!-- 3D Carousel -->
-      <section class="carousel" id="carousel" aria-label="عروض">
-        <div class="carousel-track" id="carouselTrack">
+      <section class="carousel" id="carousel">
+        <div class="carousel-track">
           <div class="slide"><img src="assets/img/banner1.svg" alt="banner1"></div>
           <div class="slide"><img src="assets/img/banner2.svg" alt="banner2"></div>
           <div class="slide"><img src="assets/img/banner3.svg" alt="banner3"></div>
         </div>
-        <div class="carousel-controls">
-          <button id="prev" class="ctrl">‹</button>
-          <div class="dots" id="dots"></div>
-          <button id="next" class="ctrl">›</button>
-        </div>
       </section>
 
-      <!-- Sections -->
       <section class="section head-cards" id="featured">
         <h2>مقترحات اليوم</h2>
-        <div class="cards" id="cards"></div>
+        <div class="cards" id="cards">
+          <div class="card">لعبة 1</div>
+          <div class="card">لعبة 2</div>
+          <div class="card">لعبة 3</div>
+        </div>
       </section>
-
     </main>
   </div>
 
@@ -63,13 +59,6 @@
     <div class="container">© 2025 Prok Store</div>
   </footer>
 
-  <!-- Firebase (compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-  <script src="assets/js/firebase-config.js"></script>
-  <script src="assets/js/darkmode.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>
