@@ -1,87 +1,62 @@
-/* === إعدادات القائمة العلوية === */
-.site-header {
-  background: var(--header-bg, #081021);
-  color: white;
-  padding: 10px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+/* style.css - Prok responsive */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+
+:root{
+  --bg1:#071224; --bg2:#0f2a36; --card:rgba(255,255,255,0.03);
+  --accent:#00ffe7; --accent2:#ff00d4; --muted:#9fb0bf; --text:#ffffff;
+}
+[data-theme="light"]{
+  --bg1:#f7fafc; --bg2:#e6eef8; --card:#fff; --accent:#0066ff; --accent2:#ff5ea2; --muted:#334155; --text:#081124;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:'Cairo',sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+
+/* header */
+.site-header{position:sticky;top:0;z-index:80;background:rgba(0,0,0,0.25);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,0.04)}
+.nav-container{display:flex;align-items:center;justify-content:space-between;padding:12px}
+.logo{font-weight:900;color:var(--accent);text-decoration:none;font-size:1.15rem}
+.main-nav{display:flex;gap:18px;align-items:center}
+.main-nav a{color:var(--muted);text-decoration:none;padding:8px;border-radius:8px;font-weight:600}
+.main-nav a:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.controls{display:flex;gap:10px;align-items:center}
+.theme-toggle{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:6px 8px;border-radius:8px;color:var(--muted);cursor:pointer}
+.menu-toggle{display:none;background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:6px}
+
+/* hero */
+.hero{min-height:70vh;display:flex;align-items:center;justify-content:center;position:relative;padding:40px 20px}
+.hero-inner{text-align:center;max-width:900px}
+.hero h1{font-size:2.6rem;margin:0;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}
+.hero p{color:var(--muted);margin:12px 0}
+.btn{display:inline-block;padding:12px 22px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#06202a;font-weight:800;text-decoration:none;box-shadow:0 12px 30px rgba(0,0,0,0.35);transition:transform .15s}
+.btn:active{transform:scale(.98)}
+
+/* ad strip */
+.ad-strip{position:absolute;bottom:18px;left:0;right:0;display:flex;gap:12px;justify-content:center;pointer-events:none}
+.ad-card{background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));padding:10px 14px;border-radius:12px;font-weight:700;animation: float 6s ease-in-out infinite}
+@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;padding:30px 0}
+.card{background:var(--card);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(20px);transition:opacity .45s ease,transform .45s ease}
+.card.show{opacity:1;transform:none}
+.card h3{color:var(--accent);margin:0 0 8px}
+.card p{color:var(--muted);margin:0}
+
+/* footer */
+.footer{padding:30px 20px;color:var(--muted);text-align:center}
+
+/* responsive */
+@media (max-width:900px){
+  .hero h1{font-size:2.1rem}
+}
+@media (max-width:768px){
+  .main-nav{display:none;position:absolute;top:64px;left:10px;right:10px;background:var(--bg2);border-radius:12px;padding:14px;flex-direction:column;gap:12px;box-shadow:0 20px 40px rgba(0,0,0,0.4)}
+  .main-nav.show{display:flex}
+  .menu-toggle{display:block}
+  .ad-strip{display:none}
 }
 
-.nav-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1100px;
-}
-
-.logo {
-  font-size: 1.4rem;
-  font-weight: bold;
-  background: linear-gradient(90deg, #0ff, #f0f);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-#mainNav {
-  display: flex;
-  gap: 20px;
-}
-
-#mainNav a {
-  text-decoration: none;
-  color: #ccc;
-  transition: 0.3s;
-}
-
-#mainNav a:hover {
-  color: #fff;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.menu-toggle {
-  display: none;
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
-
-/* === للجوال === */
-@media (max-width: 768px) {
-  #mainNav {
-    display: none;
-    flex-direction: column;
-    background: #0b152b;
-    position: absolute;
-    top: 60px;
-    right: 10px;
-    left: 10px;
-    border-radius: 10px;
-    padding: 15px;
-    animation: fadeIn 0.3s ease-in-out;
-  }
-
-  #mainNav.show {
-    display: flex;
-  }
-
-  .menu-toggle {
-    display: block;
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* small perf hint */
+*{will-change:transform,opacity}
