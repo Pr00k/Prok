@@ -1,43 +1,66 @@
 <!doctype html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Prok - متجر التطبيقات</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <title>Prok — المتجر العصري</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <header class="site-header">
-    <a class="logo" href="index.html">Prok</a>
+  <header class="navbar">
+    <div class="brand">
+      <a id="logo" class="logo" href="index.html">Prok</a>
+      <select id="langSwitcher" aria-label="language">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+      </select>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌓</button>
+    </div>
     <nav>
-      <a href="about.html">حول</a>
-      <a href="services.html">التطبيقات</a>
-      <a href="blog/index.html">المدونة</a>
-      <a href="contact.html">اتصل</a>
-      <a href="admin/index.html" class="admin-link">لوحة الادمن</a>
+      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
+      <a href="about.html" data-i18n="nav.about">عنّا</a>
+      <a href="services.html" data-i18n="nav.services">الخدمات</a>
+      <a href="contact.html" data-i18n="nav.contact">اتصل</a>
+      <a href="admin/login.html" class="admin-link">لوحة الإدارة</a>
     </nav>
   </header>
 
-  <main>
+  <main id="mainContent">
     <section class="hero">
-      <h1>أهلاً بك في Prok</h1>
-      <p>المتجر التجريبي لتطبيقاتك — ادخل لوحة الادمن لتحديث المحتوى.</p>
-      <a class="cta" href="services.html">تصفح التطبيقات</a>
+      <div class="hero-inner">
+        <h1 id="heroTitle">جارٍ التحميل...</h1>
+        <p id="heroSub"></p>
+        <div class="cta-row">
+          <a id="ctaBtn" class="btn" href="services.html">استكشف</a>
+        </div>
+      </div>
+      <div id="adStrip" class="ad-strip" aria-hidden="true">
+        <div class="ad-card">🔥 <span data-i18n="ads.one">ترقية محدودة — 30 يوم</span></div>
+        <div class="ad-card">⭐ <span data-i18n="ads.two">قوالب Pro</span></div>
+        <div class="ad-card">⚡ <span data-i18n="ads.three">أداء فائق</span></div>
+      </div>
     </section>
 
-    <section class="apps" id="appsList"></section>
+    <section id="features" class="cards container"></section>
+
+    <section id="about" class="about container">
+      <h2 data-i18n="about.title">عنّا</h2>
+      <p id="aboutText"></p>
+    </section>
   </main>
 
-  <footer>
-    <p>© Prok 2025 — كل الحقوق محفوظة</p>
+  <footer class="footer container">
+    <p id="footerText">© Prok</p>
   </footer>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-  <!-- Config and main scripts -->
+  <!-- Config + main script -->
   <script src="assets/js/firebase-config.js"></script>
-  <script defer src="assets/js/main.js"></script>
+  <script src="assets/js/lang.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
