@@ -149,3 +149,18 @@ footer {
   from { text-shadow: 0 0 10px #00ffe7; }
   to { text-shadow: 0 0 20px #ff00e1; }
 }
+/* ===== SCROLL ANIMATION ===== */
+.animate-show {
+  animation: fadeUp 1.2s ease forwards;
+}
+
+@keyframes fadeUp {
+  0% { 
+    opacity: 0; 
+    transform: translateY(40px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
