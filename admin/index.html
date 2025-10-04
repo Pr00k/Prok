@@ -4,23 +4,21 @@
 <link rel="stylesheet" href="../assets/css/style.css"></head>
 <body>
 <div class="admin-wrap">
-  <h2>Admin Login</h2>
-  <p>Sign in with the Google account that is allowed in Firestore rules.</p>
+  <h2>تسجيل دخول الأدمن</h2>
+  <p>سجل بحساب جوجل المصرح له للدخول للوحة.</p>
   <button id="googleBtn" class="btn">Sign in with Google</button>
   <p id="msg" style="color:#f88"></p>
+  <hr/>
+  <h3>أو تسجيل باسم وكلمة سر</h3>
+  <input id="email" placeholder="Email" /><input id="password" placeholder="Password" type="password" />
+  <div style="margin-top:8px">
+    <button id="emailSign" class="btn">Sign in</button>
+    <button id="emailCreate" class="btn" style="background:#0a84ff">Create account</button>
+  </div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="../assets/js/firebase-config.js"></script>
-<script>
-if(!window.firebaseConfig){ document.getElementById('msg').textContent='أضف firebase-config.js'; }
-else {
-  firebase.initializeApp(window.firebaseConfig);
-  const auth = firebase.auth();
-  const provider = new firebase.auth.GoogleAuthProvider();
-  document.getElementById('googleBtn').addEventListener('click', ()=> auth.signInWithPopup(provider).then(()=> location.href='dashboard.html').catch(e=> document.getElementById('msg').textContent=e.message));
-  auth.onAuthStateChanged(u=>{ if(u) location.href='dashboard.html'; });
-}
-</script>
+<script src="../assets/js/admin.js"></script>
 </body>
 </html>

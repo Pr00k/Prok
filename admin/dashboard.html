@@ -29,66 +29,10 @@
     </div>
   </section>
 </div>
-
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="../assets/js/firebase-config.js"></script>
-<script>
-if(!window.firebaseConfig){ alert('Add firebase-config.js'); }
-else {
-  firebase.initializeApp(window.firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  const status = document.getElementById('status');
-
-  auth.onAuthStateChanged(async user=>{
-    if(!user) return location.href='index.html';
-    document.getElementById('userEmail').textContent = user.email;
-    await load();
-  });
-
-  document.getElementById('logoutBtn').addEventListener('click', ()=> auth.signOut().then(()=> location.href='index.html'));
-
-  async function load(){
-    status.textContent='جاري التحميل...';
-    try{
-      const doc = await db.collection('site').doc('content').get();
-      if(!doc.exists){
-        document.getElementById('hero_ar').value='مرحبا';
-        document.getElementById('hero_en').value='Welcome';
-        document.getElementById('sub_ar').value='';
-        document.getElementById('sub_en').value='';
-        document.getElementById('features').value = JSON.stringify([], null, 2);
-        status.textContent='لا يوجد محتوى بعد (افتراضي)';
-        return;
-      }
-      const data = doc.data();
-      document.getElementById('hero_ar').value = data.heroTitle_ar || '';
-      document.getElementById('hero_en').value = data.heroTitle || '';
-      document.getElementById('sub_ar').value = data.heroSub_ar || '';
-      document.getElementById('sub_en').value = data.heroSub || '';
-      document.getElementById('features').value = JSON.stringify(data.features || [], null, 2);
-      status.textContent='تم التحميل';
-    }catch(e){ status.textContent='خطأ: '+e.message; }
-  }
-
-  document.getElementById('saveBtn').addEventListener('click', async ()=>{
-    let parsed = [];
-    try{ parsed = JSON.parse(document.getElementById('features').value || '[]'); if(!Array.isArray(parsed)) throw new Error('Features must be array'); }
-    catch(e){ status.textContent='JSON Error: '+e.message; return; }
-    status.textContent='جاري الحفظ...';
-    try{
-      await db.collection('site').doc('content').set({
-        heroTitle: document.getElementById('hero_en').value,
-        heroTitle_ar: document.getElementById('hero_ar').value,
-        heroSub: document.getElementById('sub_en').value,
-        heroSub_ar: document.getElementById('sub_ar').value,
-        features: parsed,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge: true });
-      status.textContent='تم الحفظ ✅';
-    }catch(e){ status.textContent='حفظ خطأ: '+e.message; }
-  });
-}
-</script>
+<script src="../assets/js/admin.js"></script>
+</body>
+</html>
