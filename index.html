@@ -1,71 +1,75 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Prok — المتجر العصري</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Prok Store — أفضل تجربة</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="nav-container container">
-      <a class="logo" href="index.html">Prok</a>
-
-      <div class="controls">
-        <button id="themeToggle" class="theme-toggle" aria-label="تبديل الوضع">🌓</button>
-        <select id="langSwitcher" aria-label="اختر اللغة">
-          <option value="ar">العربية</option>
-          <option value="en">English</option>
-        </select>
-        <button id="menuToggle" class="menu-toggle" aria-label="فتح القائمة">☰</button>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">Prok<span class="dot">.</span></a>
+      <nav class="top-nav" id="topNav" aria-label="القائمة العلوية">
+        <a href="index.html">الرئيسية</a>
+        <a href="services.html">الألعاب</a>
+        <a href="services.html">التطبيقات</a>
+        <a href="about.html">عنّا</a>
+      </nav>
+      <div class="header-actions">
+        <button id="themeToggle" class="btn icon">🌓</button>
+        <button id="adminLoginBtn" class="btn primary">أدمن</button>
+        <button id="sidebarToggle" class="btn icon">☰</button>
       </div>
     </div>
-
-    <nav id="mainNav" class="main-nav">
-      <a href="index.html" data-i18n="nav.home">الرئيسية</a>
-      <a href="about.html" data-i18n="nav.about">عنّا</a>
-      <a href="services.html" data-i18n="nav.services">الخدمات</a>
-      <a href="contact.html" data-i18n="nav.contact">اتصل</a>
-      <a href="admin/index.html" class="admin-link" data-i18n="nav.admin">لوحة الإدارة</a>
-    </nav>
   </header>
 
-  <main id="mainContent">
-    <section class="hero container">
-      <div class="hero-inner">
-        <h1 id="heroTitle">جارٍ التحميل...</h1>
-        <p id="heroSub">...</p>
-        <a id="ctaBtn" class="btn" href="services.html" data-i18n="cta.explore">استكشف</a>
-      </div>
+  <div class="layout container">
+    <aside class="sidebar" id="sidebar">
+      <ul>
+        <li class="active">الأبرز</li>
+        <li>الأكثر تحميلاً</li>
+        <li>الألعاب الجديدة</li>
+        <li>التطبيقات</li>
+        <li>التصنيفات</li>
+      </ul>
+    </aside>
 
-      <div id="adStrip" class="ad-strip" aria-hidden="true">
-        <div class="ad-card" data-i18n="ads.one">ترقية محدودة</div>
-        <div class="ad-card" data-i18n="ads.two">قوالب Pro</div>
-        <div class="ad-card" data-i18n="ads.three">أداء فائق</div>
-      </div>
-    </section>
+    <main class="main">
+      <!-- 3D Carousel -->
+      <section class="carousel" id="carousel" aria-label="عروض">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="slide"><img src="assets/img/banner1.svg" alt="banner1"></div>
+          <div class="slide"><img src="assets/img/banner2.svg" alt="banner2"></div>
+          <div class="slide"><img src="assets/img/banner3.svg" alt="banner3"></div>
+        </div>
+        <div class="carousel-controls">
+          <button id="prev" class="ctrl">‹</button>
+          <div class="dots" id="dots"></div>
+          <button id="next" class="ctrl">›</button>
+        </div>
+      </section>
 
-    <section id="features" class="cards container"></section>
+      <!-- Sections -->
+      <section class="section head-cards" id="featured">
+        <h2>مقترحات اليوم</h2>
+        <div class="cards" id="cards"></div>
+      </section>
 
-    <section class="about container">
-      <h2 id="aboutTitle">عنّا</h2>
-      <p id="aboutText"></p>
-    </section>
-  </main>
+    </main>
+  </div>
 
-  <footer class="footer container">
-    <p id="footerText">© Prok</p>
+  <footer class="footer">
+    <div class="container">© 2025 Prok Store</div>
   </footer>
 
-  <!-- Firebase libs (compat) -->
+  <!-- Firebase (compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-  <!-- App scripts -->
   <script src="assets/js/firebase-config.js"></script>
-  <script src="assets/js/lang.js"></script>
   <script src="assets/js/darkmode.js"></script>
-  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
