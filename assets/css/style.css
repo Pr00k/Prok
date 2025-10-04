@@ -1,30 +1,162 @@
-.glow-btn {
-  margin-top: 25px;
-  background: linear-gradient(90deg, #00ffe7, #ff00e1);
-  border: none;
-  padding: 12px 25px;
-  color: #fff;
-  border-radius: 10px;
-  font-size: 1.1em;
-  cursor: pointer;
-  box-shadow: 0 0 20px #00ffe7, 0 0 40px #ff00e1; /* توهج دائم */
-  animation: pulse 2s infinite alternate; /* حركة بسيطة */
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prok — الموقع المطوّر</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* إلغاء تأثير النقر */
+    body, button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+    * {
+      user-select: none;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* نبضة بسيطة مثل GIF */
-@keyframes pulse {
-  from {
-    transform: scale(1);
-    box-shadow: 0 0 15px #00ffe7, 0 0 30px #ff00e1;
-  }
-  to {
-    transform: scale(1.05);
-    box-shadow: 0 0 25px #ff00e1, 0 0 50px #00ffe7;
-  }
-}
+    body {
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(135deg, #0f0f1a, #1c1c2e);
+      color: #fff;
+      overflow-x: hidden;
+    }
 
-/* أزلنا تأثير hover تمامًا */
-.glow-btn:hover {
-  transform: none;
-  box-shadow: 0 0 20px #00ffe7, 0 0 40px #ff00e1;
-}
+    header.navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background: rgba(0,0,0,0.6);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+    }
+
+    header .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #0ff;
+    }
+
+    nav a {
+      margin-left: 20px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #0ff;
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: url('https://i.gifer.com/1amw.gif') center/cover no-repeat; /* صورة متحركة خفيفة */
+      position: relative;
+    }
+
+    .hero .content {
+      background: rgba(0,0,0,0.6);
+      padding: 40px;
+      border-radius: 20px;
+      animation: fadeUp 1.2s ease forwards;
+    }
+
+    .hero h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .glow-btn {
+      padding: 10px 25px;
+      border: none;
+      border-radius: 30px;
+      background: #0ff;
+      color: #000;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .glow-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 80px 50px;
+      background: #141422;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      background: rgba(0,255,255,0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #0f0f1a;
+      margin-top: 50px;
+    }
+
+    /* أنيميشن دخول */
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <h1 class="logo">⚡ Prok Vision</h1>
+    <nav>
+      <a href="#">الرئيسية</a>
+      <a href="about.html">من نحن</a>
+      <a href="services.html">الخدمات</a>
+      <a href="contact.html">تواصل معنا</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="content">
+      <h2>مرحبا بك في المستقبل 💫</h2>
+      <p>موقع متكامل بتقنيات حديثة وأنيميشن فائق التطور.</p>
+      <button class="glow-btn">ابدأ الآن 🚀</button>
+    </div>
+  </section>
+
+  <section class="cards">
+    <div class="card"><h3>⚙️ التطوير الذكي</h3><p>أنظمة ذكية تتطور ذاتيًا.</p></div>
+    <div class="card"><h3>🌌 الواجهة المستقبلية</h3><p>تفاعل مذهل وحركة انسيابية.</p></div>
+    <div class="card"><h3>🧠 الذكاء الاصطناعي</h3><p>أفكار تفوق الخيال.</p></div>
+  </section>
+
+  <footer>
+    <p>© 2025 Prok Vision — جميع الحقوق محفوظة.</p>
+  </footer>
+</body>
+</html>
