@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin Dashboard — Prok</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div style="max-width:1000px;margin:90px auto;padding:20px;background:rgba(0,0,0,0.45);border-radius:12px">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h2>Dashboard</h2>
+    <div><span id="userEmail" style="margin-right:10px"></span><button id="logoutBtn" class="btn">Logout</button></div>
+  </div>
+
+  <hr style="margin:12px 0">
+
+  <label>Hero title (EN)</label>
+  <input id="h_en" style="width:100%;padding:8px;margin:6px 0">
+
+  <label>Hero title (AR)</label>
+  <input id="h_ar" style="width:100%;padding:8px;margin:6px 0">
+
+  <label>Hero sub (EN)</label>
+  <textarea id="s_en" style="width:100%;padding:8px;margin:6px 0"></textarea>
+
+  <label>Hero sub (AR)</label>
+  <textarea id="s_ar" style="width:100%;padding:8px;margin:6px 0"></textarea>
+
+  <label>Features (JSON array)</label>
+  <textarea id="features" style="width:100%;padding:8px;margin:6px 0" placeholder='Example: ["Fast","Secure"]'></textarea>
+
+  <div style="margin-top:10px">
+    <button id="saveBtn" class="btn">Save</button>
+    <button id="loadBtn" class="btn" style="background:#888;color:#fff;margin-left:8px">Reload</button>
+    <div id="status" style="margin-top:8px;color:#9f9"></div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script>
+if (!window.firebaseConfig){ alert('Add firebase-config.js with your project config.'); }
+else {
+  firebase.initializeApp(window.firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  const userEmail = document.getElementById('userEmail');
+  const status = document.getElementById('status');
+
+  auth.onAuthStateChanged(async user => {
+    if (!user) return location.href='login.html';
+    userEmail.textContent = user.email;
+    await load();
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', ()=> auth.signOut().then(()=> location.href='login.html'));
+
+  async function load(){
+    status.textContent='Loading...';
+    try {
+      const doc = await db.collection('site').doc('content').get();
+      if (!doc.exists) {
+        document.getElementById('h_en').value='Welcome';
+        document.getElementById('h_ar').value='مرحبا';
+        document.getElementById('s_en').value='';
+        document.getElementById('s_ar').value='';
+        document.getElementById('features').value = JSON.stringify([],null,2);
+        status.textContent='No document yet (defaults shown)';
+        return;
+      }
+      const data = doc.data();
+      document.getElementById('h_en').value = data.heroTitle || '';
+      document.getElementById('h_ar').value = data.heroTitle_ar || '';
+      document.getElementById('s_en').value = data.heroSub || '';
+      document.getElementById('s_ar').value = data.heroSub_ar || '';
+      document.getElementById('features').value = JSON.stringify(data.features||[],null,2);
+      status.textContent='Loaded';
+    } catch(e){ status.textContent='Error: '+e.message; }
+  }
+
+  document.getElementById('saveBtn').addEventListener('click', async ()=>{
+    let parsed = [];
+    try { parsed = JSON.parse(document.getElementById('features').value||'[]'); if (!Array.isArray(parsed)) throw new Error('Features must be array'); }
+    catch(e){ status.textContent='JSON Error: '+e.message; return; }
+    status.textContent='Saving...';
+    try {
+      await db.collection('site').doc('content').set({
+        heroTitle: document.getElementById('h_en').value,
+        heroTitle_ar: document.getElementById('h_ar').value,
+        heroSub: document.getElementById('s_en').value,
+        heroSub_ar: document.getElementById('s_ar').value,
+        features: parsed,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge:true });
+      status.textContent='Saved ✅';
+    } catch(e){ status.textContent='Save error: '+e.message; }
+  });
+
+  document.getElementById('loadBtn').addEventListener('click', load);
+}
+</script>
