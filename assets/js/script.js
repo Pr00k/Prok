@@ -1,10 +1,15 @@
-// تحريك العناصر عند التمرير
+// ===== Scroll Animation (Cards تظهر عند التمرير) =====
+const cards = document.querySelectorAll('.card');
+
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.classList.add('animate-show');
+      entry.target.classList.add('show');
+      observer.unobserve(entry.target); // ما نرجع نعملها أنيميشن مرة ثانية
     }
   });
-});
+}, { threshold: 0.2 });
 
-document.querySelectorAll('.card, .hero .content').forEach(el => observer.observe(el));
+cards.forEach(card => {
+  observer.observe(card);
+});
