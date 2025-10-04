@@ -3,75 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prok - مقترحات التطبيقات والألعاب</title>
-    <meta name="description" content="اكتشف أفضل التطبيقات والألعاب المقترحة يومياً">
-    <meta name="theme-color" content="#6366f1">
-    
+    <title>Prok - تطبيقات وألعاب مجانية</title>
+    <meta name="description" content="اكتشف أفضل التطبيقات والألعاب المجانية من Prok. تنزيل مباشر وآمن.">
+    <meta name="keywords" content="تطبيقات, ألعاب, مجانية, بروك, تنزيل">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/edits.css">
+    <link rel="preload" href="assets/img/banner1.svg" as="image">
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Prok",
+        "description": "منصة تطبيقات وألعاب مجانية",
+        "url": "https://pr00k.github.io/Prok/",
+        "logo": "https://pr00k.github.io/Prok/assets/img/logo.svg"
+    }
+    </script>
 </head>
 <body>
-    <div id="loader" class="loader">
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading-spinner">
         <div class="spinner"></div>
     </div>
 
-    <div id="toast-container"></div>
-
+    <!-- Header -->
     <header class="header">
-        <div class="container">
-            <div class="header-content">
+        <nav class="nav container">
+            <div class="nav-brand">
                 <h1 class="logo">Prok</h1>
-                <div class="header-actions">
-                    <button id="theme-toggle" class="icon-btn" aria-label="تبديل الثيم">
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#home" class="nav-link">الرئيسية</a></li>
+                    <li class="nav-item"><a href="#apps" class="nav-link">التطبيقات</a></li>
+                    <li class="nav-item"><a href="#games" class="nav-link">الألعاب</a></li>
+                    <li class="nav-item"><a href="#about" class="nav-link">عن بروك</a></li>
+                </ul>
+                
+                <div class="nav-actions">
+                    <button id="theme-toggle" class="theme-btn" aria-label="تبديل السمة">
                         <span class="theme-icon">🌙</span>
                     </button>
-                    <button id="admin-login" class="icon-btn admin-only hidden" aria-label="دخول الأدمن">
-                        <span>👤</span>
-                    </button>
-                    <button id="admin-logout" class="icon-btn admin-only hidden" aria-label="خروج">
-                        <span>🚪</span>
-                    </button>
+                    <button id="admin-login-btn" class="admin-btn" style="display: none;">تسجيل المدير</button>
                 </div>
             </div>
-        </div>
+
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
     </header>
 
-    <section class="hero">
-        <div class="container">
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-carousel">
             <div class="carousel-container">
-                <div class="carousel-wrapper" id="carousel-wrapper"></div>
-                <button class="carousel-btn prev" id="carousel-prev" aria-label="السابق">❮</button>
-                <button class="carousel-btn next" id="carousel-next" aria-label="التالي">❯</button>
-                <div class="carousel-dots" id="carousel-dots"></div>
+                <div class="carousel-track">
+                    <!-- Banner slides will be loaded dynamically -->
+                </div>
+                
+                <div class="carousel-nav">
+                    <button class="carousel-prev" aria-label="السابق">❮</button>
+                    <button class="carousel-next" aria-label="التالي">❯</button>
+                </div>
+                
+                <div class="carousel-dots">
+                    <!-- Dots will be generated dynamically -->
+                </div>
             </div>
         </div>
     </section>
 
-    <main class="main-content">
+    <!-- Apps Section -->
+    <section id="apps" class="section">
         <div class="container">
             <div class="section-header">
-                <h2 id="section-title" class="section-title">مقترحات اليوم</h2>
-                <button class="edit-btn admin-only hidden" data-edit="title" aria-label="تعديل">✏️</button>
+                <h2 class="section-title">التطبيقات الشائعة</h2>
+                <p class="section-subtitle">اكتشف أفضل التطبيقات المجانية</p>
             </div>
-            <div class="apps-grid" id="apps-grid"></div>
-            <button id="add-app-btn" class="add-btn admin-only hidden">+ إضافة تطبيق</button>
+            
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">الكل</button>
+                <button class="filter-btn" data-filter="productivity">الإنتاجية</button>
+                <button class="filter-btn" data-filter="social">التواصل</button>
+                <button class="filter-btn" data-filter="tools">الأدوات</button>
+            </div>
+            
+            <div class="apps-grid" id="apps-grid">
+                <!-- Apps will be loaded dynamically -->
+            </div>
         </div>
-    </main>
+    </section>
 
+    <!-- Games Section -->
+    <section id="games" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">الألعاب المميزة</h2>
+                <p class="section-subtitle">استمتع بألعاب مجانية رائعة</p>
+            </div>
+            
+            <div class="games-grid" id="games-grid">
+                <!-- Games will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="about-content">
+                <h2 class="section-title">عن Prok</h2>
+                <div class="about-text">
+                    <p>منصة Prok تقدم أفضل التطبيقات والألعاب المجانية بعالية الجودة وسهولة الاستخدام.</p>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <h3>50+</h3>
+                        <p>تطبيق</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>30+</h3>
+                        <p>لعبة</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>10K+</h3>
+                        <p>مستخدم</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Prok. جميع الحقوق محفوظة.</p>
-            <div class="admin-info admin-only hidden">
-                <span id="admin-email"></span>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Prok</h3>
+                    <p>منصة التطبيقات والألعاب المجانية</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#apps">التطبيقات</a></li>
+                        <li><a href="#games">الألعاب</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>التواصل</h4>
+                    <p>aaaab9957@gmail.com</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Prok. جميع الحقوق محفوظة.</p>
             </div>
         </div>
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-    
+    <!-- Admin Modal -->
+    <div id="admin-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>لوحة التحكم</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="admin-login">
+                    <h4>تسجيل الدخول</h4>
+                    <button id="google-login" class="btn btn-primary">التسجيل عبر جوجل</button>
+                </div>
+                <div id="admin-panel" style="display: none;">
+                    <h4>أدوات المدير</h4>
+                    <div class="admin-tools">
+                        <button class="admin-tool-btn" data-action="edit-banners">تحرير اللافتات</button>
+                        <button class="admin-tool-btn" data-action="edit-apps">تحرير التطبيقات</button>
+                        <button class="admin-tool-btn" data-action="edit-games">تحرير الألعاب</button>
+                        <button class="admin-tool-btn" data-action="edit-content">تحرير المحتوى</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+
+    <!-- App Scripts -->
     <script src="assets/js/firebase-config.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/admin.js"></script>
