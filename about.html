@@ -1,34 +1,11 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>عنّا — Prok</title>
-<link rel="stylesheet" href="assets/css/style.css">
-</head>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>عنّا — Prok</title>
+<link rel="stylesheet" href="assets/css/style.css"></head>
 <body>
-<header class="navbar">
-  <div class="brand"><a class="logo" href="index.html">Prok</a></div>
-  <nav><a href="index.html">الرئيسية</a><a href="about.html">عنّا</a></nav>
-</header>
-
-<main class="container" style="padding-top:120px">
-  <h1 id="aboutTitle">عن Prok</h1>
-  <p id="aboutBody">نص تعريفي...</p>
-</main>
-
+<header class="navbar"><div class="brand"><a class="logo" href="index.html">Prok</a></div><nav><a href="index.html">الرئيسية</a><a href="about.html">عنّا</a></nav></header>
+<main class="container" style="padding-top:120px"><h1 id="aboutTitle">عن Prok</h1><p id="aboutBody">نص تعريفي...</p></main>
 <footer class="footer container"><p>© Prok</p></footer>
-
 <script src="assets/js/lang.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', ()=> {
-  const aboutBody = {
-    en: "Prok is a lightweight modern starter built with speed in mind.",
-    ar: "Prok هو قالب خفيف وعصري مصمم للسرعة."
-  };
-  const aboutTitle = { en: "About Prok", ar: "عن Prok" };
-  const lang = localStorage.getItem('prok_lang') || (navigator.language.startsWith('ar') ? 'ar' : 'en');
-  document.getElementById('aboutBody').textContent = aboutBody[lang];
-  document.getElementById('aboutTitle').textContent = aboutTitle[lang];
-});
-</script>
 </body>
 </html>
