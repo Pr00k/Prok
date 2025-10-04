@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Prok Store — متجر التطبيقات</title>
+  <title>Prok Store — أفضل تجربة</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 <body>
   <header class="header">
@@ -36,20 +37,25 @@
     </aside>
 
     <main class="main">
-      <section class="carousel" id="carousel">
-        <div class="carousel-track">
+      <section class="carousel" id="carousel" aria-label="عروض" data-aos="fade-up">
+        <div class="carousel-track" id="carouselTrack">
           <div class="slide"><img src="assets/img/banner1.svg" alt="banner1"></div>
           <div class="slide"><img src="assets/img/banner2.svg" alt="banner2"></div>
           <div class="slide"><img src="assets/img/banner3.svg" alt="banner3"></div>
         </div>
+        <div class="carousel-controls">
+          <button id="prev" class="ctrl">‹</button>
+          <div class="dots" id="dots"></div>
+          <button id="next" class="ctrl">›</button>
+        </div>
       </section>
 
       <section class="section head-cards" id="featured">
-        <h2>مقترحات اليوم</h2>
+        <h2 data-aos="zoom-in">مقترحات اليوم</h2>
         <div class="cards" id="cards">
-          <div class="card">لعبة 1</div>
-          <div class="card">لعبة 2</div>
-          <div class="card">لعبة 3</div>
+          <div class="card" data-aos="fade-up">لعبة 1</div>
+          <div class="card" data-aos="fade-up" data-aos-delay="100">لعبة 2</div>
+          <div class="card" data-aos="fade-up" data-aos-delay="200">لعبة 3</div>
         </div>
       </section>
     </main>
@@ -59,6 +65,13 @@
     <div class="container">© 2025 Prok Store</div>
   </footer>
 
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script src="assets/js/firebase-config.js"></script>
   <script src="assets/js/main.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>AOS.init();</script>
 </body>
 </html>
