@@ -1,0 +1,29 @@
+{
+  "heroTitle": "Welcome to Prok — modern, fast, friendly",
+  "heroSub": "A lightweight starter with smooth animations.",
+  "heroTitle_ar": "مرحبا بك في Prok — عصري وسريع",
+  "heroSub_ar": "قالب متعدد اللغات بخفة وسلاسة.",
+  "features": [
+    {
+      "title": "Modern Design",
+      "desc": "Clean, responsive interfaces",
+      "title_ar": "تصميم عصري",
+      "desc_ar": "واجهات نظيفة ومتجاوبة"
+    },
+    {
+      "title": "High Performance",
+      "desc": "Optimized for speed",
+      "title_ar": "آداء عالي",
+      "desc_ar": "محسّن للسرعة"
+    },
+    {
+      "title": "Easy to Customize",
+      "desc": "Change content from Admin",
+      "title_ar": "سهل التخصيص",
+      "desc_ar": "عدّل المحتوى من لوحة الإدارة"
+    }
+  ],
+  "aboutText": "We build modern websites with speed in mind.",
+  "aboutText_ar": "نحن نبني مواقع عصرية مع التركيز على السرعة.",
+  "footerText": "© Prok — 2025"
+}
