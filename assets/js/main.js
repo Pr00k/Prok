@@ -1,73 +1,78 @@
-document.addEventListener('DOMContentLoaded', ()=> {
-  // menu toggle
-  const menuToggle = document.getElementById('menuToggle');
-  const mainNav = document.getElementById('mainNav');
-  if(menuToggle && mainNav){
-    menuToggle.addEventListener('click', ()=> mainNav.classList.toggle('show'));
-    // close when click outside on mobile
-    document.addEventListener('click', (e)=>{
-      if(window.innerWidth <= 768 && mainNav.classList.contains('show')){
-        if(!mainNav.contains(e.target) && e.target !== menuToggle) mainNav.classList.remove('show');
-      }
+// main.js - Prok Best
+document.addEventListener('DOMContentLoaded', ()=>{
+  // Sidebar toggle for small screens
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  if(sidebarToggle && sidebar) sidebarToggle.addEventListener('click', ()=> sidebar.classList.toggle('open'));
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  const savedTheme = localStorage.getItem('prok_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme==='dark'?'dark':'light');
+  if(themeToggle) themeToggle.addEventListener('click', ()=>{
+    const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', cur);
+    localStorage.setItem('prok_theme', cur);
+  });
+
+  // Admin quick link
+  const adminBtn = document.getElementById('adminLoginBtn');
+  if(adminBtn) adminBtn.addEventListener('click', ()=> window.location.href='admin/login.html');
+
+  // Render sample cards (will be replaced from Firestore)
+  const cardsData = [
+    {title:'تطبيق صور', desc:'محرر صور نيون'},
+    {title:'لعبة سباق', desc:'سباقات ممتعة وسريعة'},
+    {title:'مشغل موسيقى', desc:'قوائم تشغيل ذكية'}
+  ];
+  const cards = document.getElementById('cards');
+  cardsData.forEach(c=>{
+    const el = document.createElement('article'); el.className='card';
+    el.innerHTML = `<h3>${c.title}</h3><p>${c.desc}</p>`;
+    cards.appendChild(el);
+  });
+
+  // Carousel logic
+  const track = document.getElementById('carouselTrack');
+  const slides = Array.from(track.querySelectorAll('.slide'));
+  const dotsWrap = document.getElementById('dots');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  let index = 0;
+  let autoplay = true;
+  let autoplayInterval = 3000;
+  let timer = null;
+
+  function updateSlides(){
+    slides.forEach((s,i)=>{
+      s.classList.toggle('active', i===index);
+      // transform for 3D effect: center slide scale 1 others scale .9 and translateZ
+      if(i===index){ s.style.transform='scale(1) translateZ(0)'; s.style.opacity='1'; }
+      else if(i===index-1 || (index===0 && i===slides.length-1)){ s.style.transform='scale(.92) translateZ(-80px)'; s.style.opacity='0.75'; }
+      else { s.style.transform='scale(.9) translateZ(-120px)'; s.style.opacity='0.5'; }
     });
+    Array.from(dotsWrap.children).forEach((d,i)=> d.classList.toggle('active', i===index));
   }
 
-  // progress simple
-  const progress = document.createElement('div');
-  progress.style.position='fixed';progress.style.left='0';progress.style.top='0';
-  progress.style.height='3px';progress.style.width='0';progress.style.background='linear-gradient(90deg,var(--accent),var(--accent2))';
-  progress.style.zIndex=9999;document.body.appendChild(progress);
-  function setProgress(n){progress.style.width = n + '%';}
-  setProgress(10);
+  // create dots
+  slides.forEach((_,i)=>{
+    const d = document.createElement('div'); d.className='dot'; d.addEventListener('click', ()=>{ index=i; resetTimer(); updateSlides(); });
+    dotsWrap.appendChild(d);
+  });
 
-  // default content (fallback)
-  const DEFAULT = {
-    heroTitle: "مرحباً بك في Prok — عصري وسريع",
-    heroSub: "قالب متعدد اللغات بخفة وسلاسة.",
-    heroTitle_ar: "مرحباً بك في Prok — عصري وسريع",
-    heroSub_ar: "قالب متعدد اللغات بخفة وسلاسة.",
-    features: [
-      {title:"Modern Design", desc:"Clean interfaces", title_ar:"تصميم عصري", desc_ar:"واجهات نظيفة"},
-      {title:"Fast", desc:"Optimized for speed", title_ar:"سريع", desc_ar:"محسّن للسرعة"}
-    ],
-    footerText: "© Prok — 2025"
-  };
+  function next(){ index = (index+1) % slides.length; updateSlides(); }
+  function prev(){ index = (index-1+slides.length) % slides.length; updateSlides(); }
+  if(nextBtn) nextBtn.addEventListener('click', ()=>{ next(); resetTimer(); });
+  if(prevBtn) prevBtn.addEventListener('click', ()=>{ prev(); resetTimer(); });
 
-  // try Firestore
-  async function tryFirestore(){
-    if(!(window.firebaseConfig && window.firebase && window.firebase.firestore)) return false;
-    try{ firebase.initializeApp(window.firebaseConfig); }catch(e){}
-    try{
-      const db = firebase.firestore();
-      const snap = await db.collection('site').doc('content').get();
-      if(snap.exists){ render(snap.data()); setProgress(100); return true; }
-    }catch(e){ console.warn('firestore error', e); }
-    return false;
-  }
+  function startTimer(){ if(timer) clearInterval(timer); timer = setInterval(()=>{ next(); }, autoplayInterval); }
+  function resetTimer(){ if(autoplay) { clearInterval(timer); startTimer(); } }
 
-  function render(data){
-    const lang = localStorage.getItem('prok_lang') || (navigator.language && navigator.language.startsWith('ar') ? 'ar' : 'en');
-    document.getElementById('heroTitle').textContent = (lang==='ar' && data.heroTitle_ar) ? data.heroTitle_ar : (data.heroTitle || '');
-    document.getElementById('heroSub').textContent = (lang==='ar' && data.heroSub_ar) ? data.heroSub_ar : (data.heroSub || '');
-    document.getElementById('footerText').textContent = data.footerText || '';
-    const c = document.getElementById('features');
-    c.innerHTML = '';
-    (data.features || []).forEach(f=>{
-      const el = document.createElement('article'); el.className = 'card';
-      const t = (localStorage.getItem('prok_lang') === 'ar') ? (f.title_ar || f.title) : (f.title || '');
-      const d = (localStorage.getItem('prok_lang') === 'ar') ? (f.desc_ar || f.desc) : (f.desc || '');
-      el.innerHTML = `<h3>${t}</h3><p>${d}</p>`;
-      c.appendChild(el);
-    });
-    // intersection animation
-    const obs = new IntersectionObserver((entries, obs)=>{
-      entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('show'); obs.unobserve(en.target); }});
-    }, {threshold:0.15});
-    document.querySelectorAll('.card').forEach(card=>obs.observe(card));
-  }
+  updateSlides();
+  if(autoplay) startTimer();
 
-  setProgress(30);
-  render(DEFAULT);
-  setProgress(60);
-  tryFirestore().then(ok=>{ if(!ok) setProgress(100); });
+  // pause on hover
+  track.addEventListener('mouseenter', ()=>{ clearInterval(timer); });
+  track.addEventListener('mouseleave', ()=>{ if(autoplay) startTimer(); });
+
 });
