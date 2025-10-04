@@ -1,81 +1,3 @@
-/* ========================
-   Prok Vision — Style
-   ======================== */
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Cairo', sans-serif;
-}
-
-body {
-  background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
-  color: #fff;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-}
-
-/* ===== NAVBAR ===== */
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 50px;
-  z-index: 10;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-.navbar a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: #fff;
-  transition: 0.3s;
-}
-
-.navbar a:hover {
-  color: #00ffe7;
-  text-shadow: 0 0 10px #00ffe7;
-}
-
-.logo {
-  font-weight: 900;
-  font-size: 1.8em;
-  color: #00ffe7;
-}
-
-/* ===== HERO ===== */
-.hero {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.hero .content h2 {
-  font-size: 2.8em;
-  background: linear-gradient(90deg, #00ffe7, #ff00e1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: glowText 3s ease-in-out infinite alternate;
-}
-
-.hero p {
-  margin-top: 15px;
-  color: #ccc;
-  font-size: 1.2em;
-}
-
 .glow-btn {
   margin-top: 25px;
   background: linear-gradient(90deg, #00ffe7, #ff00e1);
@@ -85,75 +7,24 @@ body {
   border-radius: 10px;
   font-size: 1.1em;
   cursor: pointer;
-  box-shadow: 0 0 20px #00ffe7;
-  transition: 0.3s ease;
+  box-shadow: 0 0 20px #00ffe7, 0 0 40px #ff00e1; /* توهج دائم */
+  animation: pulse 2s infinite alternate; /* حركة بسيطة */
 }
 
+/* نبضة بسيطة مثل GIF */
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 15px #00ffe7, 0 0 30px #ff00e1;
+  }
+  to {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #ff00e1, 0 0 50px #00ffe7;
+  }
+}
+
+/* أزلنا تأثير hover تمامًا */
 .glow-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 40px #ff00e1;
-}
-
-/* ===== CARDS ===== */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  padding: 100px 50px;
-  z-index: 2;
-  position: relative;
-}
-
-.card {
-  background: rgba(255,255,255,0.1);
-  border-radius: 15px;
-  padding: 30px;
-  text-align: center;
-  transition: 0.4s;
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255,255,255,0.1);
-  opacity: 0; /* مخفي مبدئياً */
-  transform: translateY(40px); /* تحت */
-}
-
-.card.show {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 1s ease, transform 1s ease;
-}
-
-.card:hover {
-  transform: translateY(-10px) scale(1.05);
-  background: rgba(255,255,255,0.2);
-  box-shadow: 0 0 20px #00ffe7;
-}
-
-.card h3 {
-  color: #00ffe7;
-  margin-bottom: 10px;
-  font-size: 1.4em;
-}
-
-/* ===== FOOTER ===== */
-footer {
-  text-align: center;
-  padding: 30px;
-  background: rgba(0,0,0,0.5);
-  font-size: 0.9em;
-  color: #aaa;
-  border-top: 1px solid rgba(255,255,255,0.1);
-}
-
-/* ===== PARTICLES ===== */
-#particles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes glowText {
-  from { text-shadow: 0 0 10px #00ffe7; }
-  to { text-shadow: 0 0 20px #ff00e1; }
+  transform: none;
+  box-shadow: 0 0 20px #00ffe7, 0 0 40px #ff00e1;
 }
