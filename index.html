@@ -32,22 +32,22 @@
     <div id="admin-toolbar" class="admin-toolbar" style="display: none;">
         <div class="admin-toolbar-content">
             <div class="toolbar-section">
-                <h4>🛠️ أدوات المدير</h4>
-                <button class="toolbar-btn" data-action="edit-texts">
-                    <span class="btn-icon">📝</span>
-                    تحرير النصوص
-                </button>
-                <button class="toolbar-btn" data-action="edit-images">
-                    <span class="btn-icon">🖼️</span>
-                    تحرير الصور
-                </button>
-                <button class="toolbar-btn" data-action="manage-apps">
+                <h4>👑 أدوات المدير</h4>
+                <button class="toolbar-btn" data-action="add-app">
                     <span class="btn-icon">📱</span>
-                    إدارة التطبيقات
+                    إضافة تطبيق
                 </button>
-                <button class="toolbar-btn" data-action="manage-games">
+                <button class="toolbar-btn" data-action="add-game">
                     <span class="btn-icon">🎮</span>
-                    إدارة الألعاب
+                    إضافة لعبة
+                </button>
+                <button class="toolbar-btn" data-action="edit-content">
+                    <span class="btn-icon">✏️</span>
+                    تحرير المحتوى
+                </button>
+                <button class="toolbar-btn" data-action="manage-menu">
+                    <span class="btn-icon">📋</span>
+                    إدارة القوائم
                 </button>
             </div>
             
@@ -60,13 +60,34 @@
                     <span class="btn-icon">✨</span>
                     تغيير الحركات
                 </button>
-                <button class="toolbar-btn" data-action="manage-ads">
-                    <span class="btn-icon">📢</span>
-                    إدارة الإعلانات
+                <button class="toolbar-btn" data-action="site-settings">
+                    <span class="btn-icon">⚙️</span>
+                    إعدادات الموقع
                 </button>
                 <button class="toolbar-btn btn-danger" data-action="logout-admin">
                     <span class="btn-icon">🚪</span>
                     تسجيل خروج
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Add Panel (للمدير فقط) -->
+    <div id="quick-add-panel" class="quick-add-panel" style="display: none;">
+        <div class="quick-add-content">
+            <h4>إضافة سريعة</h4>
+            <div class="quick-add-buttons">
+                <button class="quick-add-btn" data-type="app">
+                    <span class="btn-icon">📱</span>
+                    تطبيق جديد
+                </button>
+                <button class="quick-add-btn" data-type="game">
+                    <span class="btn-icon">🎮</span>
+                    لعبة جديدة
+                </button>
+                <button class="quick-add-btn" data-type="banner">
+                    <span class="btn-icon">🖼️</span>
+                    لافتة جديدة
                 </button>
             </div>
         </div>
@@ -80,47 +101,81 @@
             </div>
             
             <div class="nav-menu" id="nav-menu">
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="#home" class="nav-link">الرئيسية</a></li>
-                    <li class="nav-item"><a href="#apps" class="nav-link">التطبيقات</a></li>
-                    <li class="nav-item"><a href="#games" class="nav-link">الألعاب</a></li>
-                    <li class="nav-item"><a href="#contact" class="nav-link">اتصل بنا</a></li>
-                    
-                    <!-- Languages Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle">
-                            🌐 اللغات
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" class="dropdown-item" data-lang="ar">العربية</a></li>
-                            <li><a href="#" class="dropdown-item" data-lang="en">English</a></li>
-                            <li><a href="#" class="dropdown-item" data-lang="fr">Français</a></li>
-                            <li><a href="#" class="dropdown-item" data-lang="es">Español</a></li>
-                            <li><a href="#" class="dropdown-item" data-lang="de">Deutsch</a></li>
-                        </ul>
-                    </li>
-                    
-                    <!-- Admin Menu (ظهر فقط للمدير) -->
-                    <li class="nav-item dropdown" id="admin-menu-item" style="display: none;">
-                        <a href="#" class="nav-link dropdown-toggle admin-menu">
-                            👑 أدمن
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" class="dropdown-item" data-action="quick-edit">✏️ التحرير السريع</a></li>
-                            <li><a href="#" class="dropdown-item" data-action="add-app">📱 إضافة تطبيق</a></li>
-                            <li><a href="#" class="dropdown-item" data-action="add-game">🎮 إضافة لعبة</a></li>
-                            <li><a href="#" class="dropdown-item" data-action="manage-content">📊 إدارة المحتوى</a></li>
-                            <li><a href="#" class="dropdown-item" data-action="site-settings">⚙️ إعدادات الموقع</a></li>
-                        </ul>
-                    </li>
+                <!-- القائمة الديناميكية -->
+                <ul class="nav-list" id="main-nav-list">
+                    <!-- سيتم تحميل القوائم ديناميكياً -->
                 </ul>
+                
+                <!-- قائمة اللغات -->
+                <div class="nav-languages">
+                    <div class="language-selector">
+                        <button class="language-btn" id="language-toggle">
+                            <span class="language-flag">🌐</span>
+                            <span class="language-text" id="current-language">العربية</span>
+                            <span class="language-arrow">▼</span>
+                        </button>
+                        <div class="language-dropdown" id="language-dropdown">
+                            <div class="language-option" data-lang="ar">
+                                <span class="language-flag">🇸🇦</span>
+                                العربية
+                            </div>
+                            <div class="language-option" data-lang="en">
+                                <span class="language-flag">🇺🇸</span>
+                                English
+                            </div>
+                            <div class="language-option" data-lang="fr">
+                                <span class="language-flag">🇫🇷</span>
+                                Français
+                            </div>
+                            <div class="language-option" data-lang="es">
+                                <span class="language-flag">🇪🇸</span>
+                                Español
+                            </div>
+                            <div class="language-option" data-lang="de">
+                                <span class="language-flag">🇩🇪</span>
+                                Deutsch
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- قائمة الأدمن (تظهر فقط للمدير) -->
+                <div class="nav-admin" id="nav-admin" style="display: none;">
+                    <div class="admin-dropdown">
+                        <button class="admin-toggle">
+                            <span class="admin-icon">👑</span>
+                            <span class="admin-text">الأدمن</span>
+                            <span class="admin-arrow">▼</span>
+                        </button>
+                        <div class="admin-menu">
+                            <div class="admin-menu-item" data-action="quick-add">
+                                <span class="menu-icon">➕</span>
+                                إضافة سريعة
+                            </div>
+                            <div class="admin-menu-item" data-action="manage-content">
+                                <span class="menu-icon">📊</span>
+                                إدارة المحتوى
+                            </div>
+                            <div class="admin-menu-item" data-action="edit-menu">
+                                <span class="menu-icon">📋</span>
+                                تحرير القوائم
+                            </div>
+                            <div class="admin-menu-divider"></div>
+                            <div class="admin-menu-item" data-action="site-settings">
+                                <span class="menu-icon">⚙️</span>
+                                الإعدادات
+                            </div>
+                            <div class="admin-menu-item" data-action="logout">
+                                <span class="menu-icon">🚪</span>
+                                تسجيل خروج
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="nav-actions">
                     <button id="theme-toggle" class="theme-btn" aria-label="تبديل السمة">
                         <span class="theme-icon">🌙</span>
-                    </button>
-                    <button id="admin-login-btn" class="admin-btn" style="display: none;">
-                        🔐 أدمن
                     </button>
                 </div>
             </div>
@@ -161,15 +216,63 @@
                 <p class="section-subtitle" data-translate="apps_subtitle">اكتشف أفضل التطبيقات المجانية</p>
             </div>
             
-            <div class="filters">
-                <button class="filter-btn active" data-filter="all" data-translate="filter_all">الكل</button>
-                <button class="filter-btn" data-filter="productivity" data-translate="filter_productivity">الإنتاجية</button>
-                <button class="filter-btn" data-filter="social" data-translate="filter_social">التواصل</button>
-                <button class="filter-btn" data-filter="tools" data-translate="filter_tools">الأدوات</button>
+            <!-- Filters and Sorting -->
+            <div class="content-controls">
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <label data-translate="filter_by">تصفية حسب:</label>
+                        <select class="filter-select" id="app-category-filter">
+                            <option value="all" data-translate="all_categories">جميع الفئات</option>
+                            <option value="productivity" data-translate="productivity">الإنتاجية</option>
+                            <option value="social" data-translate="social">التواصل</option>
+                            <option value="tools" data-translate="tools">الأدوات</option>
+                            <option value="entertainment" data-translate="entertainment">ترفيه</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label data-translate="sort_by">ترتيب حسب:</label>
+                        <select class="filter-select" id="app-sort-filter">
+                            <option value="newest" data-translate="newest">الأحدث</option>
+                            <option value="popular" data-translate="most_popular">الأكثر شعبية</option>
+                            <option value="rating" data-translate="highest_rating">الأعلى تقييماً</option>
+                            <option value="downloads" data-translate="most_downloads">الأكثر تحميلاً</option>
+                            <option value="oldest" data-translate="oldest">الأقدم</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label data-translate="view_type">طريقة العرض:</label>
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="grid">
+                                <span class="view-icon">⊞</span>
+                                شبكة
+                            </button>
+                            <button class="view-btn" data-view="list">
+                                <span class="view-icon">☰</span>
+                                قائمة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-box">
+                        <input type="text" id="app-search" placeholder="ابحث في التطبيقات..." data-translate="search_apps">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
             </div>
             
             <div class="apps-grid" id="apps-grid">
                 <!-- Apps will be loaded dynamically -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="apps-pagination">
+                <button class="pagination-btn prev" data-translate="previous">السابق</button>
+                <div class="pagination-numbers" id="apps-pagination-numbers"></div>
+                <button class="pagination-btn next" data-translate="next">التالي</button>
             </div>
         </div>
     </section>
@@ -182,31 +285,64 @@
                 <p class="section-subtitle" data-translate="games_subtitle">استمتع بألعاب مجانية رائعة</p>
             </div>
             
+            <!-- Filters and Sorting -->
+            <div class="content-controls">
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <label data-translate="filter_by">تصفية حسب:</label>
+                        <select class="filter-select" id="game-category-filter">
+                            <option value="all" data-translate="all_categories">جميع الفئات</option>
+                            <option value="action" data-translate="action">أكشن</option>
+                            <option value="adventure" data-translate="adventure">مغامرة</option>
+                            <option value="puzzle" data-translate="puzzle">ألغاز</option>
+                            <option value="sports" data-translate="sports">رياضة</option>
+                            <option value="racing" data-translate="racing">سباقات</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label data-translate="sort_by">ترتيب حسب:</label>
+                        <select class="filter-select" id="game-sort-filter">
+                            <option value="newest" data-translate="newest">الأحدث</option>
+                            <option value="popular" data-translate="most_popular">الأكثر شعبية</option>
+                            <option value="rating" data-translate="highest_rating">الأعلى تقييماً</option>
+                            <option value="downloads" data-translate="most_downloads">الأكثر تحميلاً</option>
+                            <option value="oldest" data-translate="oldest">الأقدم</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label data-translate="view_type">طريقة العرض:</label>
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="grid">
+                                <span class="view-icon">⊞</span>
+                                شبكة
+                            </button>
+                            <button class="view-btn" data-view="list">
+                                <span class="view-icon">☰</span>
+                                قائمة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-box">
+                        <input type="text" id="game-search" placeholder="ابحث في الألعاب..." data-translate="search_games">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
+            </div>
+            
             <div class="games-grid" id="games-grid">
                 <!-- Games will be loaded dynamically -->
             </div>
-        </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title" data-translate="contact_title">اتصل بنا</h2>
-                <p class="section-subtitle" data-translate="contact_subtitle">نحن هنا لمساعدتك</p>
-            </div>
-            
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <h3 data-translate="contact_email">البريد الإلكتروني</h3>
-                        <p>aaaab9957@gmail.com</p>
-                    </div>
-                    <div class="contact-item">
-                        <h3 data-translate="contact_support">الدعم الفني</h3>
-                        <p data-translate="support_available">متاح 24/7</p>
-                    </div>
-                </div>
+            <!-- Pagination -->
+            <div class="pagination" id="games-pagination">
+                <button class="pagination-btn prev" data-translate="previous">السابق</button>
+                <div class="pagination-numbers" id="games-pagination-numbers"></div>
+                <button class="pagination-btn next" data-translate="next">التالي</button>
             </div>
         </div>
     </section>
@@ -222,16 +358,18 @@
                 
                 <div class="footer-section">
                     <h4 data-translate="quick_links">روابط سريعة</h4>
-                    <ul>
-                        <li><a href="#home" data-translate="menu_home">الرئيسية</a></li>
-                        <li><a href="#apps" data-translate="menu_apps">التطبيقات</a></li>
-                        <li><a href="#games" data-translate="menu_games">الألعاب</a></li>
+                    <ul id="footer-links">
+                        <!-- سيتم تحميل الروابط ديناميكياً -->
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h4 data-translate="contact_us">التواصل</h4>
-                    <p>aaaab9957@gmail.com</p>
+                    <h4 data-translate="languages">اللغات</h4>
+                    <div class="footer-languages">
+                        <button class="lang-btn" data-lang="ar">العربية</button>
+                        <button class="lang-btn" data-lang="en">English</button>
+                        <button class="lang-btn" data-lang="fr">Français</button>
+                    </div>
                 </div>
             </div>
             
@@ -256,7 +394,6 @@
                     </button>
                 </div>
                 <div id="admin-panel" style="display: none;">
-                    <h4>مرحباً بك في لوحة التحكم</h4>
                     <div class="admin-stats">
                         <div class="stat-card">
                             <h5>التطبيقات</h5>
@@ -266,21 +403,196 @@
                             <h5>الألعاب</h5>
                             <span id="games-count">0</span>
                         </div>
+                        <div class="stat-card">
+                            <h5>الزوار</h5>
+                            <span id="visitors-count">1.2K</span>
+                        </div>
+                    </div>
+                    <div class="admin-actions">
+                        <button class="admin-action-btn" data-action="add-app">
+                            <span class="action-icon">📱</span>
+                            إضافة تطبيق
+                        </button>
+                        <button class="admin-action-btn" data-action="add-game">
+                            <span class="action-icon">🎮</span>
+                            إضافة لعبة
+                        </button>
+                        <button class="admin-action-btn" data-action="manage-menu">
+                            <span class="action-icon">📋</span>
+                            إدارة القوائم
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Edit Modals -->
-    <div id="edit-modal" class="modal edit-modal">
+    <!-- Add Item Modal -->
+    <div id="add-item-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="edit-modal-title">تحرير المحتوى</h3>
+                <h3 id="add-item-title">إضافة عنصر جديد</h3>
                 <button class="modal-close">&times;</button>
             </div>
-            <div class="modal-body" id="edit-modal-body">
-                <!-- Dynamic content -->
+            <div class="modal-body">
+                <form id="add-item-form" class="add-item-form">
+                    <div class="form-tabs">
+                        <button type="button" class="form-tab active" data-tab="basic">المعلومات الأساسية</button>
+                        <button type="button" class="form-tab" data-tab="details">التفاصيل</button>
+                        <button type="button" class="form-tab" data-tab="media">الوسائط</button>
+                    </div>
+
+                    <div class="tab-content">
+                        <!-- Basic Info Tab -->
+                        <div class="tab-pane active" id="basic-tab">
+                            <div class="form-group">
+                                <label for="item-name">اسم العنصر *</label>
+                                <input type="text" id="item-name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-description">الوصف *</label>
+                                <textarea id="item-description" name="description" required></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="item-category">الفئة *</label>
+                                    <select id="item-category" name="category" required>
+                                        <option value="">اختر الفئة</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="item-type">النوع *</label>
+                                    <select id="item-type" name="type" required>
+                                        <option value="app">تطبيق</option>
+                                        <option value="game">لعبة</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Details Tab -->
+                        <div class="tab-pane" id="details-tab">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="item-rating">التقييم</label>
+                                    <input type="number" id="item-rating" name="rating" min="0" max="5" step="0.1" value="4.0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="item-size">الحجم</label>
+                                    <input type="text" id="item-size" name="size" placeholder="مثال: 15MB">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-version">الإصدار</label>
+                                <input type="text" id="item-version" name="version" placeholder="مثال: 1.0.0">
+                            </div>
+                            <div class="form-group">
+                                <label for="item-download-link">رابط التحميل *</label>
+                                <input type="url" id="item-download-link" name="downloadLink" required>
+                            </div>
+                        </div>
+
+                        <!-- Media Tab -->
+                        <div class="tab-pane" id="media-tab">
+                            <div class="form-group">
+                                <label>صورة العنصر</label>
+                                <div class="image-upload-zone" id="image-upload-zone">
+                                    <div class="upload-placeholder">
+                                        <span class="upload-icon">🖼️</span>
+                                        <p>اسحب وأفلت الصورة هنا أو انقر للاختيار</p>
+                                        <small>الحجم الأقصى: 5MB</small>
+                                    </div>
+                                    <input type="file" id="item-image" name="image" accept="image/*" hidden>
+                                </div>
+                                <div class="image-preview" id="image-preview" style="display: none;">
+                                    <img id="preview-image" src="" alt="Preview">
+                                    <button type="button" class="remove-image" id="remove-image">✕</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="item-animation">تأثير الحركة</label>
+                                <select id="item-animation" name="animation">
+                                    <option value="fade-in">تدرج</option>
+                                    <option value="slide-up">انزلاق</option>
+                                    <option value="zoom-in">تكبير</option>
+                                    <option value="bounce-in">ارتداد</option>
+                                    <option value="rotate-in">دوران</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-add">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">
+                            <span class="submit-icon">➕</span>
+                            إضافة العنصر
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Editor Modal -->
+    <div id="menu-editor-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📋 محرر القوائم</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="menu-editor">
+                    <div class="editor-tabs">
+                        <button class="editor-tab active" data-tab="main-menu">القائمة الرئيسية</button>
+                        <button class="editor-tab" data-tab="footer-menu">قائمة التذييل</button>
+                        <button class="editor-tab" data-tab="new-menu">إنشاء قائمة جديدة</button>
+                    </div>
+
+                    <div class="editor-content">
+                        <!-- Main Menu Editor -->
+                        <div class="editor-pane active" id="main-menu-pane">
+                            <div class="menu-actions">
+                                <button class="btn btn-primary" id="add-menu-item">
+                                    <span class="btn-icon">➕</span>
+                                    إضافة عنصر
+                                </button>
+                                <button class="btn btn-secondary" id="reset-menu">
+                                    <span class="btn-icon">🔄</span>
+                                    إعادة التعيين
+                                </button>
+                            </div>
+                            <div class="menu-items-list" id="main-menu-items">
+                                <!-- سيتم تحميل العناصر ديناميكياً -->
+                            </div>
+                        </div>
+
+                        <!-- Footer Menu Editor -->
+                        <div class="editor-pane" id="footer-menu-pane">
+                            <!-- مشابه للقائمة الرئيسية -->
+                        </div>
+
+                        <!-- New Menu Editor -->
+                        <div class="editor-pane" id="new-menu-pane">
+                            <div class="form-group">
+                                <label for="new-menu-name">اسم القائمة الجديدة</label>
+                                <input type="text" id="new-menu-name" placeholder="أدخل اسم القائمة">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-menu-location">موقع القائمة</label>
+                                <select id="new-menu-location">
+                                    <option value="header">رأس الصفحة</option>
+                                    <option value="footer">تذييل الصفحة</option>
+                                    <option value="sidebar">الشريط الجانبي</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" id="create-new-menu">
+                                <span class="btn-icon">📋</span>
+                                إنشاء القائمة
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -333,5 +645,6 @@
     <script src="assets/js/languages.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/admin.js"></script>
+    <script src="assets/js/menu-editor.js"></script>
 </body>
 </html>
