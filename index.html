@@ -1,164 +1,798 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="html-element">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prok - تطبيقات وألعاب مجانية</title>
-    <meta name="description" content="اكتشف أفضل التطبيقات والألعاب المجانية من Prok. تنزيل مباشر وآمن.">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/edits.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 🔒 حماية كاملة من النسخ -->
+    <style>
+        /* منع النسخ والتقاط الشاشة */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+        
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            pointer-events: none;
+        }
+        
+        /* السماح بالنسخ في المدخلات فقط */
+        input, textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        /* التصميم الأساسي */
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ffffff;
+            --dark: #1e293b;
+            --text: #334155;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        [data-theme="dark"] {
+            --primary: #818cf8;
+            --secondary: #1e293b;
+            --dark: #0f172a;
+            --text: #f1f5f9;
+            --text-light: #cbd5e1;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--secondary);
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* التحميل */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f4f6;
+            border-left: 4px solid #6366f1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* الهيدر */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-btn, .admin-btn {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+        }
+
+        /* الهيرو */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: slideUp 0.8s ease 0.2s both;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: white;
+            color: #6366f1;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            animation: zoomIn 0.8s ease 0.4s both;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* الأقسام */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+        }
+
+        /* الشبكات */
+        .apps-grid, .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .app-card, .game-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .app-card:hover, .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-rating {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        .card-size {
+            background: #f8fafc;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-secondary {
+            background: #f8fafc;
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+        }
+
+        /* الأنيميشنات */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .fade-in { animation: fadeIn 0.6s ease; }
+        .slide-up { animation: slideUp 0.6s ease; }
+        .zoom-in { animation: zoomIn 0.6s ease; }
+
+        /* الفوتر */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* الأدمن */
+        #adminToolbar {
+            display: none;
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 999;
+            border: 1px solid var(--border);
+        }
+
+        .toolbar-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .toolbar-btn:hover {
+            background: #6366f1;
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        /* المودال */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            animation: zoomIn 0.3s ease;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* الاستجابة */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .apps-grid, .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Loading Spinner -->
-    <div id="loading" class="loading-spinner">
+    <!-- التحميل -->
+    <div id="loading">
         <div class="spinner"></div>
     </div>
 
-    <!-- Admin Toolbar -->
-    <div id="admin-toolbar" class="admin-toolbar" style="display: none;">
-        <div class="admin-toolbar-content">
-            <div class="toolbar-section">
-                <h4>👑 أدوات المدير</h4>
-                <button class="toolbar-btn" data-action="add-app">📱 إضافة تطبيق</button>
-                <button class="toolbar-btn" data-action="add-game">🎮 إضافة لعبة</button>
-                <button class="toolbar-btn" data-action="edit-content">✏️ تحرير المحتوى</button>
-            </div>
+    <!-- شريط الأدمن -->
+    <div id="adminToolbar">
+        <div style="margin-bottom: 1rem;">
+            <h4 style="margin: 0 0 0.75rem 0; color: var(--text);">👑 أدوات المدير</h4>
+            <button class="toolbar-btn" onclick="addNewItem('app')">
+                <i class="fas fa-mobile-alt"></i>
+                إضافة تطبيق
+            </button>
+            <button class="toolbar-btn" onclick="addNewItem('game')">
+                <i class="fas fa-gamepad"></i>
+                إضافة لعبة
+            </button>
         </div>
     </div>
 
-    <!-- Header -->
+    <!-- الهيدر -->
     <header class="header">
         <nav class="nav container">
             <div class="nav-brand">
                 <h1 class="logo">Prok</h1>
             </div>
             
-            <div class="nav-menu" id="nav-menu">
+            <div class="nav-menu">
                 <ul class="nav-list">
-                    <li class="nav-item"><a href="#home" class="nav-link">الرئيسية</a></li>
-                    <li class="nav-item"><a href="#apps" class="nav-link">التطبيقات</a></li>
-                    <li class="nav-item"><a href="#games" class="nav-link">الألعاب</a></li>
-                    
-                    <!-- Languages -->
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle">🌐 اللغات</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" class="dropdown-item" data-lang="ar">العربية</a></li>
-                            <li><a href="#" class="dropdown-item" data-lang="en">English</a></li>
-                            <li><a href="#" class="dropdown-item" data-lang="fr">Français</a></li>
-                        </ul>
-                    </li>
-                    
-                    <!-- Admin Menu -->
-                    <li class="nav-item dropdown" id="admin-menu-item" style="display: none;">
-                        <a href="#" class="nav-link dropdown-toggle admin-menu">👑 أدمن</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" class="dropdown-item" data-action="quick-edit">✏️ التحرير السريع</a></li>
-                            <li><a href="#" class="dropdown-item" data-action="add-app">📱 إضافة تطبيق</a></li>
-                            <li><a href="#" class="dropdown-item" data-action="add-game">🎮 إضافة لعبة</a></li>
-                        </ul>
+                    <li><a href="#home" class="nav-link">🏠 الرئيسية</a></li>
+                    <li><a href="#apps" class="nav-link">📱 التطبيقات</a></li>
+                    <li><a href="#games" class="nav-link">🎮 الألعاب</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="nav-link">🌐 اللغات</a>
                     </li>
                 </ul>
                 
                 <div class="nav-actions">
-                    <button id="theme-toggle" class="theme-btn">🌙</button>
-                    <button id="admin-login-btn" class="admin-btn" style="display: none;">🔐 أدمن</button>
+                    <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+                    <button class="admin-btn" onclick="showAdminModal()">🔐 أدمن</button>
                 </div>
-            </div>
-
-            <div class="nav-toggle" id="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
             </div>
         </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- الهيرو -->
     <section id="home" class="hero">
-        <div class="hero-carousel">
-            <div class="carousel-container">
-                <div class="carousel-track">
-                    <div class="carousel-slide fade-in">
-                        <img src="assets/img/banner1.svg" alt="مرحباً بك في Prok">
-                        <div class="carousel-content">
-                            <h2>مرحباً بك في Prok</h2>
-                            <p>اكتشف أفضل التطبيقات والألعاب المجانية</p>
-                            <a href="#apps" class="btn btn-primary">اكتشف المزيد</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="container">
+            <h1 class="fade-in">مرحباً بك في Prok</h1>
+            <p class="slide-up">اكتشف أفضل التطبيقات والألعاب المجانية</p>
+            <a href="#apps" class="btn zoom-in">🚀 ابدأ الاستكشاف</a>
         </div>
     </section>
 
-    <!-- Apps Section -->
+    <!-- قسم التطبيقات -->
     <section id="apps" class="section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">التطبيقات الشائعة</h2>
+                <h2 class="section-title">📱 التطبيقات الشائعة</h2>
                 <p class="section-subtitle">اكتشف أفضل التطبيقات المجانية</p>
             </div>
             
-            <div class="apps-grid" id="apps-grid">
-                <!-- سيتم تحميل التطبيقات ديناميكياً -->
+            <div class="apps-grid" id="appsGrid">
+                <!-- التطبيقات تظهر هنا -->
             </div>
         </div>
     </section>
 
-    <!-- Games Section -->
-    <section id="games" class="section bg-light">
+    <!-- قسم الألعاب -->
+    <section id="games" class="section" style="background: #f8fafc;">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">الألعاب المميزة</h2>
+                <h2 class="section-title">🎮 الألعاب المميزة</h2>
                 <p class="section-subtitle">استمتع بألعاب مجانية رائعة</p>
             </div>
             
-            <div class="games-grid" id="games-grid">
-                <!-- سيتم تحميل الألعاب ديناميكياً -->
+            <div class="games-grid" id="gamesGrid">
+                <!-- الألعاب تظهر هنا -->
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- الفوتر -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
+                <div>
                     <h3>Prok</h3>
                     <p>منصة التطبيقات والألعاب المجانية</p>
                 </div>
+                <div>
+                    <h4>روابط سريعة</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="#home" style="color: white; text-decoration: none;">الرئيسية</a></li>
+                        <li><a href="#apps" style="color: white; text-decoration: none;">التطبيقات</a></li>
+                        <li><a href="#games" style="color: white; text-decoration: none;">الألعاب</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align: center; padding-top: 2rem; border-top: 1px solid #374151;">
+                <p>&copy; 2024 Prok. جميع الحقوق محفوظة.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Admin Modal -->
-    <div id="admin-modal" class="modal">
+    <!-- مودال الأدمن -->
+    <div id="adminModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>👑 لوحة تحكم المدير</h3>
-                <button class="modal-close">&times;</button>
+                <h3 style="margin: 0;">👑 لوحة تحكم المدير</h3>
+                <button onclick="closeAdminModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
             </div>
             <div class="modal-body">
-                <div id="admin-login">
-                    <h4>تسجيل الدخول كمدير</h4>
-                    <button id="google-login" class="btn btn-primary">🔐 التسجيل عبر جوجل</button>
+                <div id="adminLoginSection">
+                    <h4 style="margin-bottom: 1rem;">تسجيل الدخول كمدير</h4>
+                    <button onclick="loginWithGoogle()" style="background: #6366f1; color: white; border: none; padding: 1rem 2rem; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1rem;">
+                        <i class="fab fa-google"></i> التسجيل عبر جوجل
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+    <!-- السكريبتات -->
+    <script>
+        // 🔒 منع النسخ واللصق والقائمة
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            showMessage('❌ النسخ غير مسموح');
+        });
 
-    <!-- App Scripts -->
-    <script src="assets/js/firebase-config.js"></script>
-    <script src="assets/js/languages.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/admin.js"></script>
-    <script src="assets/js/menu-editor.js"></script>
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            showMessage('❌ النسخ غير مسموح');
+        });
+
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            showMessage('❌ القص غير مسموح');
+        });
+
+        document.addEventListener('keydown', function(e) {
+            // منع F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+                (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                showMessage('❌ هذا الإجراء غير مسموح');
+            }
+        });
+
+        // إشعارات
+        function showMessage(msg) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #ef4444;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // بيانات التطبيقات
+        const sampleData = {
+            apps: [
+                {
+                    id: 1,
+                    name: 'تطبيق الإنتاجية',
+                    description: 'تطبيق مميز لزيادة الإنتاجية والتنظيم اليومي',
+                    image: 'https://via.placeholder.com/300x200/6366f1/white?text=📱',
+                    rating: 4.5,
+                    size: '15MB',
+                    category: 'productivity'
+                },
+                {
+                    id: 2,
+                    name: 'تطبيق التواصل',
+                    description: 'تواصل مع الأصدقاء والعائلة بسهولة وأمان',
+                    image: 'https://via.placeholder.com/300x200/8b5cf6/white?text=💬',
+                    rating: 4.2,
+                    size: '25MB',
+                    category: 'social'
+                },
+                {
+                    id: 3,
+                    name: 'أدوات المطور',
+                    description: 'مجموعة أدوات أساسية لكل مبرمج ومصمم',
+                    image: 'https://via.placeholder.com/300x200/10b981/white?text=🛠️',
+                    rating: 4.7,
+                    size: '10MB',
+                    category: 'tools'
+                }
+            ],
+            games: [
+                {
+                    id: 1,
+                    name: 'لعبة المغامرة',
+                    description: 'انطلق في رحلة مغامرة مثيرة عبر العوالم المختلفة',
+                    image: 'https://via.placeholder.com/300x200/f59e0b/white?text=🎮',
+                    rating: 4.8,
+                    size: '50MB',
+                    category: 'adventure'
+                },
+                {
+                    id: 2,
+                    name: 'تحدي الألغاز',
+                    description: 'اختبر ذكاءك مع ألغاز ممتعة ومثيرة',
+                    image: 'https://via.placeholder.com/300x200/ef4444/white?text=🧩',
+                    rating: 4.4,
+                    size: '30MB',
+                    category: 'puzzle'
+                },
+                {
+                    id: 3,
+                    name: 'سباق السيارات',
+                    description: 'استمتع بتجربة قيادة واقعية في مضامير عالمية',
+                    image: 'https://via.placeholder.com/300x200/6366f1/white?text=🏎️',
+                    rating: 4.6,
+                    size: '80MB',
+                    category: 'racing'
+                }
+            ]
+        };
+
+        // تحميل البيانات
+        function loadData() {
+            renderApps();
+            renderGames();
+            hideLoading();
+        }
+
+        function renderApps() {
+            const grid = document.getElementById('appsGrid');
+            grid.innerHTML = sampleData.apps.map(app => `
+                <div class="app-card fade-in">
+                    <img src="${app.image}" alt="${app.name}" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">${app.name}</h3>
+                        <p class="card-description">${app.description}</p>
+                        <div class="card-meta">
+                            <div class="card-rating">⭐ ${app.rating}</div>
+                            <div class="card-size">${app.size}</div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-primary">📥 تنزيل</button>
+                            <button class="btn-secondary">ℹ️ تفاصيل</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderGames() {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = sampleData.games.map(game => `
+                <div class="game-card fade-in">
+                    <img src="${game.image}" alt="${game.name}" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">${game.name}</h3>
+                        <p class="card-description">${game.description}</p>
+                        <div class="card-meta">
+                            <div class="card-rating">⭐ ${game.rating}</div>
+                            <div class="card-size">${game.size}</div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-primary">🎮 لعب</button>
+                            <button class="btn-secondary">ℹ️ تفاصيل</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function hideLoading() {
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+            }, 1000);
+        }
+
+        // وظائف الأدمن
+        function showAdminModal() {
+            document.getElementById('adminModal').style.display = 'flex';
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        function loginWithGoogle() {
+            showMessage('🔐 جاري تسجيل الدخول...');
+            setTimeout(() => {
+                document.getElementById('adminToolbar').style.display = 'block';
+                document.getElementById('adminModal').style.display = 'none';
+                showMessage('✅ تم تسجيل الدخول كمدير');
+            }, 2000);
+        }
+
+        function addNewItem(type) {
+            const name = type === 'app' ? 'تطبيق' : 'لعبة';
+            showMessage(`➕ إضافة ${name} جديد`);
+        }
+
+        function toggleTheme() {
+            const isDark = document.body.hasAttribute('data-theme');
+            if (isDark) {
+                document.body.removeAttribute('data-theme');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        }
+
+        // بدء التطبيق
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
 </body>
 </html>
