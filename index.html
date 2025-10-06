@@ -3,1076 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prok - تطبيقات وألعاب مجانية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* 🔒 حماية متقدمة من النسخ */
-        body {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-touch-callout: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        * {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        
-        img {
-            -webkit-user-drag: none;
-            -khtml-user-drag: none;
-            -moz-user-drag: none;
-            -o-user-drag: none;
-            pointer-events: none;
-        }
-
-        /* 🔐 طبقة التشفير عند التقاط الشاشة */
-        .screen-protection {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, 
-                #ff0000 0%, #00ff00 25%, #0000ff 50%, #ffff00 75%, #ff00ff 100%);
-            background-size: 400% 400%;
-            animation: rainbow 2s linear infinite;
-            z-index: 10000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            color: white;
-            text-align: center;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        @keyframes rainbow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* التصميم الأساسي */
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #ffffff;
-            --dark: #1e293b;
-            --text: #334155;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-        }
-
-        [data-theme="dark"] {
-            --primary: #818cf8;
-            --secondary: #1e293b;
-            --dark: #0f172a;
-            --text: #f1f5f9;
-            --text-light: #cbd5e1;
-            --border: #334155;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text);
-            background: var(--secondary);
-            direction: rtl;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* التحميل */
-        #loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--secondary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.3s ease;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f4f6;
-            border-left: 4px solid #6366f1;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* الهيدر */
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 1rem 0;
-            transition: all 0.3s ease;
-        }
-
-        [data-theme="dark"] .header {
-            background: rgba(30, 41, 59, 0.95);
-        }
-
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-menu {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .nav-list {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            background: rgba(99, 102, 241, 0.1);
-            color: #6366f1;
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .theme-btn, .admin-btn {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-        }
-
-        .admin-btn {
-            background: #6366f1;
-            color: white;
-            border: none;
-        }
-
-        .theme-btn:hover, .admin-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* زر القائمة للموبايل */
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 4px;
-        }
-
-        .nav-toggle span {
-            width: 25px;
-            height: 3px;
-            background: var(--text);
-            transition: 0.3s;
-        }
-
-        /* الهيرو */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 140px 0 80px;
-            text-align: center;
-            margin-top: 80px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            animation: fadeIn 0.8s ease;
-            position: relative;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            animation: slideUp 0.8s ease 0.2s both;
-            position: relative;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: white;
-            color: #6366f1;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            animation: zoomIn 0.8s ease 0.4s both;
-            position: relative;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        /* الأقسام */
-        .section {
-            padding: 80px 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            color: var(--text);
-            margin-bottom: 1rem;
-        }
-
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-light);
-        }
-
-        /* الشبكات */
-        .apps-grid, .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .app-card, .game-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border);
-        }
-
-        [data-theme="dark"] .app-card,
-        [data-theme="dark"] .game-card {
-            background: #1e293b;
-        }
-
-        .app-card:hover, .game-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .card-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .card-content {
-            padding: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            color: var(--text);
-            margin-bottom: 0.5rem;
-        }
-
-        .card-description {
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        .card-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .card-rating {
-            color: #f59e0b;
-            font-weight: bold;
-        }
-
-        .card-size {
-            background: #f8fafc;
-            padding: 0.25rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        [data-theme="dark"] .card-size {
-            background: #334155;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: #6366f1;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            flex: 1;
-            text-align: center;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: #4f46e5;
-        }
-
-        .btn-secondary {
-            background: #f8fafc;
-            color: var(--text);
-            border: 1px solid var(--border);
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            flex: 1;
-            text-align: center;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        [data-theme="dark"] .btn-secondary {
-            background: #334155;
-        }
-
-        .btn-secondary:hover {
-            background: #e2e8f0;
-        }
-
-        /* الأنيميشنات */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes zoomIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .fade-in { animation: fadeIn 0.6s ease; }
-        .slide-up { animation: slideUp 0.6s ease; }
-        .zoom-in { animation: zoomIn 0.6s ease; }
-
-        /* الفوتر */
-        .footer {
-            background: var(--dark);
-            color: white;
-            padding: 3rem 0 1rem;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        /* الأدمن */
-        #adminToolbar {
-            display: none;
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background: white;
-            padding: 1rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 999;
-            border: 1px solid var(--border);
-        }
-
-        [data-theme="dark"] #adminToolbar {
-            background: #1e293b;
-        }
-
-        .toolbar-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        [data-theme="dark"] .toolbar-btn {
-            background: #334155;
-        }
-
-        .toolbar-btn:hover {
-            background: #6366f1;
-            color: white;
-            transform: translateX(-5px);
-        }
-
-        /* المودال */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 16px;
-            max-width: 400px;
-            width: 90%;
-            animation: zoomIn 0.3s ease;
-        }
-
-        [data-theme="dark"] .modal-content {
-            background: #1e293b;
-        }
-
-        .modal-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-        }
-
-        /* 🔥 استجابة كاملة للجوال */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 15px;
-            }
-
-            .nav-menu {
-                display: none;
-                position: fixed;
-                top: 80px;
-                right: -100%;
-                width: 80%;
-                height: calc(100vh - 80px);
-                background: var(--secondary);
-                flex-direction: column;
-                justify-content: flex-start;
-                padding: 2rem;
-                transition: 0.3s;
-                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-            }
-
-            .nav-menu.active {
-                right: 0;
-            }
-
-            .nav-list {
-                flex-direction: column;
-                width: 100%;
-                gap: 1rem;
-            }
-
-            .nav-toggle {
-                display: flex;
-            }
-
-            .nav-toggle.active span:nth-child(1) {
-                transform: rotate(45deg) translate(5px, 5px);
-            }
-
-            .nav-toggle.active span:nth-child(2) {
-                opacity: 0;
-            }
-
-            .nav-toggle.active span:nth-child(3) {
-                transform: rotate(-45deg) translate(7px, -6px);
-            }
-
-            .hero {
-                padding: 100px 0 60px;
-                margin-top: 70px;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .section {
-                padding: 60px 0;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .apps-grid, .games-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .card-actions {
-                flex-direction: column;
-            }
-
-            #adminToolbar {
-                top: auto;
-                bottom: 20px;
-                right: 20px;
-                left: 20px;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-            }
-
-            .btn {
-                padding: 0.875rem 1.5rem;
-                font-size: 0.9rem;
-            }
-
-            .card-content {
-                padding: 1rem;
-            }
-        }
-
-        /* دعم الشاشات الكبيرة */
-        @media (min-width: 1400px) {
-            .container {
-                max-width: 1320px;
-            }
-        }
-
-        /* دعم الجهاز اللوحي */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .apps-grid, .games-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+    <title>موقع محمي ومتطور - Prok</title>
+    <meta name="description" content="موقع متطور مع أنظمة حماية متقدمة">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <!-- 🔐 طبقة التشفير -->
-    <div class="screen-protection" id="screenProtection">
-        <div>
-            <i class="fas fa-shield-alt" style="font-size: 4rem; margin-bottom: 1rem;"></i>
-            <h2>الحماية مفعلة</h2>
-            <p>التقاط الشاشة غير مسموح</p>
-        </div>
-    </div>
-
-    <!-- التحميل -->
-    <div id="loading">
-        <div class="spinner"></div>
-    </div>
-
-    <!-- شريط الأدمن -->
-    <div id="adminToolbar">
-        <div style="margin-bottom: 1rem;">
-            <h4 style="margin: 0 0 0.75rem 0; color: var(--text);">👑 أدوات المدير</h4>
-            <button class="toolbar-btn" onclick="addNewItem('app')">
-                <i class="fas fa-mobile-alt"></i>
-                إضافة تطبيق
-            </button>
-            <button class="toolbar-btn" onclick="addNewItem('game')">
-                <i class="fas fa-gamepad"></i>
-                إضافة لعبة
-            </button>
-        </div>
-    </div>
-
+<body class="protected-content">
+    <!-- طبقة حماية الشاشة -->
+    <div id="screenProtection"></div>
+    
     <!-- الهيدر -->
     <header class="header">
-        <nav class="nav container">
-            <div class="nav-brand">
-                <h1 class="logo">Prok</h1>
+        <div class="nav-container">
+            <div class="logo">Prok</div>
+            
+            <!-- قائمة الهامبرغر للجوال -->
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
             
-            <div class="nav-menu" id="navMenu">
-                <ul class="nav-list">
-                    <li><a href="#home" class="nav-link">🏠 الرئيسية</a></li>
-                    <li><a href="#apps" class="nav-link">📱 التطبيقات</a></li>
-                    <li><a href="#games" class="nav-link">🎮 الألعاب</a></li>
-                    <li><a href="#" class="nav-link">🌐 اللغات</a></li>
-                </ul>
-                
-                <div class="nav-actions">
-                    <button class="theme-btn" onclick="toggleTheme()">🌙</button>
-                    <button class="admin-btn" onclick="showAdminModal()">🔐 أدمن</button>
-                </div>
-            </div>
-
-            <!-- زر القائمة للجوال -->
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
+            <!-- قائمة التنقل -->
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="active">الرئيسية</a></li>
+                <li><a href="#features">المميزات</a></li>
+                <li><a href="#services">الخدمات</a></li>
+                <li><a href="#about">من نحن</a></li>
+                <li><a href="#contact">اتصل بنا</a></li>
+                <li><a href="#" id="adminLogin">دخول الأدمن</a></li>
+            </ul>
+        </div>
     </header>
 
-    <!-- الهيرو -->
-    <section id="home" class="hero">
+    <!-- المحتوى الرئيسي -->
+    <main class="main-content">
         <div class="container">
-            <h1 class="fade-in">مرحباً بك في Prok</h1>
-            <p class="slide-up">اكتشف أفضل التطبيقات والألعاب المجانية</p>
-            <a href="#apps" class="btn zoom-in">🚀 ابدأ الاستكشاف</a>
-        </div>
-    </section>
+            <!-- لوحة الإدارة -->
+            <section id="adminPanel" class="admin-panel" style="display: none;">
+                <h2>لوحة تحكم الأدمن</h2>
+                <div class="admin-options">
+                    <div class="admin-option" onclick="window.cms.showAdminLogin()">
+                        <h3>إدارة المحتوى</h3>
+                        <p>تعديل النصوص والصور</p>
+                    </div>
+                    <div class="admin-option" onclick="alert('ميزة رفع الملفات')">
+                        <h3>رفع الملفات</h3>
+                        <p>إدارة التطبيقات والصور</p>
+                    </div>
+                    <div class="admin-option" onclick="alert('ميزة الإعدادات')">
+                        <h3>الإعدادات</h3>
+                        <p>تعديل إعدادات الموقع</p>
+                    </div>
+                    <div class="admin-option" onclick="window.protectionSystem.disableProtection()">
+                        <h3>تعطيل الحماية</h3>
+                        <p>لأغراض التطوير فقط</p>
+                    </div>
+                </div>
+            </section>
 
-    <!-- قسم التطبيقات -->
-    <section id="apps" class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">📱 التطبيقات الشائعة</h2>
-                <p class="section-subtitle">اكتشف أفضل التطبيقات المجانية</p>
-            </div>
-            
-            <div class="apps-grid" id="appsGrid">
-                <!-- التطبيقات تظهر هنا -->
-            </div>
-        </div>
-    </section>
+            <!-- قسم الرئيسية -->
+            <section id="home" class="content-section fade-in">
+                <h2 class="editable">مرحباً بكم في موقع Prok</h2>
+                <p class="editable">هذا موقع متطور مع أنظمة حماية متقدمة تمنع النسخ وأخذ لقطات الشاشة.</p>
+                
+                <!-- محتوى حساس -->
+                <div class="sensitive-content">
+                    <h3>معلومات حساسة</h3>
+                    <div class="password-field" data-sensitive="true">
+                        كلمة المرور: ••••••••
+                    </div>
+                    <p>هذا المحتوى محمي ولا يمكن التقاط صور له</p>
+                </div>
+            </section>
 
-    <!-- قسم الألعاب -->
-    <section id="games" class="section" style="background: #f8fafc;">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">🎮 الألعاب المميزة</h2>
-                <p class="section-subtitle">استمتع بألعاب مجانية رائعة</p>
-            </div>
-            
-            <div class="games-grid" id="gamesGrid">
-                <!-- الألعاب تظهر هنا -->
-            </div>
+            <!-- قسم المميزات -->
+            <section id="features" class="content-section fade-in">
+                <h2 class="editable">مميزات نظام الحماية</h2>
+                <div class="features-grid">
+                    <div class="feature-item editable">
+                        <h3>🛡️ منع لقطات الشاشة</h3>
+                        <p>نظام متقدم يمنع أخذ لقطات الشاشة بأي طريقة</p>
+                    </div>
+                    <div class="feature-item editable">
+                        <h3>🚫 منع النسخ</h3>
+                        <p>حماية كاملة من نسخ النصوص والصور</p>
+                    </div>
+                    <div class="feature-item editable">
+                        <h3>📱 متجاوب</h3>
+                        <p>يتوافق مع جميع الأجهزة والمنصات</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم الخدمات -->
+            <section id="services" class="content-section fade-in">
+                <h2 class="editable">خدماتنا</h2>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label class="editable">رفع ملف تطبيق:</label>
+                        <input type="file" class="form-control" accept=".apk,.ipa,.exe">
+                    </div>
+                    <div class="form-group">
+                        <label class="editable">اسم التطبيق:</label>
+                        <input type="text" class="form-control editable-input" placeholder="أدخل اسم التطبيق">
+                    </div>
+                    <div class="form-group">
+                        <label class="editable">الوصف:</label>
+                        <textarea class="form-control editable-input" rows="3" placeholder="أدخل وصف التطبيق"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">رفع التطبيق</button>
+                </form>
+            </section>
+
+            <!-- قسم من نحن -->
+            <section id="about" class="content-section fade-in">
+                <h2 class="editable">من نحن</h2>
+                <p class="editable">نحن فريق متخصص في تطوير حلول الحماية المتقدمة للمواقع والتطبيقات.</p>
+                
+                <div class="sensitive-content">
+                    <h3>معلومات اتصال سرية</h3>
+                    <p>هذه المعلومات محمية ولا تظهر في لقطات الشاشة</p>
+                    <div class="password-field">
+                        API Key: sk_live_•••••••••••••••••••
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم اتصل بنا -->
+            <section id="contact" class="content-section fade-in">
+                <h2 class="editable">اتصل بنا</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label class="editable">الاسم:</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="editable">البريد الإلكتروني:</label>
+                        <input type="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="editable">الرسالة:</label>
+                        <textarea class="form-control" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">إرسال الرسالة</button>
+                </form>
+            </section>
         </div>
-    </section>
+    </main>
 
     <!-- الفوتر -->
-    <footer class="footer">
+    <footer class="header" style="margin-top: 4rem;">
         <div class="container">
-            <div class="footer-content">
-                <div>
-                    <h3>Prok</h3>
-                    <p>منصة التطبيقات والألعاب المجانية</p>
-                </div>
-                <div>
-                    <h4>روابط سريعة</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li><a href="#home" style="color: white; text-decoration: none;">الرئيسية</a></li>
-                        <li><a href="#apps" style="color: white; text-decoration: none;">التطبيقات</a></li>
-                        <li><a href="#games" style="color: white; text-decoration: none;">الألعاب</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div style="text-align: center; padding-top: 2rem; border-top: 1px solid #374151;">
-                <p>&copy; 2024 Prok. جميع الحقوق محفوظة.</p>
-            </div>
+            <p class="editable" style="text-align: center; color: white; padding: 1rem;">
+                &copy; 2024 موقع Prok. جميع الحقوق محفوظة. | نظام الحماية: <span id="protectionStatus">🟢 نشط</span>
+            </p>
         </div>
     </footer>
 
-    <!-- مودال الأدمن -->
-    <div id="adminModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: var(--text);">👑 لوحة تحكم المدير</h3>
-                <button onclick="closeAdminModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-light);">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="adminLoginSection">
-                    <h4 style="margin-bottom: 1rem; color: var(--text);">تسجيل الدخول كمدير</h4>
-                    <button onclick="loginWithGoogle()" style="background: #6366f1; color: white; border: none; padding: 1rem 2rem; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1rem;">
-                        <i class="fab fa-google"></i> التسجيل عبر جوجل
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 🔒 نظام الحماية المتقدم
-        const screenProtection = document.getElementById('screenProtection');
-        let protectionActive = false;
-
-        // كشف محاولات التقاط الشاشة
-        document.addEventListener('keydown', function(e) {
-            // كشف أزرار التقاط الشاشة
-            if (e.key === 'PrintScreen' || 
-                (e.ctrlKey && e.key === 'p') ||
-                (e.ctrlKey && e.shiftKey && e.key === 's')) {
-                e.preventDefault();
-                activateScreenProtection();
-            }
-        });
-
-        // كشف قائمة السياق (النقر بزر الماوس الأيمن)
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            activateScreenProtection();
-        });
-
-        // كشف محاولات النسخ
-        document.addEventListener('copy', function(e) {
-            e.preventDefault();
-        });
-
-        document.addEventListener('cut', function(e) {
-            e.preventDefault();
-        });
-
-        // كشف أدوات المطور
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-                (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-                activateScreenProtection();
-            }
-        });
-
-        // 🔍 كشف تغيير حجم النافذة (مؤشر على التقاط الشاشة)
-        let initialWidth = window.innerWidth;
-        let initialHeight = window.innerHeight;
-
-        window.addEventListener('resize', function() {
-            if (window.innerWidth !== initialWidth || window.innerHeight !== initialHeight) {
-                activateScreenProtection();
-            }
-        });
-
-        // 🔄 كشف تغيير رؤية الصفحة
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                activateScreenProtection();
-            }
-        });
-
-        // ⚡ تفعيل حماية الشاشة
-        function activateScreenProtection() {
-            if (protectionActive) return;
-            
-            protectionActive = true;
-            screenProtection.style.display = 'flex';
-            
-            // تشويش الصفحة الأساسية
-            document.body.style.filter = 'blur(10px)';
-            document.body.style.pointerEvents = 'none';
-            
-            // منع التمرير
-            document.body.style.overflow = 'hidden';
-            
-            // إخفاء الحماية بعد 3 ثواني
-            setTimeout(() => {
-                deactivateScreenProtection();
-            }, 3000);
-        }
-
-        // ❌ إلغاء حماية الشاشة
-        function deactivateScreenProtection() {
-            protectionActive = false;
-            screenProtection.style.display = 'none';
-            document.body.style.filter = 'none';
-            document.body.style.pointerEvents = 'auto';
-            document.body.style.overflow = 'auto';
-        }
-
-        // بيانات التطبيقات
-        const sampleData = {
-            apps: [
-                {
-                    id: 1,
-                    name: 'تطبيق الإنتاجية',
-                    description: 'تطبيق مميز لزيادة الإنتاجية والتنظيم اليومي',
-                    image: 'https://via.placeholder.com/300x200/6366f1/white?text=📱',
-                    rating: 4.5,
-                    size: '15MB',
-                    category: 'productivity'
-                },
-                {
-                    id: 2,
-                    name: 'تطبيق التواصل',
-                    description: 'تواصل مع الأصدقاء والعائلة بسهولة وأمان',
-                    image: 'https://via.placeholder.com/300x200/8b5cf6/white?text=💬',
-                    rating: 4.2,
-                    size: '25MB',
-                    category: 'social'
-                },
-                {
-                    id: 3,
-                    name: 'أدوات المطور',
-                    description: 'مجموعة أدوات أساسية لكل مبرمج ومصمم',
-                    image: 'https://via.placeholder.com/300x200/10b981/white?text=🛠️',
-                    rating: 4.7,
-                    size: '10MB',
-                    category: 'tools'
-                }
-            ],
-            games: [
-                {
-                    id: 1,
-                    name: 'لعبة المغامرة',
-                    description: 'انطلق في رحلة مغامرة مثيرة عبر العوالم المختلفة',
-                    image: 'https://via.placeholder.com/300x200/f59e0b/white?text=🎮',
-                    rating: 4.8,
-                    size: '50MB',
-                    category: 'adventure'
-                },
-                {
-                    id: 2,
-                    name: 'تحدي الألغاز',
-                    description: 'اختبر ذكاءك مع ألغاز ممتعة ومثيرة',
-                    image: 'https://via.placeholder.com/300x200/ef4444/white?text=🧩',
-                    rating: 4.4,
-                    size: '30MB',
-                    category: 'puzzle'
-                },
-                {
-                    id: 3,
-                    name: 'سباق السيارات',
-                    description: 'استمتع بتجربة قيادة واقعية في مضامير عالمية',
-                    image: 'https://via.placeholder.com/300x200/6366f1/white?text=🏎️',
-                    rating: 4.6,
-                    size: '80MB',
-                    category: 'racing'
-                }
-            ]
-        };
-
-        // تحميل البيانات
-        function loadData() {
-            renderApps();
-            renderGames();
-            setupMobileMenu();
-            hideLoading();
-        }
-
-        function renderApps() {
-            const grid = document.getElementById('appsGrid');
-            grid.innerHTML = sampleData.apps.map(app => `
-                <div class="app-card fade-in">
-                    <img src="${app.image}" alt="${app.name}" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">${app.name}</h3>
-                        <p class="card-description">${app.description}</p>
-                        <div class="card-meta">
-                            <div class="card-rating">⭐ ${app.rating}</div>
-                            <div class="card-size">${app.size}</div>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn-primary">📥 تنزيل</button>
-                            <button class="btn-secondary">ℹ️ تفاصيل</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderGames() {
-            const grid = document.getElementById('gamesGrid');
-            grid.innerHTML = sampleData.games.map(game => `
-                <div class="game-card fade-in">
-                    <img src="${game.image}" alt="${game.name}" class="card-image">
-                    <div class="card-content">
-                        <h3 class="card-title">${game.name}</h3>
-                        <p class="card-description">${game.description}</p>
-                        <div class="card-meta">
-                            <div class="card-rating">⭐ ${game.rating}</div>
-                            <div class="card-size">${game.size}</div>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn-primary">🎮 لعب</button>
-                            <button class="btn-secondary">ℹ️ تفاصيل</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // القائمة المتنقلة للجوال
-        function setupMobileMenu() {
-            const toggle = document.getElementById('navToggle');
-            const menu = document.getElementById('navMenu');
-
-            if (toggle && menu) {
-                toggle.addEventListener('click', () => {
-                    menu.classList.toggle('active');
-                    toggle.classList.toggle('active');
-                });
-
-                // إغلاق القائمة عند النقر على رابط
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.addEventListener('click', () => {
-                        menu.classList.remove('active');
-                        toggle.classList.remove('active');
-                    });
-                });
-            }
-        }
-
-        function hideLoading() {
-            setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-            }, 1000);
-        }
-
-        // وظائف الأدمن
-        function showAdminModal() {
-            document.getElementById('adminModal').style.display = 'flex';
-        }
-
-        function closeAdminModal() {
-            document.getElementById('adminModal').style.display = 'none';
-        }
-
-        function loginWithGoogle() {
-            setTimeout(() => {
-                document.getElementById('adminToolbar').style.display = 'block';
-                document.getElementById('adminModal').style.display = 'none';
-            }, 1000);
-        }
-
-        function addNewItem(type) {
-            // وظيفة إضافة عنصر جديد
-        }
-
-        function toggleTheme() {
-            const isDark = document.body.hasAttribute('data-theme');
-            if (isDark) {
-                document.body.removeAttribute('data-theme');
-            } else {
-                document.body.setAttribute('data-theme', 'dark');
-            }
-        }
-
-        // بدء التطبيق
-        document.addEventListener('DOMContentLoaded', loadData);
-    </script>
+    <!-- تحميل ملفات JavaScript -->
+    <script src="protection.js"></script>
 </body>
 </html>
