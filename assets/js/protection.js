@@ -153,8 +153,7 @@ class AdvancedProtectionSystem {
             </div>
         `;
         
-        const widthThreshold = window.outerWidth - window.innerWidth > 160;
-const heightThreshold = window.outerHeight - window.innerHeight > 160;
+        // منع أي تفاعل إضافي
         document.addEventListener('keydown', (e) => e.preventDefault());
         document.addEventListener('click', (e) => e.preventDefault());
         document.addEventListener('contextmenu', (e) => e.preventDefault());
