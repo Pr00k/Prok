@@ -1,28 +1,24 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Prok — المتجر الشخصي</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/edits.css">
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/edits.css" />
 </head>
 <body>
   <div id="sys-toast" class="sys-toast" aria-live="polite" hidden></div>
 
   <header class="header">
     <div class="container header-inner">
-      <a class="logo editable" data-path="header.title" href="index.html">Prok<span class="dot">.</span>
-        <span class="edit-icon" data-type="text" data-target=".logo" title="تعديل الاسم">✏️</span>
-      </a>
-
+      <a class="logo editable" data-path="header.title" href="index.html">Prok<span class="dot">.</span><span class="edit-icon" data-type="text" data-target=".logo" title="تعديل">✏️</span></a>
       <nav class="top-nav" id="topNav" aria-label="القائمة">
         <a href="#" class="editable" data-path="nav.home">الرئيسية</a>
         <a href="#" class="editable" data-path="nav.services">الألعاب</a>
         <a href="#" class="editable" data-path="nav.apps">التطبيقات</a>
         <a href="#" class="editable" data-path="nav.about">عنّا</a>
       </nav>
-
       <div class="header-actions">
         <button id="themeToggle" class="btn icon" aria-label="تبديل السمة">🌓</button>
         <button id="adminBtn" class="btn primary" aria-label="تسجيل أدمن">أدمن</button>
@@ -44,15 +40,15 @@
     <main class="main">
       <section class="carousel editable" id="carousel" aria-label="عروض">
         <div class="carousel-track" id="carouselTrack" role="list"></div>
-        <div class="carousel-controls">
+        <div class="carousel-controls" aria-hidden="false">
           <button id="prev" class="ctrl" aria-label="السابق">‹</button>
-          <div class="dots" id="dots" role="tablist"></div>
+          <div class="dots" id="dots" role="tablist" aria-label="نقاط العرض"></div>
           <button id="next" class="ctrl" aria-label="التالي">›</button>
         </div>
       </section>
 
       <section class="section head-cards" id="featured">
-        <h2 class="editable" data-path="featured.title">مقترحات اليوم <span class="edit-icon" data-type="text"></span></h2>
+        <h2 class="editable" data-path="featured.title">مقترحات اليوم</h2>
         <div class="cards" id="cards" aria-live="polite"></div>
         <div class="admin-controls" style="display:none; margin-top:12px;">
           <button id="addAppBtn" class="btn primary">أضف تطبيق/لعبة</button>
@@ -63,12 +59,24 @@
   </div>
 
   <footer class="footer editable" data-path="footer.text">
-    <div class="container" id="footerText">© 2025 Prok — جميع الحقوق محفوظة
-      <span class="edit-icon" data-type="text" data-target="#footerText" title="تعديل"></span>
-    </div>
+    <div class="container" id="footerText">© 2025 Prok — جميع الحقوق محفوظة<span class="edit-icon" data-type="text" data-target="#footerText"></span></div>
   </footer>
 
-  <!-- Firebase SDK (compat) -->
+  <!-- Admin Chat Button -->
+  <div id="admin-chat-btn" class="admin-chat-btn hidden" title="محادثة المساعد">💬</div>
+
+  <!-- Chat modal -->
+  <div id="aiChatModal" class="ai-chat-modal hidden" role="dialog" aria-modal="true" aria-label="محادثة مع المساعد">
+    <div class="ai-chat-header"><strong>مساعد Prok</strong><button id="aiCloseBtn" class="icon small">✖</button></div>
+    <div class="ai-chat-body" id="aiChatBody"></div>
+    <div class="ai-chat-controls">
+      <input id="aiInput" type="text" placeholder="اكتب سؤالك أو اطلب فحصاً..." />
+      <input id="aiFile" type="file" accept="image/*,text/*,application/zip" />
+      <button id="aiSend" class="btn primary">أرسل</button>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -76,8 +84,9 @@
 
   <!-- Project scripts -->
   <script defer src="assets/js/firebase-config.js"></script>
+  <script defer src="assets/js/error-handler.js"></script>
   <script defer src="assets/js/main.js"></script>
   <script defer src="assets/js/admin.js"></script>
-  <script defer src="assets/js/chat-widget.js"></script>
+  <script defer src="assets/js/chat.js"></script>
 </body>
 </html>
