@@ -1,57 +1,0 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Prok — المتجر الشخصي</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/edits.css" />
-</head>
-<body class="theme-dark">
-  <header class="header">
-    <div class="container header-inner">
-      <a class="logo" href="index.html">Prok<span class="dot">.</span></a>
-      <nav class="top-nav" id="topNav" aria-label="القائمة">
-        <a href="#home">الرئيسية</a>
-        <a href="#apps">الألعاب</a>
-        <a href="#apps">التطبيقات</a>
-        <a href="#about">عنّا</a>
-      </nav>
-      <div class="header-actions">
-        <button id="themeToggle" class="btn icon" aria-label="تبديل السمة">🌓</button>
-        <a id="adminBtn" class="btn primary" href="admin/login.html">أدمن</a>
-        <button id="sidebarToggle" class="btn icon" aria-label="القائمة">☰</button>
-      </div>
-    </div>
-  </header>
-
-  <main class="main container" id="mainContent">
-    <section class="hero" id="home">
-      <h1 id="heroTitle">مرحبا بك في Prok</h1>
-      <p id="heroSub">متجر التطبيقات — سريع، أنيق، ومتحكّم به بالكامل.</p>
-      <a class="cta btn primary" href="#apps">استكشف التطبيقات</a>
-    </section>
-
-    <section id="apps" class="apps-grid" aria-live="polite"></section>
-
-    <section id="about" class="section about">
-      <h2>عن Prok</h2>
-      <p>موقع شخصي لعرض التطبيقات مع لوحة إدارة ذكية ومحلية.</p>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container">© 2025 Prok — جميع الحقوق محفوظة</div>
-  </footer>
-
-  <!-- Firebase compat SDKs (optional) -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-  <!-- Project scripts -->
-  <script src="assets/js/firebase-config.js"></script>
-  <script src="assets/js/auto-fix.js" defer></script>
-  <script src="assets/js/main.js" defer></script>
-</body>
-</html>
