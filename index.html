@@ -6,215 +6,52 @@
   <title>Prok — المتجر الشخصي</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/edits.css" />
-  
-  <!-- حماية Meta Tags -->
-  <meta name="protection" content="no-copy, no-screenshot, no-right-click">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com;">
 </head>
-<body class="protected-content">
-  <!-- طبقة حماية الشاشة -->
-  <div id="screen-protection" class="screen-protection"></div>
-  
-  <div id="sys-toast" class="sys-toast" aria-live="polite" hidden></div>
-
+<body class="theme-dark">
   <header class="header">
     <div class="container header-inner">
-      <a class="logo editable" data-path="header.title" href="index.html">Prok<span class="dot">.</span><span class="edit-icon" data-type="text" data-target=".logo" title="تعديل">✏️</span></a>
+      <a class="logo" href="index.html">Prok<span class="dot">.</span></a>
       <nav class="top-nav" id="topNav" aria-label="القائمة">
-        <a href="#home" class="editable" data-path="nav.home">الرئيسية</a>
-        <a href="#games" class="editable" data-path="nav.services">الألعاب</a>
-        <a href="#apps" class="editable" data-path="nav.apps">التطبيقات</a>
-        <a href="#about" class="editable" data-path="nav.about">عنّا</a>
+        <a href="#home">الرئيسية</a>
+        <a href="#apps">الألعاب</a>
+        <a href="#apps">التطبيقات</a>
+        <a href="#about">عنّا</a>
       </nav>
       <div class="header-actions">
         <button id="themeToggle" class="btn icon" aria-label="تبديل السمة">🌓</button>
-        <button id="adminBtn" class="btn primary" aria-label="تسجيل أدمن">أدمن</button>
-        <button id="sidebarToggle" class="btn icon" aria-label="القائمة الجانبية">☰</button>
+        <a id="adminBtn" class="btn primary" href="admin/login.html">أدمن</a>
+        <button id="sidebarToggle" class="btn icon" aria-label="القائمة">☰</button>
       </div>
     </div>
   </header>
 
-  <div class="layout container">
-    <aside class="sidebar" id="sidebar" aria-label="قائمة الأقسام">
-      <ul id="sidebarList">
-        <li class="active editable" data-path="sidebar[0]">الأبرز <span class="edit-icon" data-type="text"></span></li>
-        <li class="editable" data-path="sidebar[1]">الأكثر تحميلاً <span class="edit-icon" data-type="text"></span></li>
-        <li class="editable" data-path="sidebar[2]">الألعاب الجديدة <span class="edit-icon" data-type="text"></span></li>
-        <li class="editable" data-path="sidebar[3]">التطبيقات <span class="edit-icon" data-type="text"></span></li>
-        <li class="editable" data-path="sidebar[4]">المفضلة <span class="edit-icon" data-type="text"></span></li>
-      </ul>
-    </aside>
+  <main class="main container" id="mainContent">
+    <section class="hero" id="home">
+      <h1 id="heroTitle">مرحبا بك في Prok</h1>
+      <p id="heroSub">متجر التطبيقات — سريع، أنيق، ومتحكّم به بالكامل.</p>
+      <a class="cta btn primary" href="#apps">استكشف التطبيقات</a>
+    </section>
 
-    <main class="main">
-      <!-- قسم الإحصائيات -->
-      <section class="stats-section" id="stats">
-        <div class="stat-card">
-          <div class="stat-icon">📊</div>
-          <div class="stat-info">
-            <h3>إحصائيات الحماية</h3>
-            <p>محاولات السكرين شوت: <span id="screenshot-attempts">0</span></p>
-            <p>حالة الحماية: <span id="protection-status">🟢 نشطة</span></p>
-          </div>
-        </div>
-      </section>
+    <section id="apps" class="apps-grid" aria-live="polite"></section>
 
-      <section class="carousel editable" id="carousel" aria-label="عروض">
-        <div class="carousel-track" id="carouselTrack" role="list"></div>
-        <div class="carousel-controls" aria-hidden="false">
-          <button id="prev" class="ctrl" aria-label="السابق">‹</button>
-          <div class="dots" id="dots" role="tablist" aria-label="نقاط العرض"></div>
-          <button id="next" class="ctrl" aria-label="التالي">›</button>
-        </div>
-      </section>
+    <section id="about" class="section about">
+      <h2>عن Prok</h2>
+      <p>موقع شخصي لعرض التطبيقات مع لوحة إدارة ذكية ومحلية.</p>
+    </section>
+  </main>
 
-      <!-- قسم التطبيقات المتطور -->
-      <section class="section head-cards" id="featured">
-        <h2 class="editable" data-path="featured.title">مقترحات اليوم</h2>
-        
-        <!-- عناصر تحكم الأدمن -->
-        <div class="admin-controls" style="display:none; margin-bottom:20px;">
-          <button id="addAppBtn" class="btn primary">➕ أضف تطبيق/لعبة</button>
-          <button id="pickAnimationBtn" class="btn">🎬 اختيار الأنيميشن</button>
-          <button id="protectionToggle" class="btn warning">🔒 تفعيل/تعطيل الحماية</button>
-        </div>
-
-        <!-- فلتر البحث -->
-        <div class="apps-filter">
-          <input type="text" id="appsSearch" placeholder="🔍 ابحث في التطبيقات..." class="search-input">
-          <select id="appsCategory" class="filter-select">
-            <option value="all">كل التطبيقات</option>
-            <option value="app">📱 تطبيقات</option>
-            <option value="game">🎮 ألعاب</option>
-            <option value="favorite">❤️ المفضلة</option>
-          </select>
-        </div>
-
-        <div class="cards" id="cards" aria-live="polite"></div>
-      </section>
-
-      <!-- قسم التطبيقات التفصيلي -->
-      <section id="apps" class="apps-section">
-        <h2 class="editable" data-path="apps.title">📱 التطبيقات والألعاب</h2>
-        
-        <div class="apps-grid" id="apps-container">
-          <!-- سيتم تعبئته بالجافاسكريبت -->
-        </div>
-      </section>
-
-      <!-- قسم المحتوى الحساس -->
-      <section class="sensitive-section">
-        <div class="sensitive-content">
-          <h3>🔐 معلومات سرية محمية</h3>
-          <div class="password-field">
-            كود API: sk_live_•••••••••••••••••••
-          </div>
-          <div class="password-field">
-            كلمة المرور: ••••••••••••••••
-          </div>
-          <p>هذا المحتوى محمي - جرب أخذ سكرين شوت!</p>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <footer class="footer editable" data-path="footer.text">
-    <div class="container" id="footerText">
-      © 2025 Prok — جميع الحقوق محفوظة | الحماية: <span id="footer-protection-status">🟢 نشطة</span>
-      <span class="edit-icon" data-type="text" data-target="#footerText"></span>
-    </div>
+  <footer class="footer">
+    <div class="container">© 2025 Prok — جميع الحقوق محفوظة</div>
   </footer>
 
-  <!-- Admin Chat Button -->
-  <div id="admin-chat-btn" class="admin-chat-btn hidden" title="محادثة المساعد">🤖</div>
-
-  <!-- Chat modal -->
-  <div id="aiChatModal" class="ai-chat-modal hidden" role="dialog" aria-modal="true" aria-label="محادثة مع المساعد">
-    <div class="ai-chat-header">
-      <strong>🤖 مساعد Prok الذكي</strong>
-      <button id="aiCloseBtn" class="icon small">✖</button>
-    </div>
-    <div class="ai-chat-body" id="aiChatBody">
-      <div class="ai-message">
-        <strong>مساعد Prok:</strong> مرحباً! أنا هنا لمساعدتك في إدارة الموقع وتصحيح الأخطاء. كيف يمكنني مساعدتك؟
-      </div>
-    </div>
-    <div class="ai-chat-controls">
-      <input id="aiInput" type="text" placeholder="اسأل عن الحماية، الأخطاء، التطوير..." />
-      <input id="aiFile" type="file" accept=".html,.css,.js,.jpg,.png,.zip" />
-      <button id="aiSend" class="btn primary">أرسل</button>
-      <button id="aiAnalyze" class="btn secondary">🔍 فحص الموقع</button>
-    </div>
-  </div>
-
-  <!-- نافذة إضافة تطبيق -->
-  <div id="addAppModal" class="modal hidden">
-    <div class="modal-content">
-      <h3>➕ إضافة تطبيق/لعبة جديدة</h3>
-      <form id="addAppForm">
-        <input type="text" id="appName" placeholder="اسم التطبيق" required>
-        <textarea id="appDescription" placeholder="الوصف" required></textarea>
-        <input type="text" id="appVersion" placeholder="الإصدار (مثال: 1.0.0)" required>
-        <select id="appCategory" required>
-          <option value="">اختر الفئة</option>
-          <option value="app">📱 تطبيق</option>
-          <option value="game">🎮 لعبة</option>
-          <option value="tool">🔧 أداة</option>
-        </select>
-        <select id="appIcon" required>
-          <option value="📱">📱 تطبيق</option>
-          <option value="🎮">🎮 لعبة</option>
-          <option value="🔧">🔧 أداة</option>
-          <option value="🎨">🎨 تصميم</option>
-        </select>
-        <input type="file" id="appFile" accept=".apk,.ipa,.exe,.zip">
-        <div class="modal-actions">
-          <button type="submit" class="btn primary">💾 حفظ</button>
-          <button type="button" class="btn" onclick="document.getElementById('addAppModal').classList.add('hidden')">❌ إلغاء</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Firebase SDKs -->
+  <!-- Firebase compat SDKs (optional) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
   <!-- Project scripts -->
-  <script defer src="assets/js/firebase-config.js"></script>
-  <script defer src="assets/js/error-handler.js"></script>
-  <script defer src="assets/js/protection.js"></script>
-  <script defer src="assets/js/main.js"></script>
-  <script defer src="assets/js/admin.js"></script>
-  <script defer src="assets/js/chat.js"></script>
-  <script defer src="assets/js/apps-system.js"></script>
-  
-  <!-- حماية فورية -->
-  <script>
-  // حماية أساسية فورية
-  document.addEventListener('DOMContentLoaded', function() {
-    // منع النسخ
-    document.addEventListener('copy', function(e) {
-      e.preventDefault();
-      showToast('❌ النسخ غير مسموح في Prok', 'error');
-    });
-    
-    // منع الزر الأيمن
-    document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-      showToast('❌ الزر الأيمن غير مسموح', 'error');
-    });
-    
-    // وظيفة المساعدة للإشعارات
-    function showToast(message, type = 'info') {
-      const toast = document.getElementById('sys-toast');
-      toast.textContent = message;
-      toast.hidden = false;
-      toast.className = `sys-toast ${type}`;
-      setTimeout(() => toast.hidden = true, 3000);
-    }
-  });
-  </script>
+  <script src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/auto-fix.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
