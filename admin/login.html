@@ -1,24 +1,40 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>تسجيل دخول الأدمن</title><link rel="stylesheet" href="../assets/css/style.css"></head>
-<body>
-  <main class="container" style="padding:80px 0;text-align:center">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Login - Admin</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="theme-dark container">
+  <main style="padding:28px;">
     <h1>تسجيل دخول الأدمن</h1>
-    <p>اضغط أدمن وسجل بحساب Google المصرح.</p>
-    <button id="adminSignBtn" class="btn primary">أدمن — تسجيل دخول</button>
-    <p style="margin-top:18px"><a href="../index.html">🔙 العودة للموقع</a></p>
+    <p>سجّل بحساب Google المصرّح (Firebase) للوصول للوحة الأدمن.</p>
+    <button id="googleSign" class="btn primary">تسجيل دخول بـ Google</button>
+    <p id="status" style="margin-top:12px;color:#fda"></p>
   </main>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
   <script src="../assets/js/firebase-config.js"></script>
   <script>
-    const auth = firebase.auth();
-    document.getElementById('adminSignBtn').addEventListener('click', async ()=>{
+    document.getElementById('googleSign').addEventListener('click', async ()=>{
+      const status = document.getElementById('status');
+      if(!(window.firebase && firebase.auth)){ status.textContent='Firebase غير مهيأ محليًا.'; return; }
       const provider = new firebase.auth.GoogleAuthProvider();
       try{
-        const res = await auth.signInWithPopup(provider);
-        window.location.href = 'dashboard.html';
-      }catch(e){ alert('خطأ: '+(e.message||e.code)); }
+        const res = await firebase.auth().signInWithPopup(provider);
+        const email = res.user.email;
+        // فقط ادمن محدد يرى لوحة الأدمن - عدّل البريد هنا أو راجع Firestore للتحقّق
+        const allowed = ['aaaab9957@gmail.com'];
+        if(allowed.includes(email)){
+          localStorage.setItem('prok_admin','1');
+          window.location.href = 'dashboard.html';
+        } else {
+          await firebase.auth().signOut();
+          status.textContent = 'هذا الحساب غير مصرح له كأدمن.';
+        }
+      }catch(e){
+        status.textContent = 'خطأ بالمصادقة: ' + e.message;
+      }
     });
   </script>
 </body>
