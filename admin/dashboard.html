@@ -1,37 +1,46 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>لوحة الأدمن</title><link rel="stylesheet" href="../assets/css/style.css"></head>
-<body>
-  <main class="container" style="padding-top:80px">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h2>لوحة التحكم</h2>
-      <div><span id="adminEmail"></span> <button id="signOut" class="btn">تسجيل خروج</button></div>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>لوحة الأدمن - Prok</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/edits.css">
+</head>
+<body class="theme-dark container">
+  <h1>لوحة الأدمن</h1>
+
+  <div class="admin-controls" style="margin-bottom:12px;">
+    <button id="scanSite" class="btn">🔍 فحص الموقع</button>
+    <button id="applyPatches" class="btn primary">⚡ تطبيق التصحيحات</button>
+    <button id="toggleEdit" class="btn">✏️ تفعيل وضع التعديل</button>
+    <button id="logout" class="btn">تسجيل خروج</button>
+  </div>
+
+  <pre id="report" style="white-space:pre-wrap;background:#011;padding:12px;color:#9ff;border-radius:8px;"></pre>
+
+  <!-- Admin AI chat modal -->
+  <div id="aiAdminBtn" class="admin-chat-btn" title="محادثة الأدمن" style="position:fixed;left:18px;bottom:18px;">
+    <button id="openAi" class="btn primary">🤖 مساعد الأدمن</button>
+  </div>
+
+  <div id="aiModal" class="modal hidden" role="dialog" aria-modal="true" style="width:420px;right:18px;bottom:90px;position:fixed;">
+    <div style="background:#021226;padding:8px;border-radius:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;color:#fff;">
+        <strong>مساعد Prok</strong>
+        <button id="closeAi" class="btn">✖</button>
+      </div>
+      <div id="aiBody" style="height:300px;overflow:auto;background:#011;margin-top:8px;padding:8px;color:#dff;border-radius:6px;"></div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <input id="aiInput" placeholder="استفسر عن الأخطاء..." style="flex:1;padding:8px;border-radius:6px;border:0"/>
+        <button id="aiSend" class="btn primary">أرسل</button>
+      </div>
     </div>
-    <section style="margin-top:18px">
-      <h3>إدارة الصور (البانرات)</h3>
-      <input id="uploadInput" type="file" accept="image/*">
-      <button id="uploadBtn" class="btn primary">رفع</button>
-      <div id="bannersList" style="margin-top:12px"></div>
-    </section>
-    <section style="margin-top:20px">
-      <h3>إدارة التطبيقات</h3>
-      <div id="appsEditor"></div>
-      <div style="margin-top:10px">
-        <input id="newTitle" placeholder="اسم التطبيق">
-        <input id="newDesc" placeholder="وصف قصير">
-        <button id="addApp" class="btn primary">أضف تطبيق</button>
-      </div>
-      <div style="margin-top:12px">
-        <button id="saveAll" class="btn primary">حفظ التغيرات</button>
-        <span id="status" style="margin-left:12px"></span>
-      </div>
-    </section>
-  </main>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  </div>
+
   <script src="../assets/js/firebase-config.js"></script>
-  <script src="../assets/js/admin-dashboard.js"></script>
+  <script src="../assets/js/auto-fix.js"></script>
+  <script src="../assets/js/admin.js"></script>
+  <script src="../assets/js/chat.js"></script>
 </body>
 </html>
