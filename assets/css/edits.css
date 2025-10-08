@@ -1,6 +1,0 @@
-/* helpers for admin UI and edit mode */
-.edit-icon{display:none}
-.admin-mode .edit-icon{display:inline-block}
-.hidden{display:none}
-.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#071026;padding:16px;border-radius:10px;z-index:999;border:1px solid rgba(255,255,255,0.04)}
-.admin-controls{display:flex;gap:8px}
