@@ -1,1 +1,46 @@
-:root{--accent:#00e6c3;--accent2:#7c4dff;--muted:#b9c6d0;--max-width:1200px}*{box-sizing:border-box;-webkit-font-smoothing:antialiased}html,body{height:100%}body{margin:0;font-family:'Tajawal',system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(135deg,#071224,#0f2b3d);color:#eef6ff;overflow-x:hidden;transition:background .25s,color .25s}.container{max-width:var(--max-width);margin:0 auto;padding:14px}.header{position:sticky;top:0;z-index:120;background:linear-gradient(180deg,rgba(0,0,0,0.25),rgba(0,0,0,0.35));backdrop-filter:blur(6px);padding:10px;border-bottom:1px solid rgba(255,255,255,0.03)}.header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}.logo{font-weight:900;color:var(--accent);text-decoration:none;font-size:1.3rem}.top-nav{display:flex;gap:12px}.top-nav a{color:var(--muted);text-decoration:none;padding:8px;border-radius:8px;font-weight:700}.header-actions{display:flex;gap:10px;align-items:center}.btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px 12px;border-radius:10px;cursor:pointer;transition:transform .15s}.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#071226}.layout{display:flex;gap:18px;margin-top:18px;align-items:flex-start}.sidebar{width:260px;background:rgba(255,255,255,0.02);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);min-height:120px}.sidebar ul{list-style:none;padding:0;margin:0}.sidebar li{padding:12px 8px;border-radius:8px;color:var(--muted);cursor:pointer;transition:background .18s}.sidebar li.active{background:linear-gradient(90deg,rgba(31,182,255,0.06),rgba(124,77,255,0.04));color:#fff}.main{flex:1}.carousel{position:relative;border-radius:12px;overflow:hidden;height:380px;box-shadow:0 30px 60px rgba(2,6,23,0.6);background:linear-gradient(180deg,rgba(0,0,0,0.06),transparent)}.carousel-track{display:flex;height:100%;transition:transform .7s cubic-bezier(.22,.9,.2,1);will-change:transform}.slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative}.slide img{width:100%;height:100%;object-fit:cover;display:block}.carousel-controls{position:absolute;bottom:14px;left:50%;transform:translateX(50%);display:flex;align-items:center;gap:8px;z-index:40}.ctrl{background:rgba(0,0,0,0.45);border:0;color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}.dots{display:flex;gap:8px}.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer}.dot.active{background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 6px 20px rgba(124,77,255,0.08)}.head-cards{margin-top:18px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:10px}.card{background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}.card img{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px}.card:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 30px 60px rgba(2,6,23,0.5)}.footer{margin-top:22px;text-align:center;color:var(--muted);padding:18px;border-top:1px solid rgba(255,255,255,0.03)}@media (max-width: 900px){.layout{flex-direction:column;padding-bottom:40px}.sidebar{width:100%}.carousel{height:240px}}.sys-toast{position:fixed;right:16px;bottom:16px;background:rgba(0,0,0,0.75);color:#fff;padding:10px 14px;border-radius:8px;z-index:9999;display:none}.sys-toast.show{display:block}.admin-chat-btn{position:fixed;left:18px;bottom:18px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#071226;font-size:22px;z-index:9999;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.45)}.hidden{display:none !important}.ai-chat-modal{position:fixed;left:18px;bottom:86px;width:420px;max-width:92%;background:#0b1220;border-radius:12px;box-shadow:0 30px 60px rgba(0,0,0,0.6);z-index:10000;display:flex;flex-direction:column;overflow:hidden}.ai-chat-header{display:flex;align-items:center;justify-content:space-between;padding:10px;border-bottom:1px solid rgba(255,255,255,0.03);color:#fff}.ai-chat-body{padding:10px;height:320px;overflow:auto;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}.ai-chat-controls{display:flex;gap:8px;padding:8px;border-top:1px solid rgba(255,255,255,0.03)}.ai-chat-controls input[type="text"]{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff}.ai-chat-controls input[type="file"]{width:48px}.icon.small{background:transparent;border:0;color:#fff;cursor:pointer}
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>لوحة الأدمن - Prok</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/edits.css">
+</head>
+<body class="theme-dark container">
+  <h1>لوحة الأدمن</h1>
+
+  <div class="admin-controls" style="margin-bottom:12px;">
+    <button id="scanSite" class="btn">🔍 فحص الموقع</button>
+    <button id="applyPatches" class="btn primary">⚡ تطبيق التصحيحات</button>
+    <button id="toggleEdit" class="btn">✏️ تفعيل وضع التعديل</button>
+    <button id="logout" class="btn">تسجيل خروج</button>
+  </div>
+
+  <pre id="report" style="white-space:pre-wrap;background:#011;padding:12px;color:#9ff;border-radius:8px;"></pre>
+
+  <!-- Admin AI chat modal -->
+  <div id="aiAdminBtn" class="admin-chat-btn" title="محادثة الأدمن" style="position:fixed;left:18px;bottom:18px;">
+    <button id="openAi" class="btn primary">🤖 مساعد الأدمن</button>
+  </div>
+
+  <div id="aiModal" class="modal hidden" role="dialog" aria-modal="true" style="width:420px;right:18px;bottom:90px;position:fixed;">
+    <div style="background:#021226;padding:8px;border-radius:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;color:#fff;">
+        <strong>مساعد Prok</strong>
+        <button id="closeAi" class="btn">✖</button>
+      </div>
+      <div id="aiBody" style="height:300px;overflow:auto;background:#011;margin-top:8px;padding:8px;color:#dff;border-radius:6px;"></div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <input id="aiInput" placeholder="استفسر عن الأخطاء..." style="flex:1;padding:8px;border-radius:6px;border:0"/>
+        <button id="aiSend" class="btn primary">أرسل</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/firebase-config.js"></script>
+  <script src="../assets/js/auto-fix.js"></script>
+  <script src="../assets/js/admin.js"></script>
+  <script src="../assets/js/chat.js"></script>
+</body>
+</html>
