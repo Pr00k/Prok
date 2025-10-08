@@ -1,6 +1,0 @@
-Conversation summary:
-- Repo: https://github.com/Pr00k/Prok
-- Admin email: aaaab9957@gmail.com
-- Firebase config is included in assets/js/firebase-config.js (verify values in Firebase Console)
-- Features: UI improvements, admin inline edit, AI diagnostics, auto error logging, file uploads, suggested patches.
-- Steps: deploy functions, set OPENAI_API_KEY, upload frontend to GitHub, enable Google Auth, add authorized domain.
