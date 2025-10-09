@@ -4,59 +4,1181 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>لوحة الأدمن — Prok</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    /* الأساسيات */
+    :root {
+      --bg: #041021;
+      --bg2: #062934;
+      --card: #0d2630;
+      --accent: #00ffe7;
+      --accent2: #ff4ecf;
+      --muted: #99c9c9;
+      --text: #eafbf9;
+      --danger: #ff4757;
+      --success: #2ed573;
+      --warning: #ffa502;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: linear-gradient(180deg, var(--bg), var(--bg2));
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* الرأس */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .brand {
+      font-weight: 900;
+      color: var(--accent);
+      font-size: 1.5rem;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* الأزرار */
+    .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn.primary {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color: #012;
+      border: none;
+    }
+
+    .btn.primary:hover {
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      box-shadow: 0 4px 20px rgba(0, 255, 231, 0.3);
+    }
+
+    .btn.danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn.success {
+      background: var(--success);
+      color: white;
+    }
+
+    .small {
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.02);
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      color: var(--text);
+    }
+
+    .small:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* التخطيط الرئيسي */
+    .admin-main {
+      display: flex;
+      gap: 30px;
+      padding: 30px 0;
+      min-height: calc(100vh - 140px);
+    }
+
+    .admin-left {
+      width: 48%;
+    }
+
+    .admin-right {
+      width: 52%;
+    }
+
+    h2 {
+      color: var(--accent);
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    h3 {
+      color: var(--muted);
+      margin: 25px 0 15px;
+      font-size: 1.3rem;
+    }
+
+    /* عناصر التحكم */
+    .admin-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 25px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    select.small {
+      width: 100%;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+    }
+
+    /* قائمة البطاقات */
+    .cardlist {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 18px;
+      border-radius: 12px;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border-color: rgba(0, 255, 231, 0.3);
+    }
+
+    .card h4 {
+      color: var(--accent);
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .edit-icon {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      background: var(--accent);
+      color: #012;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0;
+    }
+
+    .card:hover .edit-icon {
+      opacity: 1;
+    }
+
+    .edit-icon:hover {
+      background: var(--accent2);
+      transform: scale(1.1);
+    }
+
+    /* مربع الدردشة */
+    .chat-box {
+      background: rgba(0, 0, 0, 0.12);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-history {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 15px;
+    }
+
+    .chat-message {
+      padding: 12px 16px;
+      margin: 10px 0;
+      border-radius: 10px;
+      max-width: 85%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-message.user {
+      background: rgba(0, 255, 231, 0.1);
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-message.bot {
+      background: rgba(255, 78, 207, 0.1);
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+    }
+
+    .chat-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-controls input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .chat-controls input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    /* التقارير */
+    .report {
+      background: #011;
+      padding: 20px;
+      border-radius: 10px;
+      color: var(--muted);
+      margin-top: 10px;
+      border-left: 4px solid var(--accent);
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    /* الملاحظات */
+    .small-note {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 20px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    /* الفوتر */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+      margin-top: 40px;
+    }
+
+    /* نظام الفهرس */
+    .index-nav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+      margin: 15px 0;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .index-info {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .index-controls {
+      display: flex;
+      gap: 8px;
+      margin-right: auto;
+    }
+
+    /* الإحصائيات */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 18px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* النوافذ المنبثقة */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--card);
+      padding: 30px;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 90%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal h3 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    /* التجاوب */
+    @media (max-width: 900px) {
+      .admin-main {
+        flex-direction: column;
+      }
+
+      .admin-left, .admin-right {
+        width: 100%;
+      }
+
+      .admin-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .cardlist {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+
+      .topbar {
+        padding: 12px 15px;
+      }
+
+      .brand {
+        font-size: 1.2rem;
+      }
+
+      .cardlist {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-box {
+        height: 350px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* شريط التمرير */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent2);
+    }
+  </style>
 </head>
 <body class="theme-dark admin-page">
 
 <header class="topbar">
-  <div class="brand">Prok — Admin</div>
+  <div class="brand">Prok — لوحة التحكم</div>
   <div class="actions">
-    <button id="logoutBtn" class="small hidden">خروج</button>
+    <span id="adminEmail" class="small"></span>
+    <button id="logoutBtn" class="btn danger">🚪 خروج</button>
   </div>
 </header>
 
 <main class="admin-main container">
   <section class="admin-left">
-    <h2>التحكم الكامل</h2>
-    <div class="admin-controls">
-      <button id="toggleEdit" class="btn">✏️ وضع التعديل</button>
-      <button id="uploadImage" class="btn">📤 رفع صورة</button>
-      <select id="animationSelect" class="small">
-        <option value="none">بدون</option>
-        <option value="fade">Fade</option>
-        <option value="slide">Slide</option>
-        <option value="float">Float</option>
-        <option value="zoom">Zoom</option>
-      </select>
-      <button id="applyAnim" class="btn primary">تطبيق الأنيميشن</button>
-      <button id="runScan" class="btn">🔍 فحص تلقائي</button>
-      <button id="applyFix" class="btn primary">⚡ تنفيذ التصحيحات</button>
-    </div>
-
-    <h3>تطبيقات الموقع</h3>
-    <div id="appList" class="cardlist"></div>
-
-    <div class="small-note">تسجيل الدخول: باستخدام Firebase (بدون كلمة مرور).</div>
-  </section>
-
-  <section class="admin-right">
-    <h2>مساعد ذكي</h2>
-    <div id="aiBox" class="chat-box">
-      <div id="aiHistory" class="chat-history"></div>
-      <div class="chat-controls">
-        <input id="aiInput" placeholder="اسأل المساعد عن الأخطاء أو التعديلات…"/>
-        <button id="aiSend" class="btn primary">أرسل</button>
+    <h2>🛠️ التحكم الكامل</h2>
+    
+    <!-- إحصائيات سريعة -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="totalApps">0</div>
+        <div class="stat-label">التطبيقات</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalVisitors">0</div>
+        <div class="stat-label">الزوار</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="activeUsers">0</div>
+        <div class="stat-label">مستخدمون نشطون</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="issuesCount">0</div>
+        <div class="stat-label">مشاكل</div>
       </div>
     </div>
 
-    <h3>نتائج الفحص</h3>
-    <pre id="scanReport" class="report">لم يُفحص بعد.</pre>
+    <!-- نظام الفهرس -->
+    <div class="index-nav">
+      <div class="index-info">
+        الفهرس: <span id="currentIndex">1</span> / <span id="totalItems">0</span>
+      </div>
+      <div class="index-controls">
+        <button class="small" id="indexPrev">◀ السابق</button>
+        <button class="small" id="indexNext">التالي ▶</button>
+        <button class="small" id="goToStart">⏮️ البداية</button>
+        <button class="small" id="goToEnd">⏭️ النهاية</button>
+      </div>
+    </div>
+
+    <!-- عناصر التحكم -->
+    <div class="admin-controls">
+      <button id="toggleEdit" class="btn">✏️ وضع التعديل</button>
+      <button id="uploadImage" class="btn">📤 رفع صورة</button>
+      <button id="addAppBtn" class="btn success">➕ تطبيق جديد</button>
+      <select id="animationSelect" class="small">
+        <option value="none">بدون أنيميشن</option>
+        <option value="fade">Fade - تدرج</option>
+        <option value="slide">Slide - انزلاق</option>
+        <option value="float">Float - طفو</option>
+        <option value="zoom">Zoom - تكبير</option>
+      </select>
+      <button id="applyAnim" class="btn primary">🎬 تطبيق الأنيميشن</button>
+      <button id="runScan" class="btn">🔍 فحص تلقائي</button>
+      <button id="applyFix" class="btn primary">⚡ تنفيذ التصحيحات</button>
+      <button id="exportData" class="btn">📊 تصدير البيانات</button>
+    </div>
+
+    <!-- قائمة التطبيقات -->
+    <h3>📱 تطبيقات الموقع</h3>
+    <div id="appList" class="cardlist"></div>
+
+    <div class="small-note">
+      🔐 تسجيل الدخول: باستخدام Firebase Authentication
+    </div>
+  </section>
+
+  <section class="admin-right">
+    <h2>🤖 المساعد الذكي</h2>
+    <div id="aiBox" class="chat-box">
+      <div id="aiHistory" class="chat-history">
+        <div class="chat-message bot">
+          مرحباً! أنا مساعدك الذكي في Prok. يمكنني مساعدتك في:
+          <br>• فحص الأخطاء تلقائياً 🔍
+          <br>• اقتراح تحسينات الأداء ⚡
+          <br>• مساعدة في إدارة المحتوى 📝
+          <br>• تحليل إحصائيات الموقع 📊
+        </div>
+      </div>
+      <div class="chat-controls">
+        <input id="aiInput" placeholder="اسأل المساعد عن الأخطاء أو التعديلات…"/>
+        <button id="aiSend" class="btn primary">🕊️ أرسل</button>
+      </div>
+    </div>
+
+    <!-- نتائج الفحص -->
+    <h3>📋 نتائج الفحص</h3>
+    <pre id="scanReport" class="report">لم يُفحص بعد. اضغط على "فحص تلقائي" لبدء التحليل.</pre>
+
+    <!-- السجل الحديث -->
+    <h3>🕒 السجل الحديث</h3>
+    <div id="recentActivity" class="report" style="max-height: 150px; font-size: 0.8rem;">
+      جاري تحميل السجل...
+    </div>
   </section>
 </main>
 
-<footer class="footer">© 2025 Prok — الأدمن</footer>
+<!-- نافذة إضافة تطبيق -->
+<div class="modal" id="addAppModal">
+  <div class="modal-content">
+    <h3>➕ إضافة تطبيق جديد</h3>
+    <input type="text" id="appTitle" class="modal-input" placeholder="اسم التطبيق">
+    <textarea id="appDescription" class="modal-input" placeholder="وصف التطبيق" style="height: 100px; resize: vertical;"></textarea>
+    <input type="text" id="appImage" class="modal-input" placeholder="رابط الصورة">
+    <input type="text" id="appCategory" class="modal-input" placeholder="الفئة">
+    <div class="modal-actions">
+      <button id="saveApp" class="btn primary">💾 حفظ</button>
+      <button id="cancelApp" class="btn">❌ إلغاء</button>
+    </div>
+  </div>
+</div>
 
-<script src="firebase-config.js"></script>
-<script src="script.js"></script>
+<!-- نافذة تأكيد الحذف -->
+<div class="modal" id="deleteModal">
+  <div class="modal-content">
+    <h3>🗑️ تأكيد الحذف</h3>
+    <p>هل أنت متأكد من أنك تريد حذف هذا العنصر؟</p>
+    <div class="modal-actions">
+      <button id="confirmDelete" class="btn danger">✅ نعم، احذف</button>
+      <button id="cancelDelete" class="btn">❌ إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">© 2025 Prok — نظام الإدارة المتقدم</footer>
+
+<script>
+  // تهيئة لوحة الأدمن
+  document.addEventListener('DOMContentLoaded', function() {
+    initAdminPanel();
+  });
+
+  function initAdminPanel() {
+    // التحقق من تسجيل الدخول
+    checkAdminAuth();
+    
+    // تهيئة الإحصائيات
+    initStats();
+    
+    // تهيئة واجهة المستخدم
+    initUI();
+    
+    // تحميل البيانات
+    loadAdminData();
+    
+    // تهيئة نظام الفهرس
+    initIndexSystem();
+    
+    // تهيئة المساعد الذكي
+    initAIAssistant();
+  }
+
+  function checkAdminAuth() {
+    // محاكاة التحقق من Firebase Auth
+    const user = JSON.parse(localStorage.getItem('prok_admin_user') || 'null');
+    
+    if (!user) {
+      // إذا لم يكن مسجلاً، ارجع للصفحة الرئيسية
+      alert('يجب تسجيل الدخول أولاً');
+      window.location.href = 'index.html';
+      return;
+    }
+    
+    // عرض معلومات المستخدم
+    const adminEmail = document.getElementById('adminEmail');
+    if (adminEmail) {
+      adminEmail.textContent = user.email;
+    }
+  }
+
+  function initStats() {
+    // تحديث الإحصائيات
+    updateStats();
+    
+    // تحديث الإحصائيات كل 30 ثانية
+    setInterval(updateStats, 30000);
+  }
+
+  function updateStats() {
+    // تطبيقات
+    const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+    document.getElementById('totalApps').textContent = apps.length;
+    
+    // زوار
+    const visitors = localStorage.getItem('prok_visitors') || '0';
+    document.getElementById('totalVisitors').textContent = parseInt(visitors).toLocaleString();
+    
+    // مستخدمون نشطون (محاكاة)
+    document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 50) + 10;
+    
+    // مشاكل
+    const issues = JSON.parse(localStorage.getItem('prok_issues') || '[]');
+    document.getElementById('issuesCount').textContent = issues.length;
+  }
+
+  function initUI() {
+    // زر الخروج
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function() {
+        localStorage.removeItem('prok_admin_user');
+        window.location.href = 'index.html';
+      });
+    }
+
+    // زر إضافة تطبيق
+    const addAppBtn = document.getElementById('addAppBtn');
+    const addAppModal = document.getElementById('addAppModal');
+    const saveApp = document.getElementById('saveApp');
+    const cancelApp = document.getElementById('cancelApp');
+
+    if (addAppBtn && addAppModal) {
+      addAppBtn.addEventListener('click', function() {
+        addAppModal.classList.add('show');
+      });
+    }
+
+    if (cancelApp && addAppModal) {
+      cancelApp.addEventListener('click', function() {
+        addAppModal.classList.remove('show');
+      });
+    }
+
+    if (saveApp) {
+      saveApp.addEventListener('click', function() {
+        const title = document.getElementById('appTitle').value;
+        const description = document.getElementById('appDescription').value;
+        const image = document.getElementById('appImage').value;
+        const category = document.getElementById('appCategory').value;
+
+        if (title && description) {
+          addNewApp({
+            title: title,
+            description: description,
+            image: image || 'https://via.placeholder.com/280x180/6366f1/fff?text=تطبيق+جديد',
+            category: category || 'عام'
+          });
+          addAppModal.classList.remove('show');
+        } else {
+          alert('يرجى ملء الحقول المطلوبة');
+        }
+      });
+    }
+
+    // وضع التعديل
+    const toggleEdit = document.getElementById('toggleEdit');
+    if (toggleEdit) {
+      toggleEdit.addEventListener('click', function() {
+        document.body.classList.toggle('edit-mode');
+        const isEditMode = document.body.classList.contains('edit-mode');
+        
+        if (isEditMode) {
+          toggleEdit.innerHTML = '🔒 إنهاء التعديل';
+          showNotification('تم تفعيل وضع التعديل', 'success');
+        } else {
+          toggleEdit.innerHTML = '✏️ وضع التعديل';
+          showNotification('تم تعطيل وضع التعديل', 'info');
+        }
+      });
+    }
+
+    // تطبيق الأنيميشن
+    const applyAnim = document.getElementById('applyAnim');
+    if (applyAnim) {
+      applyAnim.addEventListener('click', function() {
+        const animType = document.getElementById('animationSelect').value;
+        applyAnimation(animType);
+      });
+    }
+
+    // فحص تلقائي
+    const runScan = document.getElementById('runScan');
+    if (runScan) {
+      runScan.addEventListener('click', function() {
+        runAutoScan();
+      });
+    }
+
+    // تصدير البيانات
+    const exportData = document.getElementById('exportData');
+    if (exportData) {
+      exportData.addEventListener('click', function() {
+        exportAllData();
+      });
+    }
+  }
+
+  function initIndexSystem() {
+    const indexPrev = document.getElementById('indexPrev');
+    const indexNext = document.getElementById('indexNext');
+    const goToStart = document.getElementById('goToStart');
+    const goToEnd = document.getElementById('goToEnd');
+
+    let currentIndex = 1;
+    const totalItems = 10; // محاكاة
+
+    function updateIndexDisplay() {
+      document.getElementById('currentIndex').textContent = currentIndex;
+      document.getElementById('totalItems').textContent = totalItems;
+    }
+
+    if (indexPrev) {
+      indexPrev.addEventListener('click', function() {
+        if (currentIndex > 1) {
+          currentIndex--;
+          updateIndexDisplay();
+          showNotification(`انتقل إلى الفهرس: ${currentIndex}`, 'info');
+        }
+      });
+    }
+
+    if (indexNext) {
+      indexNext.addEventListener('click', function() {
+        if (currentIndex < totalItems) {
+          currentIndex++;
+          updateIndexDisplay();
+          showNotification(`انتقل إلى الفهرس: ${currentIndex}`, 'info');
+        }
+      });
+    }
+
+    if (goToStart) {
+      goToStart.addEventListener('click', function() {
+        currentIndex = 1;
+        updateIndexDisplay();
+        showNotification('انتقل إلى البداية', 'info');
+      });
+    }
+
+    if (goToEnd) {
+      goToEnd.addEventListener('click', function() {
+        currentIndex = totalItems;
+        updateIndexDisplay();
+        showNotification('انتقل إلى النهاية', 'info');
+      });
+    }
+
+    updateIndexDisplay();
+  }
+
+  function initAIAssistant() {
+    const aiInput = document.getElementById('aiInput');
+    const aiSend = document.getElementById('aiSend');
+    const aiHistory = document.getElementById('aiHistory');
+
+    function addMessage(message, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
+      messageDiv.textContent = message;
+      aiHistory.appendChild(messageDiv);
+      aiHistory.scrollTop = aiHistory.scrollHeight;
+    }
+
+    function processAIQuery(query) {
+      // محاكاة استجابة الذكاء الاصطناعي
+      const responses = [
+        "لقد قمت بفحص النظام ولم أجد أي أخطاء حرجة.",
+        "أقترح تحسين سرعة تحميل الصور لتحسين الأداء.",
+        "تم اكتشاف 3 أخطاء في واجهة المستخدم تحتاج للتصحيح.",
+        "جميع الأنظمة تعمل بشكل طبيعي ولا توجد مشاكل.",
+        "يوجد تحديث جديد متاح للنظام الأساسي."
+      ];
+      
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      
+      // محاكاة التأخير
+      setTimeout(() => {
+        addMessage(randomResponse, false);
+      }, 1000);
+    }
+
+    if (aiSend && aiInput) {
+      aiSend.addEventListener('click', function() {
+        const query = aiInput.value.trim();
+        if (query) {
+          addMessage(query, true);
+          aiInput.value = '';
+          processAIQuery(query);
+        }
+      });
+
+      aiInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          aiSend.click();
+        }
+      });
+    }
+  }
+
+  function loadAdminData() {
+    // تحميل التطبيقات
+    const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+    renderApps(apps);
+    
+    // تحميل السجل
+    loadRecentActivity();
+  }
+
+  function renderApps(apps) {
+    const appList = document.getElementById('appList');
+    if (!appList) return;
+
+    appList.innerHTML = apps.map((app, index) => `
+      <div class="card">
+        <span class="edit-icon" onclick="editApp(${index})">✏️</span>
+        <h4>${app.title}</h4>
+        <p>${app.description}</p>
+        <div class="card-actions">
+          <button class="small" onclick="viewApp(${index})">👁️ عرض</button>
+          <button class="small" onclick="editApp(${index})">✏️ تعديل</button>
+          <button class="small" onclick="deleteApp(${index})">🗑️ حذف</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function addNewApp(appData) {
+    const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+    apps.push({
+      id: Date.now(),
+      ...appData,
+      createdAt: new Date().toISOString()
+    });
+    
+    localStorage.setItem('prok_apps', JSON.stringify(apps));
+    renderApps(apps);
+    updateStats();
+    showNotification('تم إضافة التطبيق بنجاح', 'success');
+    
+    // إضافة إلى السجل
+    addToActivityLog(`تم إضافة تطبيق جديد: ${appData.title}`);
+  }
+
+  function deleteApp(index) {
+    const deleteModal = document.getElementById('deleteModal');
+    const confirmDelete = document.getElementById('confirmDelete');
+    const cancelDelete = document.getElementById('cancelDelete');
+    
+    if (deleteModal) {
+      deleteModal.classList.add('show');
+      
+      // إزالة المستمعين السابقين
+      confirmDelete.replaceWith(confirmDelete.cloneNode(true));
+      cancelDelete.replaceWith(cancelDelete.cloneNode(true));
+      
+      // إضافة مستمعين جديدين
+      document.getElementById('confirmDelete').addEventListener('click', function() {
+        const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+        const deletedApp = apps.splice(index, 1)[0];
+        
+        localStorage.setItem('prok_apps', JSON.stringify(apps));
+        renderApps(apps);
+        updateStats();
+        deleteModal.classList.remove('show');
+        
+        showNotification('تم حذف التطبيق', 'success');
+        addToActivityLog(`تم حذف تطبيق: ${deletedApp.title}`);
+      });
+      
+      document.getElementById('cancelDelete').addEventListener('click', function() {
+        deleteModal.classList.remove('show');
+      });
+    }
+  }
+
+  function viewApp(index) {
+    const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+    const app = apps[index];
+    alert(`عرض التطبيق: ${app.title}\n\nالوصف: ${app.description}\n\nالفئة: ${app.category}`);
+  }
+
+  function editApp(index) {
+    const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+    const app = apps[index];
+    
+    const newTitle = prompt('اسم التطبيق الجديد:', app.title);
+    const newDesc = prompt('الوصف الجديد:', app.description);
+    
+    if (newTitle !== null) {
+      apps[index].title = newTitle;
+    }
+    
+    if (newDesc !== null) {
+      apps[index].description = newDesc;
+    }
+    
+    localStorage.setItem('prok_apps', JSON.stringify(apps));
+    renderApps(apps);
+    showNotification('تم تحديث التطبيق', 'success');
+    addToActivityLog(`تم تعديل تطبيق: ${app.title}`);
+  }
+
+  function applyAnimation(animType) {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      card.classList.remove('anim-fade', 'anim-slide', 'anim-float', 'anim-zoom');
+      
+      if (animType !== 'none') {
+        setTimeout(() => {
+          card.classList.add(`anim-${animType}`);
+        }, 100);
+      }
+    });
+    
+    showNotification(`تم تطبيق أنيميشن: ${animType}`, 'success');
+    addToActivityLog(`تم تطبيق أنيميشن: ${animType}`);
+  }
+
+  function runAutoScan() {
+    const scanReport = document.getElementById('scanReport');
+    if (!scanReport) return;
+    
+    // محاكاة الفحص
+    scanReport.textContent = 'جاري فحص النظام...';
+    
+    setTimeout(() => {
+      const issues = [
+        '✅ SEO: العناوين والوصف جيدة',
+        '⚠️  الأداء: 2 صورة بحجم كبير تحتاج تحسين',
+        '✅ الأمان: جميع الاتصالات آمنة',
+        '✅ إمكانية الوصول: النصوص البديلة موجودة',
+        '⚠️  التخزين: 15% من المساحة المتبقية'
+      ];
+      
+      scanReport.textContent = issues.join('\n');
+      showNotification('تم الانتهاء من الفحص', 'success');
+      addToActivityLog('تم إجراء فحص تلقائي للنظام');
+    }, 2000);
+  }
+
+  function exportAllData() {
+    const data = {
+      apps: JSON.parse(localStorage.getItem('prok_apps') || '[]'),
+      visitors: localStorage.getItem('prok_visitors') || '0',
+      settings: JSON.parse(localStorage.getItem('prok_settings') || '{}'),
+      exportDate: new Date().toISOString()
+    };
+    
+    const dataStr = JSON.stringify(data, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = `prok-export-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    
+    showNotification('تم تصدير البيانات', 'success');
+    addToActivityLog('تم تصدير بيانات النظام');
+  }
+
+  function loadRecentActivity() {
+    const activityLog = document.getElementById('recentActivity');
+    if (!activityLog) return;
+    
+    const activities = JSON.parse(localStorage.getItem('prok_activity_log') || '[]');
+    
+    if (activities.length === 0) {
+      // أنشطة افتراضية
+      const defaultActivities = [
+        'تم تسجيل الدخول إلى لوحة التحكم',
+        'تم تحديث إعدادات الموقع',
+        'تم إضافة تطبيق جديد',
+        'تم إجراء فحص أمان'
+      ];
+      
+      activityLog.textContent = defaultActivities.map(act => `• ${act}`).join('\n');
+    } else {
+      activityLog.textContent = activities.slice(-5).map(act => `• ${act}`).join('\n');
+    }
+  }
+
+  function addToActivityLog(activity) {
+    const activities = JSON.parse(localStorage.getItem('prok_activity_log') || '[]');
+    activities.push(`${new Date().toLocaleString()} - ${activity}`);
+    
+    // الحفاظ على آخر 50 نشاط فقط
+    if (activities.length > 50) {
+      activities.splice(0, activities.length - 50);
+    }
+    
+    localStorage.setItem('prok_activity_log', JSON.stringify(activities));
+    loadRecentActivity();
+  }
+
+  function showNotification(message, type = 'info') {
+    // إنشاء عنصر الإشعار
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      z-index: 1000;
+      animation: slideInRight 0.3s ease;
+    `;
+    
+    // تحديد اللون حسب النوع
+    const colors = {
+      success: '#2ed573',
+      error: '#ff4757',
+      warning: '#ffa502',
+      info: '#00ffe7'
+    };
+    
+    notification.style.background = colors[type] || colors.info;
+    if (type === 'info') notification.style.color = '#012';
+    
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    // إزالة تلقائية بعد 3 ثوان
+    setTimeout(() => {
+      notification.style.animation = 'slideOutRight 0.3s ease';
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, 3000);
+  }
+
+  // إضافة أنيميشن للإشعارات
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+    
+    .anim-fade { animation: fadeIn 0.5s ease; }
+    .anim-slide { animation: slideInUp 0.5s ease; }
+    .anim-float { animation: float 3s ease-in-out infinite; }
+    .anim-zoom { animation: zoomIn 0.5s ease; }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes zoomIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // جعل الدوال متاحة عالمياً
+  window.viewApp = viewApp;
+  window.editApp = editApp;
+  window.deleteApp = deleteApp;
+</script>
 </body>
 </html>
