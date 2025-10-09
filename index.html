@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Prok — المتجر الشخصي</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prok — المتجر الذكي</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body class="theme-dark">
 
@@ -17,7 +17,7 @@
   </nav>
   <div class="actions">
     <button id="themeToggle" class="small">🌓</button>
-    <a id="adminBtn" class="btn" href="admin.html">أدمن</a>
+    <button id="adminBtn" class="btn">لوحة الأدمن</button>
     <div id="visitor">👥 <span id="visCount">--</span></div>
   </div>
 </header>
@@ -26,7 +26,7 @@
   <section id="home" class="hero">
     <div class="hero-left">
       <h1 class="title">مرحباً بك في <span class="accent">Prok</span></h1>
-      <p class="lead">واجهة متطورة — أنيميشن ثلاثي الأبعاد — لوحة إدارة كاملة.</p>
+      <p class="lead">واجهة متطورة مع ذكاء فوري لحل الأخطاء تلقائيًا.</p>
       <a href="#apps" class="cta">استعرض التطبيقات</a>
       <div class="ad-strip" id="adRow">
         <div class="ad" data-slot="1">إعلان 1</div>
@@ -37,29 +37,25 @@
     <div class="hero-right">
       <div class="carousel" id="carousel">
         <div class="slides" id="slides">
-          <div class="slide"><img src="assets_banner1.svg" alt="بانر1"></div>
-          <div class="slide"><img src="assets_banner2.svg" alt="بانر2"></div>
-          <div class="slide"><img src="assets_banner3.svg" alt="بانر3"></div>
+          <div class="slide"><img src="banner1.svg" alt="بانر1"></div>
+          <div class="slide"><img src="banner2.svg" alt="بانر2"></div>
+          <div in="slide"><img src="banner3.svg" alt="بانر3"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="apps" class="apps grid">
-    <!-- تمليها script.js -->
-  </section>
+  <section id="apps" class="apps grid"></section>
 
   <section id="about" class="about">
     <h2>عن Prok</h2>
-    <p>موقع شخصي لعرض التطبيقات مع لوحة إدارة ذكية قابلة للتطوير.</p>
+    <p>موقع ذكي يتطوّر بنفسه ويصحّح الأخطاء تلقائيًّا.</p>
   </section>
 </main>
 
-<footer class="footer">
-  © 2025 Prok — كل الحقوق محفوظة
-</footer>
+<footer class="footer">© 2025 Prok — الحقوق محفوظة</footer>
 
-<!-- حماية و سكربتات -->
+<script src="firebase-config.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
