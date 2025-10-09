@@ -1,61 +1,341 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prok — المتجر الذكي</title>
   <link rel="stylesheet" href="style.css">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+  
+  <style>
+    /* Protection */
+    * {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+    body.blur-mode {
+      filter: blur(25px) grayscale(100%);
+    }
+    .protection-alert {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 999999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      color: #ff0000;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .protection-alert.show {
+      display: flex;
+    }
+    
+    /* Edit Icon - Small & Hidden by Default */
+    .edit-icon {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 18px;
+      height: 18px;
+      background: #6366f1;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      cursor: pointer;
+      z-index: 100;
+      transition: 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .edit-icon:hover {
+      transform: scale(1.2);
+      background: #ec4899;
+    }
+    
+    /* Show only in admin mode */
+    body.admin-mode .edit-icon {
+      display: flex;
+    }
+    
+    /* Hide admin elements */
+    .admin-only {
+      display: none !important;
+    }
+    body.admin-mode .admin-only {
+      display: flex !important;
+    }
+  </style>
 </head>
 <body class="theme-dark">
 
-<header class="topbar">
-  <div class="brand">Prok<span class="dot">.</span></div>
-  <nav class="nav">
-    <a href="#home">الرئيسية</a>
-    <a href="#apps">التطبيقات</a>
-    <a href="#about">عنّا</a>
-  </nav>
-  <div class="actions">
-    <button id="themeToggle" class="small">🌓</button>
-    <button id="adminBtn" class="btn">لوحة الأدمن</button>
-    <div id="visitor">👥 <span id="visCount">--</span></div>
+  <!-- Protection Alert -->
+  <div class="protection-alert" id="protectionAlert">
+    ⚠️ غير مصرح - محمي بواسطة Prok
   </div>
-</header>
 
-<main id="main">
-  <section id="home" class="hero">
-    <div class="hero-left">
-      <h1 class="title">مرحباً بك في <span class="accent">Prok</span></h1>
-      <p class="lead">واجهة متطورة مع ذكاء فوري لحل الأخطاء تلقائيًا.</p>
-      <a href="#apps" class="cta">استعرض التطبيقات</a>
-      <div class="ad-strip" id="adRow">
-        <div class="ad" data-slot="1">إعلان 1</div>
-        <div class="ad" data-slot="2">إعلان 2</div>
-        <div class="ad" data-slot="3">إعلان 3</div>
+  <!-- 3D Background -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Header -->
+  <header class="topbar">
+    <div class="container">
+      <div class="brand">
+        <span class="edit-icon" data-edit="logo">✏️</span>
+        Prok<span class="dot">.</span>
+      </div>
+      
+      <button class="mobile-menu" id="mobileMenuBtn">
+        <span></span><span></span><span></span>
+      </button>
+      
+      <nav class="nav" id="mainNav">
+        <a href="#home">الرئيسية</a>
+        <a href="#apps">التطبيقات</a>
+        <a href="#about">عنّا</a>
+      </nav>
+      
+      <div class="actions">
+        <div id="visitor" class="visitor-badge">
+          👥 <span id="visCount">0</span>
+        </div>
+        
+        <button id="themeToggle" class="icon-btn">🌓</button>
+        
+        <!-- Admin Only Buttons -->
+        <button id="animBtn" class="icon-btn admin-only">🎨</button>
+        <button id="aiBtn" class="icon-btn admin-only">🤖</button>
+        
+        <button id="adminBtn" class="btn">لوحة الأدمن</button>
+        <button id="logoutBtn" class="btn admin-only">خروج</button>
       </div>
     </div>
-    <div class="hero-right">
-      <div class="carousel" id="carousel">
-        <div class="slides" id="slides">
-          <div class="slide"><img src="banner1.svg" alt="بانر1"></div>
-          <div class="slide"><img src="banner2.svg" alt="بانر2"></div>
-          <div in="slide"><img src="banner3.svg" alt="بانر3"></div>
+  </header>
+
+  <main>
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <span class="edit-icon" data-edit="hero">✏️</span>
+      <div class="container hero-grid">
+        
+        <div class="hero-left">
+          <h1 class="title">
+            <span class="edit-icon" data-edit="title">✏️</span>
+            مرحباً بك في <span class="accent">Prok</span>
+          </h1>
+          
+          <p class="lead">
+            <span class="edit-icon" data-edit="lead">✏️</span>
+            واجهة متطورة مع ذكاء فوري لحل الأخطاء تلقائيًا
+          </p>
+          
+          <div class="cta-group">
+            <a href="#apps" class="cta primary">
+              <span class="edit-icon" data-edit="cta1">✏️</span>
+              استعرض التطبيقات 🚀
+            </a>
+            <a href="#about" class="cta secondary">
+              <span class="edit-icon" data-edit="cta2">✏️</span>
+              اعرف المزيد
+            </a>
+          </div>
+          
+          <!-- Ads -->
+          <div class="ads-row">
+            <div class="ad-card">
+              <span class="edit-icon" data-edit="ad1">✏️</span>
+              <img src="https://via.placeholder.com/280x90/6366f1/fff?text=Ad+1" alt="Ad 1">
+            </div>
+            <div class="ad-card">
+              <span class="edit-icon" data-edit="ad2">✏️</span>
+              <img src="https://via.placeholder.com/280x90/ec4899/fff?text=Ad+2" alt="Ad 2">
+            </div>
+            <div class="ad-card">
+              <span class="edit-icon" data-edit="ad3">✏️</span>
+              <img src="https://via.placeholder.com/280x90/10b981/fff?text=Ad+3" alt="Ad 3">
+            </div>
+          </div>
+        </div>
+        
+        <div class="hero-right">
+          <div class="carousel">
+            <span class="edit-icon" data-edit="carousel">✏️</span>
+            <div class="carousel-track" id="carouselTrack">
+              <div class="carousel-slide active">
+                <span class="edit-icon" data-edit="banner1">✏️</span>
+                <img src="https://via.placeholder.com/700x450/6366f1/fff?text=Banner+1" alt="Banner 1">
+              </div>
+              <div class="carousel-slide">
+                <span class="edit-icon" data-edit="banner2">✏️</span>
+                <img src="https://via.placeholder.com/700x450/ec4899/fff?text=Banner+2" alt="Banner 2">
+              </div>
+              <div class="carousel-slide">
+                <span class="edit-icon" data-edit="banner3">✏️</span>
+                <img src="https://via.placeholder.com/700x450/10b981/fff?text=Banner+3" alt="Banner 3">
+              </div>
+            </div>
+            <button class="carousel-btn prev" id="prevBtn">❮</button>
+            <button class="carousel-btn next" id="nextBtn">❯</button>
+            <div class="carousel-dots" id="dots"></div>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- Apps Section -->
+    <section id="apps" class="section-apps">
+      <div class="container">
+        <div class="section-head">
+          <h2>
+            <span class="edit-icon" data-edit="apps-title">✏️</span>
+            التطبيقات المميزة
+          </h2>
+          <button class="btn add-btn admin-only" id="addAppBtn">+ إضافة</button>
+        </div>
+        <div class="apps-grid" id="appsGrid">
+          <!-- Loaded by JS -->
         </div>
       </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section-about">
+      <span class="edit-icon" data-edit="about">✏️</span>
+      <div class="container">
+        <h2>
+          <span class="edit-icon" data-edit="about-title">✏️</span>
+          عن Prok
+        </h2>
+        <p>
+          <span class="edit-icon" data-edit="about-text">✏️</span>
+          موقع ذكي يتطوّر بنفسه ويصحّح الأخطاء تلقائيًّا. محمي بأقوى نظام حماية.
+        </p>
+        
+        <div class="features">
+          <div class="feature">
+            <span class="edit-icon" data-edit="feat1">✏️</span>
+            <div class="feat-icon">🛡️</div>
+            <h3>حماية فائقة</h3>
+            <p>نظام متعدد الطبقات</p>
+          </div>
+          <div class="feature">
+            <span class="edit-icon" data-edit="feat2">✏️</span>
+            <div class="feat-icon">🤖</div>
+            <h3>ذكاء اصطناعي</h3>
+            <p>AI يصلح الأخطاء تلقائياً</p>
+          </div>
+          <div class="feature">
+            <span class="edit-icon" data-edit="feat3">✏️</span>
+            <div class="feat-icon">⚡</div>
+            <h3>سرعة عالية</h3>
+            <p>أداء محسّن للغاية</p>
+          </div>
+          <div class="feature">
+            <span class="edit-icon" data-edit="feat4">✏️</span>
+            <div class="feat-icon">🎨</div>
+            <h3>تصميم 3D</h3>
+            <p>أنميشن متقدم</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span class="edit-icon" data-edit="footer">✏️</span>
+    <p>© 2025 Prok — الحقوق محفوظة</p>
+    <div class="admin-info admin-only">
+      <span id="adminEmail"></span>
     </div>
-  </section>
+  </footer>
 
-  <section id="apps" class="apps grid"></section>
+  <!-- AI Chat (Admin Only) -->
+  <div class="ai-chat admin-only" id="aiChat">
+    <div class="ai-header">
+      <h3>🤖 مساعد AI</h3>
+      <button id="aiClose">✕</button>
+    </div>
+    <div class="ai-body" id="aiBody">
+      <div class="ai-msg bot">
+        أنا مساعدك الذكي. يمكنني:
+        <br>• فحص الأخطاء 🔍
+        <br>• إصلاح تلقائي 🔧
+        <br>• تحسين الأداء ⚡
+      </div>
+    </div>
+    <div class="ai-input-area">
+      <input type="text" id="aiInput" placeholder="اكتب...">
+      <button id="aiSend">📤</button>
+    </div>
+    <div class="ai-actions">
+      <button class="ai-action" data-action="scan">🔍 فحص</button>
+      <button class="ai-action" data-action="fix">🔧 إصلاح</button>
+      <button class="ai-action" data-action="stats">📊 إحصائيات</button>
+    </div>
+  </div>
 
-  <section id="about" class="about">
-    <h2>عن Prok</h2>
-    <p>موقع ذكي يتطوّر بنفسه ويصحّح الأخطاء تلقائيًّا.</p>
-  </section>
-</main>
+  <!-- Animation Modal (Admin Only) -->
+  <div class="modal admin-only" id="animModal">
+    <div class="modal-box">
+      <h2>اختر الأنميشن</h2>
+      <div class="anim-grid">
+        <button class="anim-opt" data-anim="particles">✨ جزيئات</button>
+        <button class="anim-opt" data-anim="waves">🌊 موجات</button>
+        <button class="anim-opt" data-anim="stars">⭐ نجوم</button>
+        <button class="anim-opt" data-anim="matrix">💻 ماتريكس</button>
+        <button class="anim-opt" data-anim="bubbles">🫧 فقاعات</button>
+        <button class="anim-opt" data-anim="geometric">🔷 هندسي</button>
+      </div>
+      <button class="btn" id="closeAnimModal">إغلاق</button>
+    </div>
+  </div>
 
-<footer class="footer">© 2025 Prok — الحقوق محفوظة</footer>
+  <!-- Edit Modal -->
+  <div class="modal" id="editModal">
+    <div class="modal-box">
+      <h2 id="editModalTitle">تعديل</h2>
+      <div id="editModalContent"></div>
+      <div class="modal-btns">
+        <button class="btn primary" id="saveEdit">حفظ</button>
+        <button class="btn" id="cancelEdit">إلغاء</button>
+      </div>
+    </div>
+  </div>
 
-<script src="firebase-config.js"></script>
-<script src="script.js"></script>
+  <!-- Admin Login Modal -->
+  <div class="modal" id="adminModal">
+    <div class="modal-box">
+      <h2>تسجيل دخول الأدمن</h2>
+      <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني" class="input">
+      <input type="password" id="adminPassInput" placeholder="كلمة المرور" class="input">
+      <div class="modal-btns">
+        <button class="btn primary" id="adminLogin">دخول</button>
+        <button class="btn" id="adminCancel">إلغاء</button>
+      </div>
+      <button class="btn google" id="googleLogin">🔐 Google</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toastContainer"></div>
+
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+
 </body>
 </html>
