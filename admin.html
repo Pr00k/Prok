@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Admin — Prok</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-dark admin-page">
+
+<header class="topbar">
+  <div class="brand">Prok — Admin</div>
+  <div class="actions">
+    <button id="logoutBtn" class="small hidden">خروج</button>
+  </div>
+</header>
+
+<main class="admin-main container">
+  <section class="admin-left">
+    <h2>أدوات التحكم</h2>
+    <div class="admin-controls">
+      <button id="toggleEdit" class="btn">✏️ وضع التعديل</button>
+      <button id="uploadImage" class="btn">📤 رفع صورة</button>
+      <label class="select-label">اختر أنيميشن:
+        <select id="animationSelect">
+          <option value="none">بدون</option>
+          <option value="fade">Fade</option>
+          <option value="slide">Slide</option>
+          <option value="float">Float</option>
+          <option value="zoom">Zoom</option>
+        </select>
+      </label>
+      <button id="applyAnim" class="btn primary">تطبيق الأنيميشن</button>
+      <button id="runScan" class="btn">🔍 فحص الموقع</button>
+      <button id="applyFix" class="btn primary">⚡ تطبيق التصحيح</button>
+    </div>
+
+    <h3>قائمة التطبيقات</h3>
+    <div id="appList" class="cardlist"></div>
+
+    <div class="small-note">ملاحظة: تسجيل الأدمن محلي الآن. لتفعيل Google Sign-in ركب Firebase لاحقًا.</div>
+  </section>
+
+  <section class="admin-right">
+    <h2>محادثة المساعد</h2>
+    <div id="aiBox" class="chat-box">
+      <div id="aiHistory" class="chat-history"></div>
+      <div class="chat-controls">
+        <input id="aiInput" placeholder="اسأل المساعد (مثال: افحص الموقع)"/>
+        <button id="aiSend" class="btn primary">أرسل</button>
+      </div>
+    </div>
+
+    <h3>نتائج الفحص</h3>
+    <pre id="scanReport" class="report">لم يتم الفحص بعد.</pre>
+  </section>
+</main>
+
+<footer class="footer">© 2025 Prok — Admin</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
