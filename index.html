@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prok — المتجر الذكي</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -13,16 +13,52 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
   
   <style>
-    /* Protection */
+    /* الأساسيات */
     * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       -webkit-user-select: none;
       -moz-user-select: none;
       user-select: none;
       -webkit-touch-callout: none;
     }
+    
+    :root {
+      --primary: #6366f1;
+      --secondary: #ec4899;
+      --success: #10b981;
+      --dark: #1e293b;
+      --light: #f8fafc;
+      --gray: #64748b;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    body.theme-light {
+      background: var(--light);
+      color: var(--dark);
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* الحماية */
     body.blur-mode {
       filter: blur(25px) grayscale(100%);
+      pointer-events: none;
     }
+    
     .protection-alert {
       position: fixed;
       top: 0;
@@ -37,59 +73,603 @@
       color: #ff0000;
       font-size: 28px;
       font-weight: bold;
+      flex-direction: column;
     }
+    
     .protection-alert.show {
       display: flex;
     }
     
-    /* Edit Icon - Small & Hidden by Default */
+    /* الرأس */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .topbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .brand {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--light);
+      position: relative;
+    }
+    
+    .brand .dot {
+      color: var(--primary);
+    }
+    
+    .nav {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .nav a {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav a:hover {
+      color: var(--primary);
+    }
+    
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .visitor-badge {
+      background: var(--primary);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    
+    .icon-btn, .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    
+    .icon-btn:hover, .btn:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+    
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .mobile-menu span {
+      width: 25px;
+      height: 3px;
+      background: var(--light);
+      transition: 0.3s;
+    }
+    
+    /* المحتوى الرئيسي */
+    main {
+      margin-top: 80px;
+    }
+    
+    .hero {
+      padding: 80px 0;
+      position: relative;
+    }
+    
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    
+    .title {
+      font-size: 48px;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    
+    .accent {
+      color: var(--primary);
+    }
+    
+    .lead {
+      font-size: 20px;
+      margin-bottom: 30px;
+      color: var(--gray);
+    }
+    
+    .theme-light .lead {
+      color: #475569;
+    }
+    
+    .cta-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+    
+    .cta {
+      padding: 12px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    
+    .cta.primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .cta.secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    
+    .cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    
+    .ads-row {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .ad-card {
+      flex: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .ad-card img {
+      width: 100%;
+      height: 90px;
+      object-fit: cover;
+    }
+    
+    /* الكاروسيل */
+    .carousel {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .carousel-slide {
+      display: none;
+    }
+    
+    .carousel-slide.active {
+      display: block;
+    }
+    
+    .carousel-slide img {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+    }
+    
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+    
+    .carousel-btn:hover {
+      background: rgba(0,0,0,0.8);
+    }
+    
+    .carousel-btn.prev {
+      right: 15px;
+    }
+    
+    .carousel-btn.next {
+      left: 15px;
+    }
+    
+    .carousel-dots {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+    
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .carousel-dot.active {
+      background: white;
+    }
+    
+    /* الأقسام */
+    .section-apps, .section-about {
+      padding: 80px 0;
+    }
+    
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    
+    .section-head h2 {
+      font-size: 36px;
+    }
+    
+    .add-btn {
+      background: var(--success);
+    }
+    
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+    }
+    
+    .app-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .theme-light .app-card {
+      background: rgba(0,0,0,0.05);
+    }
+    
+    .app-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .app-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    
+    .app-info {
+      padding: 20px;
+    }
+    
+    .app-info h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    
+    .app-info p {
+      color: var(--gray);
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+    
+    .app-actions {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .app-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    
+    .app-btn:hover {
+      background: var(--secondary);
+    }
+    
+    .app-btn.delete {
+      background: #ef4444;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+    
+    .feature {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      transition: transform 0.3s;
+    }
+    
+    .theme-light .feature {
+      background: rgba(0,0,0,0.05);
+    }
+    
+    .feature:hover {
+      transform: translateY(-5px);
+    }
+    
+    .feat-icon {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+    
+    .feature h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+    
+    .feature p {
+      color: var(--gray);
+    }
+    
+    /* الفوتر */
+    .footer {
+      text-align: center;
+      padding: 30px 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: var(--gray);
+      position: relative;
+    }
+    
+    .admin-info {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    
+    /* نظام التعديل */
     .edit-icon {
       position: absolute;
       top: 5px;
       right: 5px;
-      width: 18px;
-      height: 18px;
-      background: #6366f1;
+      width: 22px;
+      height: 22px;
+      background: var(--primary);
+      color: white;
       border-radius: 50%;
       display: none;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
+      font-size: 12px;
       cursor: pointer;
       z-index: 100;
       transition: 0.2s;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
+    
     .edit-icon:hover {
       transform: scale(1.2);
-      background: #ec4899;
+      background: var(--secondary);
     }
     
-    /* Show only in admin mode */
+    .app-card .edit-icon {
+      top: 10px;
+      right: 10px;
+    }
+    
+    /* وضع الأدمن */
     body.admin-mode .edit-icon {
       display: flex;
     }
     
-    /* Hide admin elements */
     .admin-only {
       display: none !important;
     }
+    
     body.admin-mode .admin-only {
       display: flex !important;
+    }
+    
+    /* النوافذ المنبثقة */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.show {
+      display: flex;
+    }
+    
+    .modal-box {
+      background: var(--dark);
+      width: 90%;
+      max-width: 500px;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+    }
+    
+    .theme-light .modal-box {
+      background: var(--light);
+    }
+    
+    .modal-box h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.1);
+      color: var(--light);
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    
+    .theme-light .input {
+      background: rgba(0,0,0,0.05);
+      color: var(--dark);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .btn.google {
+      width: 100%;
+      margin-top: 15px;
+      background: #db4437;
+    }
+    
+    /* الشعارات */
+    #toastContainer {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .toast {
+      background: var(--primary);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      animation: toastIn 0.3s, toastOut 0.3s 2.7s;
+    }
+    
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-20px); }
+    }
+    
+    /* التجاوب */
+    @media (max-width: 992px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      
+      .hero-left {
+        text-align: center;
+      }
+      
+      .cta-group {
+        justify-content: center;
+      }
+      
+      .ads-row {
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .nav {
+        display: none;
+      }
+      
+      .mobile-menu {
+        display: flex;
+      }
+      
+      .title {
+        font-size: 36px;
+      }
+      
+      .lead {
+        font-size: 18px;
+      }
+      
+      .cta-group {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .ads-row {
+        flex-direction: column;
+      }
+      
+      .features {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body class="theme-dark">
 
-  <!-- Protection Alert -->
+  <!-- تنبيه الحماية -->
   <div class="protection-alert" id="protectionAlert">
+    <i class="fas fa-shield-alt" style="font-size: 48px; margin-bottom: 20px;"></i>
     ⚠️ غير مصرح - محمي بواسطة Prok
   </div>
 
-  <!-- 3D Background -->
-  <canvas id="bgCanvas"></canvas>
-
-  <!-- Header -->
+  <!-- الرأس -->
   <header class="topbar">
     <div class="container">
       <div class="brand">
@@ -112,11 +692,11 @@
           👥 <span id="visCount">0</span>
         </div>
         
-        <button id="themeToggle" class="icon-btn">🌓</button>
+        <button id="themeToggle" class="icon-btn"><i class="fas fa-moon"></i></button>
         
-        <!-- Admin Only Buttons -->
-        <button id="animBtn" class="icon-btn admin-only">🎨</button>
-        <button id="aiBtn" class="icon-btn admin-only">🤖</button>
+        <!-- أزرار الأدمن فقط -->
+        <button id="animBtn" class="icon-btn admin-only"><i class="fas fa-palette"></i></button>
+        <button id="aiBtn" class="icon-btn admin-only"><i class="fas fa-robot"></i></button>
         
         <button id="adminBtn" class="btn">لوحة الأدمن</button>
         <button id="logoutBtn" class="btn admin-only">خروج</button>
@@ -126,7 +706,7 @@
 
   <main>
     
-    <!-- Hero Section -->
+    <!-- قسم البطل -->
     <section id="home" class="hero">
       <span class="edit-icon" data-edit="hero">✏️</span>
       <div class="container hero-grid">
@@ -145,7 +725,7 @@
           <div class="cta-group">
             <a href="#apps" class="cta primary">
               <span class="edit-icon" data-edit="cta1">✏️</span>
-              استعرض التطبيقات 🚀
+              استعرض التطبيقات <i class="fas fa-rocket"></i>
             </a>
             <a href="#about" class="cta secondary">
               <span class="edit-icon" data-edit="cta2">✏️</span>
@@ -153,19 +733,19 @@
             </a>
           </div>
           
-          <!-- Ads -->
+          <!-- الإعلانات -->
           <div class="ads-row">
             <div class="ad-card">
               <span class="edit-icon" data-edit="ad1">✏️</span>
-              <img src="https://via.placeholder.com/280x90/6366f1/fff?text=Ad+1" alt="Ad 1">
+              <img src="https://via.placeholder.com/280x90/6366f1/fff?text=إعلان+1" alt="إعلان 1">
             </div>
             <div class="ad-card">
               <span class="edit-icon" data-edit="ad2">✏️</span>
-              <img src="https://via.placeholder.com/280x90/ec4899/fff?text=Ad+2" alt="Ad 2">
+              <img src="https://via.placeholder.com/280x90/ec4899/fff?text=إعلان+2" alt="إعلان 2">
             </div>
             <div class="ad-card">
               <span class="edit-icon" data-edit="ad3">✏️</span>
-              <img src="https://via.placeholder.com/280x90/10b981/fff?text=Ad+3" alt="Ad 3">
+              <img src="https://via.placeholder.com/280x90/10b981/fff?text=إعلان+3" alt="إعلان 3">
             </div>
           </div>
         </div>
@@ -176,19 +756,19 @@
             <div class="carousel-track" id="carouselTrack">
               <div class="carousel-slide active">
                 <span class="edit-icon" data-edit="banner1">✏️</span>
-                <img src="https://via.placeholder.com/700x450/6366f1/fff?text=Banner+1" alt="Banner 1">
+                <img src="https://via.placeholder.com/700x450/6366f1/fff?text=بانر+1" alt="بانر 1">
               </div>
               <div class="carousel-slide">
                 <span class="edit-icon" data-edit="banner2">✏️</span>
-                <img src="https://via.placeholder.com/700x450/ec4899/fff?text=Banner+2" alt="Banner 2">
+                <img src="https://via.placeholder.com/700x450/ec4899/fff?text=بانر+2" alt="بانر 2">
               </div>
               <div class="carousel-slide">
                 <span class="edit-icon" data-edit="banner3">✏️</span>
-                <img src="https://via.placeholder.com/700x450/10b981/fff?text=Banner+3" alt="Banner 3">
+                <img src="https://via.placeholder.com/700x450/10b981/fff?text=بانر+3" alt="بانر 3">
               </div>
             </div>
-            <button class="carousel-btn prev" id="prevBtn">❮</button>
-            <button class="carousel-btn next" id="nextBtn">❯</button>
+            <button class="carousel-btn prev" id="prevBtn"><i class="fas fa-chevron-right"></i></button>
+            <button class="carousel-btn next" id="nextBtn"><i class="fas fa-chevron-left"></i></button>
             <div class="carousel-dots" id="dots"></div>
           </div>
         </div>
@@ -196,7 +776,7 @@
       </div>
     </section>
 
-    <!-- Apps Section -->
+    <!-- قسم التطبيقات -->
     <section id="apps" class="section-apps">
       <div class="container">
         <div class="section-head">
@@ -204,15 +784,15 @@
             <span class="edit-icon" data-edit="apps-title">✏️</span>
             التطبيقات المميزة
           </h2>
-          <button class="btn add-btn admin-only" id="addAppBtn">+ إضافة</button>
+          <button class="btn add-btn admin-only" id="addAppBtn"><i class="fas fa-plus"></i> إضافة</button>
         </div>
         <div class="apps-grid" id="appsGrid">
-          <!-- Loaded by JS -->
+          <!-- سيتم تحميلها بواسطة JS -->
         </div>
       </div>
     </section>
 
-    <!-- About Section -->
+    <!-- قسم عنّا -->
     <section id="about" class="section-about">
       <span class="edit-icon" data-edit="about">✏️</span>
       <div class="container">
@@ -228,25 +808,25 @@
         <div class="features">
           <div class="feature">
             <span class="edit-icon" data-edit="feat1">✏️</span>
-            <div class="feat-icon">🛡️</div>
+            <div class="feat-icon"><i class="fas fa-shield-alt"></i></div>
             <h3>حماية فائقة</h3>
             <p>نظام متعدد الطبقات</p>
           </div>
           <div class="feature">
             <span class="edit-icon" data-edit="feat2">✏️</span>
-            <div class="feat-icon">🤖</div>
+            <div class="feat-icon"><i class="fas fa-robot"></i></div>
             <h3>ذكاء اصطناعي</h3>
             <p>AI يصلح الأخطاء تلقائياً</p>
           </div>
           <div class="feature">
             <span class="edit-icon" data-edit="feat3">✏️</span>
-            <div class="feat-icon">⚡</div>
+            <div class="feat-icon"><i class="fas fa-bolt"></i></div>
             <h3>سرعة عالية</h3>
             <p>أداء محسّن للغاية</p>
           </div>
           <div class="feature">
             <span class="edit-icon" data-edit="feat4">✏️</span>
-            <div class="feat-icon">🎨</div>
+            <div class="feat-icon"><i class="fas fa-palette"></i></div>
             <h3>تصميم 3D</h3>
             <p>أنميشن متقدم</p>
           </div>
@@ -264,48 +844,21 @@
     </div>
   </footer>
 
-  <!-- AI Chat (Admin Only) -->
-  <div class="ai-chat admin-only" id="aiChat">
-    <div class="ai-header">
-      <h3>🤖 مساعد AI</h3>
-      <button id="aiClose">✕</button>
-    </div>
-    <div class="ai-body" id="aiBody">
-      <div class="ai-msg bot">
-        أنا مساعدك الذكي. يمكنني:
-        <br>• فحص الأخطاء 🔍
-        <br>• إصلاح تلقائي 🔧
-        <br>• تحسين الأداء ⚡
-      </div>
-    </div>
-    <div class="ai-input-area">
-      <input type="text" id="aiInput" placeholder="اكتب...">
-      <button id="aiSend">📤</button>
-    </div>
-    <div class="ai-actions">
-      <button class="ai-action" data-action="scan">🔍 فحص</button>
-      <button class="ai-action" data-action="fix">🔧 إصلاح</button>
-      <button class="ai-action" data-action="stats">📊 إحصائيات</button>
-    </div>
-  </div>
-
-  <!-- Animation Modal (Admin Only) -->
-  <div class="modal admin-only" id="animModal">
+  <!-- نافذة تسجيل الدخول للأدمن -->
+  <div class="modal" id="adminModal">
     <div class="modal-box">
-      <h2>اختر الأنميشن</h2>
-      <div class="anim-grid">
-        <button class="anim-opt" data-anim="particles">✨ جزيئات</button>
-        <button class="anim-opt" data-anim="waves">🌊 موجات</button>
-        <button class="anim-opt" data-anim="stars">⭐ نجوم</button>
-        <button class="anim-opt" data-anim="matrix">💻 ماتريكس</button>
-        <button class="anim-opt" data-anim="bubbles">🫧 فقاعات</button>
-        <button class="anim-opt" data-anim="geometric">🔷 هندسي</button>
+      <h2>تسجيل دخول الأدمن</h2>
+      <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني" class="input">
+      <input type="password" id="adminPassInput" placeholder="كلمة المرور" class="input">
+      <div class="modal-btns">
+        <button class="btn primary" id="adminLogin">دخول</button>
+        <button class="btn" id="adminCancel">إلغاء</button>
       </div>
-      <button class="btn" id="closeAnimModal">إغلاق</button>
+      <button class="btn google" id="googleLogin"><i class="fab fa-google"></i> تسجيل الدخول بـ Google</button>
     </div>
   </div>
 
-  <!-- Edit Modal -->
+  <!-- نافذة التعديل -->
   <div class="modal" id="editModal">
     <div class="modal-box">
       <h2 id="editModalTitle">تعديل</h2>
@@ -317,25 +870,572 @@
     </div>
   </div>
 
-  <!-- Admin Login Modal -->
-  <div class="modal" id="adminModal">
-    <div class="modal-box">
-      <h2>تسجيل دخول الأدمن</h2>
-      <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني" class="input">
-      <input type="password" id="adminPassInput" placeholder="كلمة المرور" class="input">
-      <div class="modal-btns">
-        <button class="btn primary" id="adminLogin">دخول</button>
-        <button class="btn" id="adminCancel">إلغاء</button>
-      </div>
-      <button class="btn google" id="googleLogin">🔐 Google</button>
-    </div>
-  </div>
-
-  <!-- Toast -->
+  <!-- حاوية الشعارات -->
   <div id="toastContainer"></div>
 
-  <script src="firebase-config.js"></script>
-  <script src="script.js"></script>
+  <script>
+    // تهيئة Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDummyKeyForDemoPurposesOnly123",
+      authDomain: "prok-demo.firebaseapp.com",
+      projectId: "prok-demo",
+      storageBucket: "prok-demo.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef123456"
+    };
+    
+    // تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+    
+    // مدير القوائم ونظام الفهرس
+    class ListManager {
+      constructor() {
+        this.lists = {};
+        this.currentIndex = {};
+        this.deletedItems = {};
+      }
+      
+      // إنشاء قائمة جديدة
+      createList(listName, items = []) {
+        this.lists[listName] = items;
+        this.currentIndex[listName] = 0;
+        return this.lists[listName];
+      }
+      
+      // الحصول على العنصر الحالي
+      getCurrent(listName) {
+        if (!this.lists[listName] || this.lists[listName].length === 0) {
+          return null;
+        }
+        return this.lists[listName][this.currentIndex[listName]];
+      }
+      
+      // الانتقال للعنصر التالي
+      next(listName) {
+        if (!this.lists[listName] || this.lists[listName].length === 0) {
+          return null;
+        }
+        
+        this.currentIndex[listName] = 
+          (this.currentIndex[listName] + 1) % this.lists[listName].length;
+        
+        return this.getCurrent(listName);
+      }
+      
+      // الانتقال للعنصر السابق
+      prev(listName) {
+        if (!this.lists[listName] || this.lists[listName].length === 0) {
+          return null;
+        }
+        
+        this.currentIndex[listName] = 
+          (this.currentIndex[listName] - 1 + this.lists[listName].length) % 
+          this.lists[listName].length;
+        
+        return this.getCurrent(listName);
+      }
+      
+      // الانتقال إلى index محدد
+      goTo(listName, index) {
+        if (!this.lists[listName] || index < 0 || index >= this.lists[listName].length) {
+          return null;
+        }
+        
+        this.currentIndex[listName] = index;
+        return this.getCurrent(listName);
+      }
+      
+      // الحصول على index الحالي
+      getCurrentIndex(listName) {
+        return this.currentIndex[listName];
+      }
+      
+      // الحصول على طول القائمة
+      getLength(listName) {
+        return this.lists[listName] ? this.lists[listName].length : 0;
+      }
+      
+      // إضافة عنصر جديد
+      addItem(listName, item) {
+        if (!this.lists[listName]) {
+          this.createList(listName);
+        }
+        
+        this.lists[listName].push(item);
+        return this.lists[listName];
+      }
+      
+      // حذف عنصر من القائمة
+      deleteItem(listName, index) {
+        if (!this.lists[listName] || index < 0 || index >= this.lists[listName].length) {
+          return false;
+        }
+        
+        // حفظ العنصر المحذوف للتراجع إذا لزم الأمر
+        if (!this.deletedItems[listName]) {
+          this.deletedItems[listName] = [];
+        }
+        
+        const deletedItem = {
+          item: this.lists[listName][index],
+          index: index,
+          timestamp: new Date()
+        };
+        
+        this.deletedItems[listName].push(deletedItem);
+        
+        // حذف العنصر فعلياً
+        this.lists[listName].splice(index, 1);
+        
+        // تعديل الفهرس الحالي إذا لزم الأمر
+        if (this.currentIndex[listName] >= this.lists[listName].length) {
+          this.currentIndex[listName] = Math.max(0, this.lists[listName].length - 1);
+        }
+        
+        return true;
+      }
+      
+      // استعادة العنصر المحذوف
+      restoreItem(listName) {
+        if (!this.deletedItems[listName] || this.deletedItems[listName].length === 0) {
+          return false;
+        }
+        
+        const deletedItem = this.deletedItems[listName].pop();
+        this.lists[listName].splice(deletedItem.index, 0, deletedItem.item);
+        
+        return true;
+      }
+    }
+    
+    // تهيئة مدير القوائم
+    const listManager = new ListManager();
+    
+    // تطبيقات افتراضية
+    const defaultApps = [
+      {
+        id: 1,
+        name: "تطبيق الإنتاجية",
+        description: "أداة متكاملة لإدارة المهام والوقت",
+        image: "https://via.placeholder.com/280x180/6366f1/fff?text=تطبيق+الإنتاجية",
+        category: "أدوات"
+      },
+      {
+        id: 2,
+        name: "مدير الملفات",
+        description: "تنظيم الملفات والوثائق بذكاء",
+        image: "https://via.placeholder.com/280x180/ec4899/fff?text=مدير+الملفات",
+        category: "أدوات"
+      },
+      {
+        id: 3,
+        name: "مشغل الوسائط",
+        description: "تشغيل الفيديو والصوت بجودة عالية",
+        image: "https://via.placeholder.com/280x180/10b981/fff?text=مشغل+الوسائط",
+        category: "ترفيه"
+      },
+      {
+        id: 4,
+        name: "المحفظة الذكية",
+        description: "إدارة الأموال والمصروفات بسهولة",
+        image: "https://via.placeholder.com/280x180/8b5cf6/fff?text=المحفظة+الذكية",
+        category: "مال"
+      }
+    ];
+    
+    // تهيئة القوائم
+    listManager.createList("apps", defaultApps);
+    listManager.createList("carousel", [0, 1, 2]);
+    
+    // DOM جاهز
+    document.addEventListener('DOMContentLoaded', function() {
+      // العناصر
+      const protectionAlert = document.getElementById('protectionAlert');
+      const themeToggle = document.getElementById('themeToggle');
+      const adminBtn = document.getElementById('adminBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const adminModal = document.getElementById('adminModal');
+      const adminLogin = document.getElementById('adminLogin');
+      const adminCancel = document.getElementById('adminCancel');
+      const googleLogin = document.getElementById('googleLogin');
+      const editModal = document.getElementById('editModal');
+      const saveEdit = document.getElementById('saveEdit');
+      const cancelEdit = document.getElementById('cancelEdit');
+      const addAppBtn = document.getElementById('addAppBtn');
+      const appsGrid = document.getElementById('appsGrid');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const dotsContainer = document.getElementById('dots');
+      const visCount = document.getElementById('visCount');
+      const adminEmail = document.getElementById('adminEmail');
+      
+      // حالة التطبيق
+      let isAdmin = false;
+      let currentEditElement = null;
+      let currentEditType = null;
+      
+      // تهيئة الواجهة
+      initCarousel();
+      renderApps();
+      updateVisitorCount();
+      
+      // تبديل السمة
+      themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('theme-dark');
+        document.body.classList.toggle('theme-light');
+        
+        const isLight = document.body.classList.contains('theme-light');
+        themeToggle.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        
+        showToast(isLight ? 'السمة الفاتحة مفعلة' : 'السمة الداكنة مفعلة');
+      });
+      
+      // فتح نافذة الأدمن
+      adminBtn.addEventListener('click', function() {
+        if (isAdmin) {
+          toggleAdminMode(false);
+          showToast('تم الخروج من وضع الأدمن');
+        } else {
+          adminModal.classList.add('show');
+        }
+      });
+      
+      // إلغاء تسجيل الدخول
+      adminCancel.addEventListener('click', function() {
+        adminModal.classList.remove('show');
+      });
+      
+      // تسجيل الدخول اليدوي
+      adminLogin.addEventListener('click', function() {
+        const email = document.getElementById('adminEmailInput').value;
+        const password = document.getElementById('adminPassInput').value;
+        
+        if (email && password) {
+          // محاكاة تسجيل الدخول
+          auth.signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              adminModal.classList.remove('show');
+              toggleAdminMode(true);
+              adminEmail.textContent = userCredential.user.email;
+              showToast('تم تسجيل الدخول بنجاح');
+            })
+            .catch((error) => {
+              // في حالة الخطأ، نستخدم تسجيل دخول تجريبي
+              if (email === "admin@prok.com" && password === "123456") {
+                adminModal.classList.remove('show');
+                toggleAdminMode(true);
+                adminEmail.textContent = email;
+                showToast('تم تسجيل الدخول بنجاح');
+              } else {
+                showToast('خطأ في البريد أو كلمة المرور', 'error');
+              }
+            });
+        } else {
+          showToast('يرجى ملء جميع الحقول', 'error');
+        }
+      });
+      
+      // تسجيل الدخول بـ Google
+      googleLogin.addEventListener('click', function() {
+        // محاكاة تسجيل الدخول بـ Google
+        showToast('جاري تسجيل الدخول بـ Google...');
+        
+        setTimeout(() => {
+          adminModal.classList.remove('show');
+          toggleAdminMode(true);
+          adminEmail.textContent = "user@gmail.com";
+          showToast('تم تسجيل الدخول بـ Google بنجاح');
+        }, 1500);
+      });
+      
+      // تسجيل الخروج
+      logoutBtn.addEventListener('click', function() {
+        auth.signOut().then(() => {
+          toggleAdminMode(false);
+          showToast('تم تسجيل الخروج بنجاح');
+        });
+      });
+      
+      // إضافة تطبيق جديد
+      addAppBtn.addEventListener('click', function() {
+        const newApp = {
+          id: Date.now(),
+          name: "تطبيق جديد",
+          description: "وصف التطبيق الجديد",
+          image: "https://via.placeholder.com/280x180/6366f1/fff?text=تطبيق+جديد",
+          category: "جديد"
+        };
+        
+        listManager.addItem("apps", newApp);
+        renderApps();
+        showToast('تم إضافة تطبيق جديد');
+      });
+      
+      // تهيئة الكاروسيل
+      function initCarousel() {
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = [];
+        
+        // إنشاء النقاط
+        for (let i = 0; i < slides.length; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'carousel-dot';
+          if (i === 0) dot.classList.add('active');
+          dot.addEventListener('click', () => goToSlide(i));
+          dotsContainer.appendChild(dot);
+          dots.push(dot);
+        }
+        
+        // الأزرار
+        prevBtn.addEventListener('click', showPrevSlide);
+        nextBtn.addEventListener('click', showNextSlide);
+        
+        // التلقائي
+        setInterval(showNextSlide, 5000);
+        
+        function showPrevSlide() {
+          const current = listManager.getCurrentIndex("carousel");
+          const prev = listManager.prev("carousel");
+          updateCarousel(prev);
+        }
+        
+        function showNextSlide() {
+          const current = listManager.getCurrentIndex("carousel");
+          const next = listManager.next("carousel");
+          updateCarousel(next);
+        }
+        
+        function goToSlide(index) {
+          const slide = listManager.goTo("carousel", index);
+          updateCarousel(slide);
+        }
+        
+        function updateCarousel(slideIndex) {
+          // إخفاء جميع الشرائح
+          slides.forEach(slide => slide.classList.remove('active'));
+          
+          // إظهار الشريحة الحالية
+          slides[slideIndex].classList.add('active');
+          
+          // تحديث النقاط
+          dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === slideIndex);
+          });
+        }
+      }
+      
+      // عرض التطبيقات
+      function renderApps() {
+        appsGrid.innerHTML = '';
+        const apps = listManager.lists["apps"];
+        
+        apps.forEach((app, index) => {
+          const appCard = document.createElement('div');
+          appCard.className = 'app-card';
+          appCard.innerHTML = `
+            <span class="edit-icon" data-edit="app-${app.id}">✏️</span>
+            <img src="${app.image}" alt="${app.name}">
+            <div class="app-info">
+              <h3>${app.name}</h3>
+              <p>${app.description}</p>
+              <div class="app-actions">
+                <button class="app-btn download" data-id="${app.id}">
+                  <i class="fas fa-download"></i> تحميل
+                </button>
+                <button class="app-btn delete admin-only" data-index="${index}">
+                  <i class="fas fa-trash"></i> حذف
+                </button>
+              </div>
+            </div>
+          `;
+          
+          appsGrid.appendChild(appCard);
+        });
+        
+        // إضافة مستمعي الأحداث للأزرار
+        document.querySelectorAll('.app-btn.download').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const appId = this.getAttribute('data-id');
+            showToast(`جاري تحميل التطبيق (ID: ${appId})`);
+          });
+        });
+        
+        document.querySelectorAll('.app-btn.delete').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const appIndex = parseInt(this.getAttribute('data-index'));
+            deleteApp(appIndex);
+          });
+        });
+        
+        // إضافة مستمعي الأحداث لأيقونات التعديل
+        document.querySelectorAll('.edit-icon').forEach(icon => {
+          icon.addEventListener('click', function() {
+            const editTarget = this.getAttribute('data-edit');
+            openEditModal(editTarget, this);
+          });
+        });
+      }
+      
+      // حذف تطبيق
+      function deleteApp(index) {
+        if (listManager.deleteItem("apps", index)) {
+          renderApps();
+          showToast('تم حذف التطبيق بنجاح');
+        } else {
+          showToast('خطأ في حذف التطبيق', 'error');
+        }
+      }
+      
+      // فتح نافذة التعديل
+      function openEditModal(type, element) {
+        currentEditType = type;
+        currentEditElement = element;
+        
+        document.getElementById('editModalTitle').textContent = `تعديل ${type}`;
+        
+        let content = '';
+        if (type.startsWith('app-')) {
+          const appId = parseInt(type.split('-')[1]);
+          const app = listManager.lists["apps"].find(a => a.id === appId);
+          
+          content = `
+            <input type="text" id="editAppName" value="${app.name}" class="input" placeholder="اسم التطبيق">
+            <textarea id="editAppDesc" class="input" placeholder="وصف التطبيق" style="height: 100px; resize: vertical;">${app.description}</textarea>
+            <input type="text" id="editAppImage" value="${app.image}" class="input" placeholder="رابط الصورة">
+            <input type="text" id="editAppCategory" value="${app.category}" class="input" placeholder="الفئة">
+          `;
+        } else {
+          // عناصر أخرى
+          const targetElement = element.parentElement;
+          let currentValue = '';
+          
+          if (targetElement.tagName === 'H1' || targetElement.tagName === 'H2' || targetElement.tagName === 'H3') {
+            currentValue = targetElement.textContent.replace('✏️', '').trim();
+            content = `<input type="text" id="editValue" value="${currentValue}" class="input">`;
+          } else if (targetElement.tagName === 'P') {
+            currentValue = targetElement.textContent.replace('✏️', '').trim();
+            content = `<textarea id="editValue" class="input" style="height: 100px; resize: vertical;">${currentValue}</textarea>`;
+          } else {
+            currentValue = targetElement.textContent.replace('✏️', '').trim();
+            content = `<input type="text" id="editValue" value="${currentValue}" class="input">`;
+          }
+        }
+        
+        document.getElementById('editModalContent').innerHTML = content;
+        editModal.classList.add('show');
+      }
+      
+      // حفظ التعديل
+      saveEdit.addEventListener('click', function() {
+        if (currentEditType.startsWith('app-')) {
+          const appId = parseInt(currentEditType.split('-')[1]);
+          const appIndex = listManager.lists["apps"].findIndex(a => a.id === appId);
+          
+          if (appIndex !== -1) {
+            listManager.lists["apps"][appIndex].name = document.getElementById('editAppName').value;
+            listManager.lists["apps"][appIndex].description = document.getElementById('editAppDesc').value;
+            listManager.lists["apps"][appIndex].image = document.getElementById('editAppImage').value;
+            listManager.lists["apps"][appIndex].category = document.getElementById('editAppCategory').value;
+            
+            renderApps();
+            showToast('تم تحديث التطبيق بنجاح');
+          }
+        } else {
+          const newValue = document.getElementById('editValue').value;
+          const targetElement = currentEditElement.parentElement;
+          
+          if (targetElement.tagName === 'H1' || targetElement.tagName === 'H2' || targetElement.tagName === 'H3' || targetElement.tagName === 'P') {
+            targetElement.innerHTML = `<span class="edit-icon" data-edit="${currentEditType}">✏️</span> ${newValue}`;
+            
+            // إعادة إرفاق مستمع الحدث
+            targetElement.querySelector('.edit-icon').addEventListener('click', function() {
+              const editTarget = this.getAttribute('data-edit');
+              openEditModal(editTarget, this);
+            });
+          } else {
+            targetElement.textContent = newValue;
+            targetElement.appendChild(currentEditElement);
+          }
+          
+          showToast('تم حفظ التغييرات بنجاح');
+        }
+        
+        editModal.classList.remove('show');
+      });
+      
+      // إلغاء التعديل
+      cancelEdit.addEventListener('click', function() {
+        editModal.classList.remove('show');
+      });
+      
+      // تبديل وضع الأدمن
+      function toggleAdminMode(enable) {
+        isAdmin = enable;
+        document.body.classList.toggle('admin-mode', enable);
+        adminBtn.textContent = enable ? 'خروج من الأدمن' : 'لوحة الأدمن';
+      }
+      
+      // تحديث عدد الزوار
+      function updateVisitorCount() {
+        // محاكاة زيادة عدد الزوار
+        let count = Math.floor(Math.random() * 100) + 50;
+        visCount.textContent = count;
+        
+        // زيادة العدد كل 10 ثوانٍ
+        setInterval(() => {
+          count += Math.floor(Math.random() * 5);
+          visCount.textContent = count;
+        }, 10000);
+      }
+      
+      // عرض الإشعارات
+      function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        
+        document.getElementById('toastContainer').appendChild(toast);
+        
+        setTimeout(() => {
+          toast.remove();
+        }, 3000);
+      }
+      
+      // حماية الموقع
+      document.addEventListener('keydown', function(e) {
+        // منع F12
+        if (e.key === 'F12') {
+          e.preventDefault();
+          protectionAlert.classList.add('show');
+          setTimeout(() => protectionAlert.classList.remove('show'), 2000);
+        }
+        
+        // منع Ctrl+Shift+I
+        if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+          e.preventDefault();
+          protectionAlert.classList.add('show');
+          setTimeout(() => protectionAlert.classList.remove('show'), 2000);
+        }
+        
+        // منع Ctrl+U
+        if (e.ctrlKey && e.key === 'u') {
+          e.preventDefault();
+          protectionAlert.classList.add('show');
+          setTimeout(() => protectionAlert.classList.remove('show'), 2000);
+        }
+      });
+      
+      // منع النقر بزر الماوس الأيمن
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        protectionAlert.classList.add('show');
+        setTimeout(() => protectionAlert.classList.remove('show'), 2000);
+      });
+    });
+  </script>
 
 </body>
 </html>
