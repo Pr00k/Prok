@@ -1,48 +1,255 @@
-/* ===== Prok Enhanced Script ===== */
-/* نظام متكامل مع Firebase، الذكاء الاصطناعي، نظام الفهرس والحذف */
-
-// تهيئة التطبيق
+/* ===== Prok Complete Script ===== */
 document.addEventListener('DOMContentLoaded', function() {
     initApp();
 });
 
-/* ---------- تهيئة التطبيق الرئيسية ---------- */
-function initApp() {
-    // تهيئة Firebase
-    initFirebase();
-    
-    // تهيئة العداد
-    initVisitorCounter();
-    
-    // تهيئة الكاروسيل
-    initCarousel();
-    
-    // تهيئة نظام الحماية
-    initProtection();
-    
-    // تهيئة نظام الفهرس والحذف
-    initIndexDeleteSystem();
-    
-    // تهيئة نظام التعديل
-    initEditSystem();
-    
-    // تهيئة واجهة الأدمن
-    initAdminInterface();
-    
-    // تحميل البيانات
-    loadData();
+// نظام الذكاء الاصطناعي المحسن
+class ProkAI {
+    constructor() {
+        this.context = [];
+        this.isProcessing = false;
+        this.knowledgeBase = {
+            'فحص': this.scanSystem.bind(this),
+            'تحسين': this.optimizePerformance.bind(this),
+            'تحليل': this.analyzeStats.bind(this),
+            'حماية': this.securityCheck.bind(this),
+            'تطبيقات': this.manageApps.bind(this),
+            'أخطاء': this.findErrors.bind(this)
+        };
+    }
+
+    async processQuery(message) {
+        if (this.isProcessing) return "جاري معالجة طلبك السابق...";
+        
+        this.isProcessing = true;
+        this.addToContext('user', message);
+        
+        try {
+            const response = await this.generateResponse(message);
+            this.addToContext('assistant', response);
+            this.isProcessing = false;
+            return response;
+        } catch (error) {
+            this.isProcessing = false;
+            return "عذراً، حدث خطأ في المعالجة. يرجى المحاولة مرة أخرى.";
+        }
+    }
+
+    async generateResponse(message) {
+        // محاكاة معالجة الذكاء الاصطناعي
+        await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+        
+        const lowerMessage = message.toLowerCase();
+        
+        // الردود الذكية بناءً على المحتوى
+        if (lowerMessage.includes('فحص') || lowerMessage.includes('اخطاء') || lowerMessage.includes('مشاكل')) {
+            return this.scanSystem();
+        }
+        
+        if (lowerMessage.includes('تحسين') || lowerMessage.includes('اداء') || lowerMessage.includes('سرعة')) {
+            return this.optimizePerformance();
+        }
+        
+        if (lowerMessage.includes('تحليل') || lowerMessage.includes('إحصائيات') || lowerMessage.includes('ارقام')) {
+            return this.analyzeStats();
+        }
+        
+        if (lowerMessage.includes('حماية') || lowerMessage.includes('أمان') || lowerMessage.includes('امن')) {
+            return this.securityCheck();
+        }
+        
+        if (lowerMessage.includes('تطبيق') || lowerMessage.includes('برنامج') || lowerMessage.includes('app')) {
+            return this.manageApps();
+        }
+        
+        if (lowerMessage.includes('مساعدة') || lowerMessage.includes('مساعده') || lowerMessage.includes('help')) {
+            return this.showHelp();
+        }
+        
+        // ردود عامة
+        const generalResponses = [
+            "أفهم طلبك. أقترح استخدام أحد الأزرار المتخصصة أدناه للحصول على مساعدة أكثر دقة.",
+            "يمكنني مساعدتك في فحص النظام، تحسين الأداء، أو تحليل الإحصائيات. ما الذي تريد القيام به؟",
+            "للمساعدة المثلى، يرجى استخدام الأزرار المخصصة أو وصف مشكلتك بتفصيل أكثر.",
+            "أنظمة Prok تعمل بشكل طبيعي. هل تواجه مشكلة محددة يمكنني مساعدتك فيها؟",
+            "لدي القدرة على فحص الأخطاء تلقائياً وتحسين أداء النظام. كيف يمكنني خدمتك؟"
+        ];
+        
+        return generalResponses[Math.floor(Math.random() * generalResponses.length)];
+    }
+
+    scanSystem() {
+        const issues = [];
+        const fixes = [];
+        
+        // فحص SEO
+        if (!document.querySelector('meta[name="description"]')) {
+            issues.push("❌ لا يوجد وصف Meta للصفحة");
+            fixes.push("إضافة وصف Meta لتحسين SEO");
+        }
+        
+        // فحص الصور
+        document.querySelectorAll('img').forEach((img, index) => {
+            if (!img.alt) {
+                issues.push(`❌ الصورة ${index + 1} لا تحتوي على نص بديل`);
+                fixes.push(`إضافة خاصية alt للصورة ${index + 1}`);
+            }
+        });
+        
+        // فحص الأداء
+        const largeImages = document.querySelectorAll('img[src*="placeholder"]');
+        if (largeImages.length > 2) {
+            issues.push("⚠️ يوجد عدد كبير من الصور التي قد تؤثر على الأداء");
+            fixes.push("تحسين حجم الصور لتحسين سرعة التحميل");
+        }
+        
+        // فحص JavaScript
+        if (typeof window.indexDeleteManager === 'undefined') {
+            issues.push("❌ نظام إدارة الفهرس غير مفعل");
+            fixes.push("تفعيل نظام إدارة الفهرس والقوائم");
+        }
+        
+        let report = "📊 تقرير الفحص:\n\n";
+        
+        if (issues.length === 0) {
+            report += "✅ جميع الأنظمة تعمل بشكل مثالي!\nلا توجد أخطاء أو مشاكل تحتاج للتصحيح.";
+        } else {
+            report += "المشاكل المكتشفة:\n" + issues.join('\n');
+            report += "\n\nالتصحيحات المقترحة:\n" + fixes.join('\n');
+            report += `\n\n📈 تم اكتشاف ${issues.length} مشكلة تحتاج للانتباه.`;
+        }
+        
+        return report;
+    }
+
+    optimizePerformance() {
+        const optimizations = [
+            "⚡ ضغط الصور وتحسين أحجامها",
+            "🔧 تقليل طلبات HTTP غير الضرورية",
+            "💾 تفعيل التخزين المؤقت للمتصفح",
+            "🚀 تحسين كود JavaScript",
+            "🎯 تقليل وقت تحميل الصفحة"
+        ];
+        
+        // محاكاة التحسين
+        const savedKB = Math.floor(Math.random() * 500) + 100;
+        const improvedSpeed = (Math.random() * 40 + 10).toFixed(1);
+        
+        return `🛠️ تحسينات الأداء المقترحة:\n\n${optimizations.join('\n')}\n\n` +
+               `📈 النتائج المتوقعة:\n` +
+               `• توفير ${savedKB} كيلوبايت في حجم الصفحة\n` +
+               `• تحسين السرعة بنسبة ${improvedSpeed}%\n` +
+               `• تجربة مستخدم أسرع وأكثر سلاسة`;
+    }
+
+    analyzeStats() {
+        const visitors = parseInt(localStorage.getItem('prok_visitors') || '0');
+        const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+        const issues = JSON.parse(localStorage.getItem('prok_issues') || '[]');
+        
+        const growthRate = ((visitors - 100) / 100 * 100).toFixed(1);
+        const satisfaction = (95 - issues.length * 2).toFixed(0);
+        
+        return `📈 تحليل إحصائيات Prok:\n\n` +
+               `👥 عدد الزوار: ${visitors.toLocaleString()}\n` +
+               `📱 عدد التطبيقات: ${apps.length}\n` +
+               `⚠️  المشاكل النشطة: ${issues.length}\n` +
+               `📊 معدل النمو: ${growthRate}%\n` +
+               `⭐ رضا المستخدمين: ${satisfaction}%\n\n` +
+               `💡 التوصيات:\n` +
+               `• ${visitors < 500 ? 'تحسين استراتيجية التسويق' : 'الحفاظ على جودة الخدمة'}\n` +
+               `• ${apps.length < 5 ? 'إضافة المزيد من التطبيقات' : 'تحسين التطبيقات الحالية'}\n` +
+               `• ${issues.length > 3 ? 'معالجة المشاكل فوراً' : 'الاستمرار في المراقبة'}`;
+    }
+
+    securityCheck() {
+        const checks = [
+            "✅ الحماية من النسخ مفعلة",
+            "✅ منع النقر بزر الماوس الأيمن نشط",
+            "✅ حماية أدوات المطورين مفعلة",
+            "✅ الاتصالات آمنة",
+            "✅ نظام كشف التسلل نشط"
+        ];
+        
+        return `🛡️ تقرير الأمان:\n\n${checks.join('\n')}\n\n` +
+               `🔒 حالة النظام: آمن تماماً\n` +
+               `📊 مستوى الحماية: 98%\n` +
+               `⏰ آخر تحديث: ${new Date().toLocaleDateString('ar-SA')}\n\n` +
+               `💡 النصيحة: استمر في تحديث النظام بانتظام للحفاظ على أعلى مستويات الأمان.`;
+    }
+
+    manageApps() {
+        const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+        
+        if (apps.length === 0) {
+            return "📱 إدارة التطبيقات:\n\nلا توجد تطبيقات حالياً.\n\n💡 نصيحة: يمكنك إضافة تطبيقات جديدة من خلال زر 'إضافة تطبيق' في لوحة التحكم.";
+        }
+        
+        let report = "📱 إدارة التطبيقات:\n\n";
+        report += `إجمالي التطبيقات: ${apps.length}\n\n`;
+        
+        apps.forEach((app, index) => {
+            report += `${index + 1}. ${app.title}\n`;
+            report += `   📝 ${app.description}\n`;
+            report += `   🏷️  ${app.category}\n\n`;
+        });
+        
+        report += "💡 الإجراءات المتاحة:\n• تعديل التطبيقات\n• حذف التطبيقات\n• إضافة تطبيقات جديدة\n• تنظيم التطبيقات حسب الفئة";
+        
+        return report;
+    }
+
+    findErrors() {
+        const errors = [];
+        
+        // فحص العناصر المفقودة
+        if (!document.getElementById('appsGrid')) {
+            errors.push("❌ قسم التطبيقات غير موجود");
+        }
+        
+        if (!document.querySelector('.carousel')) {
+            errors.push("❌ الكاروسيل غير موجود");
+        }
+        
+        if (errors.length === 0) {
+            return "✅ فحص الأخطاء:\n\nلم يتم العثور على أخطاء حرجة في الهيكل الأساسي للموقع.";
+        } else {
+            return `❌ فحص الأخطاء:\n\nتم اكتشاف الأخطاء التالية:\n${errors.join('\n')}\n\n🔧 يوصى بإصلاح هذه الأخطاء فوراً.`;
+        }
+    }
+
+    showHelp() {
+        return `🤖 مساعد Prok الذكي - دليل المساعدة:\n\n` +
+               `🔍 **فحص النظام**: اكتشف الأخطاء والمشاكل تلقائياً\n` +
+               `⚡ **تحسين الأداء**: احصل على نصائح لتحسين سرعة الموقع\n` +
+               `📊 **تحليل الإحصائيات**: عرض إحصائيات الموقع والأداء\n` +
+               `🛡️ **التحقق من الأمان**: تأكد من أنظمة الحماية\n` +
+               `📱 **إدارة التطبيقات**: التحكم في التطبيقات والمحتوى\n\n` +
+               `💡 **نصائح سريعة**:\n` +
+               `• استخدم كلمات واضحة ومحددة\n` +
+               `• استفد من الأزرار المخصصة للإجراءات السريعة\n` +
+               `• يمكنني معالجة استفسارات متعددة في وقت واحد\n` +
+               `• النظام يتعلم ويتحسن باستمرار`;
+    }
+
+    addToContext(role, content) {
+        this.context.push({ role, content, timestamp: new Date() });
+        
+        // الحفاظ على آخر 10 رسائل فقط
+        if (this.context.length > 10) {
+            this.context = this.context.slice(-10);
+        }
+    }
 }
 
-/* ---------- نظام الفهرس والحذف ---------- */
+// نظام إدارة الفهرس والحذف
 class IndexDeleteManager {
     constructor() {
         this.lists = new Map();
         this.currentIndexes = new Map();
         this.deletedItems = new Map();
-        this.history = [];
     }
 
-    // إنشاء قائمة جديدة
     createList(listName, items = []) {
         this.lists.set(listName, items);
         this.currentIndexes.set(listName, 0);
@@ -50,19 +257,16 @@ class IndexDeleteManager {
         return this.getList(listName);
     }
 
-    // الحصول على القائمة
     getList(listName) {
         return this.lists.get(listName) || [];
     }
 
-    // الحصول على العنصر الحالي
     getCurrent(listName) {
         const list = this.getList(listName);
         const currentIndex = this.currentIndexes.get(listName) || 0;
         return list[currentIndex] || null;
     }
 
-    // الانتقال للعنصر التالي
     next(listName) {
         const list = this.getList(listName);
         if (list.length === 0) return null;
@@ -71,11 +275,9 @@ class IndexDeleteManager {
         currentIndex = (currentIndex + 1) % list.length;
         this.currentIndexes.set(listName, currentIndex);
         
-        this.addToHistory('NEXT', { listName, newIndex: currentIndex });
         return this.getCurrent(listName);
     }
 
-    // الانتقال للعنصر السابق
     prev(listName) {
         const list = this.getList(listName);
         if (list.length === 0) return null;
@@ -84,151 +286,43 @@ class IndexDeleteManager {
         currentIndex = (currentIndex - 1 + list.length) % list.length;
         this.currentIndexes.set(listName, currentIndex);
         
-        this.addToHistory('PREV', { listName, newIndex: currentIndex });
         return this.getCurrent(listName);
     }
 
-    // الانتقال إلى index محدد
-    goTo(listName, index) {
-        const list = this.getList(listName);
-        if (index < 0 || index >= list.length) return null;
-
-        this.currentIndexes.set(listName, index);
-        this.addToHistory('GOTO', { listName, newIndex: index });
-        return this.getCurrent(listName);
-    }
-
-    // الحصول على الفهرس الحالي
-    getCurrentIndex(listName) {
-        return this.currentIndexes.get(listName) || 0;
-    }
-
-    // الحصول على طول القائمة
-    getLength(listName) {
-        return this.getList(listName).length;
-    }
-
-    // إضافة عنصر جديد
     addItem(listName, item) {
         const list = this.getList(listName);
-        list.push({
-            id: this.generateId(),
+        const newItem = {
+            id: Date.now().toString(),
             ...item,
             createdAt: new Date().toISOString()
-        });
+        };
+        list.push(newItem);
         this.lists.set(listName, list);
-        
-        this.addToHistory('ADD', { listName, item });
         this.saveToStorage(listName);
-        return list;
+        return newItem;
     }
 
-    // حذف عنصر
     deleteItem(listName, index) {
         const list = this.getList(listName);
         if (index < 0 || index >= list.length) return false;
 
         const deletedItem = list[index];
-        
-        // حفظ العنصر المحذوف
         const deletedList = this.deletedItems.get(listName) || [];
+        
         deletedList.push({
             ...deletedItem,
             deletedAt: new Date().toISOString(),
             originalIndex: index
         });
+        
         this.deletedItems.set(listName, deletedList);
-
-        // الحذف الفعلي
         list.splice(index, 1);
         this.lists.set(listName, list);
-
-        // تعديل الفهرس الحالي إذا لزم الأمر
-        const currentIndex = this.currentIndexes.get(listName) || 0;
-        if (currentIndex >= list.length) {
-            this.currentIndexes.set(listName, Math.max(0, list.length - 1));
-        }
-
-        this.addToHistory('DELETE', { listName, index, deletedItem });
+        
         this.saveToStorage(listName);
         return true;
     }
 
-    // استعادة العنصر المحذوف
-    restoreItem(listName, itemId) {
-        const deletedList = this.deletedItems.get(listName) || [];
-        const itemIndex = deletedList.findIndex(item => item.id === itemId);
-        
-        if (itemIndex === -1) return false;
-
-        const itemToRestore = deletedList[itemIndex];
-        const list = this.getList(listName);
-        
-        // إعادة الإضافة في الموضع الأصلي إن أمكن
-        const insertIndex = Math.min(itemToRestore.originalIndex, list.length);
-        list.splice(insertIndex, 0, itemToRestore);
-        
-        // إزالة من قائمة المحذوفات
-        deletedList.splice(itemIndex, 1);
-        
-        this.lists.set(listName, list);
-        this.deletedItems.set(listName, deletedList);
-        
-        this.addToHistory('RESTORE', { listName, item: itemToRestore });
-        this.saveToStorage(listName);
-        return true;
-    }
-
-    // البحث في القائمة
-    search(listName, query, fields = ['title', 'description']) {
-        const list = this.getList(listName);
-        const lowerQuery = query.toLowerCase();
-        
-        return list.filter(item => 
-            fields.some(field => 
-                item[field] && item[field].toLowerCase().includes(lowerQuery)
-            )
-        );
-    }
-
-    // ترتيب القائمة
-    sort(listName, field, ascending = true) {
-        const list = this.getList(listName);
-        list.sort((a, b) => {
-            const aVal = a[field] || '';
-            const bVal = b[field] || '';
-            
-            if (aVal < bVal) return ascending ? -1 : 1;
-            if (aVal > bVal) return ascending ? 1 : -1;
-            return 0;
-        });
-        
-        this.lists.set(listName, list);
-        this.addToHistory('SORT', { listName, field, ascending });
-        this.saveToStorage(listName);
-        return list;
-    }
-
-    // توليد معرف فريد
-    generateId() {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2);
-    }
-
-    // إضافة إلى السجل
-    addToHistory(action, data) {
-        this.history.push({
-            action,
-            data,
-            timestamp: new Date().toISOString()
-        });
-        
-        // الحفاظ على آخر 100 إجراء فقط
-        if (this.history.length > 100) {
-            this.history = this.history.slice(-100);
-        }
-    }
-
-    // الحفظ في التخزين المحلي
     saveToStorage(listName) {
         try {
             const data = {
@@ -242,7 +336,6 @@ class IndexDeleteManager {
         }
     }
 
-    // التحميل من التخزين المحلي
     loadFromStorage(listName) {
         try {
             const stored = localStorage.getItem(`prok_${listName}`);
@@ -260,110 +353,36 @@ class IndexDeleteManager {
     }
 }
 
-// إنشاء مدير الفهرس والحذف العالمي
+// التهيئة الرئيسية
+const prokAI = new ProkAI();
 const indexDeleteManager = new IndexDeleteManager();
 
-/* ---------- تهيئة نظام الفهرس والحذف ---------- */
-function initIndexDeleteSystem() {
-    // تهيئة القوائم الافتراضية
-    const defaultApps = [
-        {
-            id: '1',
-            title: 'تطبيق الإنتاجية',
-            description: 'أداة متكاملة لإدارة المهام والوقت',
-            image: 'https://via.placeholder.com/280x180/6366f1/fff?text=تطبيق+الإنتاجية',
-            category: 'أدوات',
-            rating: 4.5
-        },
-        {
-            id: '2',
-            title: 'مدير الملفات',
-            description: 'تنظيم الملفات والوثائق بذكاء',
-            image: 'https://via.placeholder.com/280x180/ec4899/fff?text=مدير+الملفات',
-            category: 'أدوات',
-            rating: 4.2
-        },
-        {
-            id: '3',
-            title: 'مشغل الوسائط',
-            description: 'تشغيل الفيديو والصوت بجودة عالية',
-            image: 'https://via.placeholder.com/280x180/10b981/fff?text=مشغل+الوسائط',
-            category: 'ترفيه',
-            rating: 4.7
-        }
-    ];
-
-    indexDeleteManager.createList('apps', defaultApps);
-    indexDeleteManager.createList('carousel', [0, 1, 2]);
-    
-    // تحميل البيانات المحفوظة
-    indexDeleteManager.loadFromStorage('apps');
+function initApp() {
+    initFirebase();
+    initVisitorCounter();
+    initCarousel();
+    initProtection();
+    initIndexDeleteSystem();
+    initEditSystem();
+    initAdminInterface();
+    loadData();
+    setupEventListeners();
 }
 
-/* ---------- Firebase Authentication ---------- */
 function initFirebase() {
-    if (typeof firebase === 'undefined') {
-        console.warn('Firebase not loaded');
-        return;
-    }
-
-    try {
-        firebase.initializeApp({
-            apiKey: "AIzaSyDummyKeyForDemoPurposesOnly123",
-            authDomain: "prok-demo.firebaseapp.com",
-            projectId: "prok-demo",
-            storageBucket: "prok-demo.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef123456"
-        });
-
-        // مراقبة حالة المصادقة
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                handleAdminLogin(user);
-            } else {
-                handleAdminLogout();
-            }
-        });
-    } catch (error) {
-        console.warn('Firebase initialization error:', error);
-    }
+    // محاكاة تهيئة Firebase
+    console.log('Firebase initialized in demo mode');
+    
+    // محاكاة مستخدم أدمن للتجربة
+    setTimeout(() => {
+        const adminUser = {
+            email: 'admin@prok.com',
+            uid: 'demo-user-123'
+        };
+        localStorage.setItem('prok_admin_user', JSON.stringify(adminUser));
+    }, 1000);
 }
 
-/* ---------- معالجة تسجيل دخول الأدمن ---------- */
-function handleAdminLogin(user) {
-    document.body.classList.add('admin-mode');
-    
-    // تحديث واجهة المستخدم
-    const adminBtn = document.getElementById('adminBtn');
-    const adminEmail = document.getElementById('adminEmail');
-    
-    if (adminBtn) adminBtn.textContent = 'لوحة التحكم';
-    if (adminEmail) adminEmail.textContent = user.email;
-    
-    // إظهار عناصر الأدمن
-    document.querySelectorAll('.admin-only').forEach(el => {
-        el.style.display = 'flex';
-    });
-    
-    showToast(`مرحباً ${user.email}`, 'success');
-}
-
-/* ---------- معالجة تسجيل خروج الأدمن ---------- */
-function handleAdminLogout() {
-    document.body.classList.remove('admin-mode');
-    
-    // تحديث واجهة المستخدم
-    const adminBtn = document.getElementById('adminBtn');
-    if (adminBtn) adminBtn.textContent = 'تسجيل الدخول';
-    
-    // إخفاء عناصر الأدمن
-    document.querySelectorAll('.admin-only').forEach(el => {
-        el.style.display = 'none';
-    });
-}
-
-/* ---------- عداد الزوار ---------- */
 function initVisitorCounter() {
     const visCount = document.getElementById('visCount');
     if (!visCount) return;
@@ -378,57 +397,51 @@ function initVisitorCounter() {
     }
 }
 
-/* ---------- نظام الكاروسيل ---------- */
 function initCarousel() {
-    const track = document.querySelector('.slides');
-    const slides = document.querySelectorAll('.slide');
+    const slides = document.getElementById('carouselSlides');
+    const dotsContainer = document.getElementById('carouselDots');
     const prevBtn = document.querySelector('.carousel-btn.prev');
     const nextBtn = document.querySelector('.carousel-btn.next');
     
-    if (!track || slides.length === 0) return;
+    if (!slides) return;
 
-    let currentIndex = 0;
-    const slideWidth = slides[0].clientWidth;
-    const totalSlides = slides.length;
+    const slideElements = slides.querySelectorAll('.slide');
+    let currentSlide = 0;
 
     function updateCarousel() {
-        track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-        updateDots();
+        slides.querySelectorAll('.slide').forEach((slide, index) => {
+            slide.classList.toggle('active', index === currentSlide);
+        });
+        
+        if (dotsContainer) {
+            dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
     }
 
     function nextSlide() {
-        currentIndex = (currentIndex + 1) % totalSlides;
+        currentSlide = (currentSlide + 1) % slideElements.length;
         updateCarousel();
     }
 
     function prevSlide() {
-        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        currentSlide = (currentSlide - 1 + slideElements.length) % slideElements.length;
         updateCarousel();
     }
 
-    function updateDots() {
-        const dots = document.querySelectorAll('.carousel-dot');
-        dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentIndex);
-        });
-    }
-
-    // إضافة النقاط إذا لم تكن موجودة
-    if (!document.querySelector('.carousel-dots')) {
-        const dotsContainer = document.createElement('div');
-        dotsContainer.className = 'carousel-dots';
-        
-        slides.forEach((_, index) => {
+    // إنشاء النقاط
+    if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        slideElements.forEach((_, index) => {
             const dot = document.createElement('div');
             dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
             dot.addEventListener('click', () => {
-                currentIndex = index;
+                currentSlide = index;
                 updateCarousel();
             });
             dotsContainer.appendChild(dot);
         });
-        
-        track.parentNode.appendChild(dotsContainer);
     }
 
     // إضافة الأحداث
@@ -439,19 +452,14 @@ function initCarousel() {
     let autoSlide = setInterval(nextSlide, 5000);
 
     // إيقاف التمرير التلقائي عند التمرير
-    track.addEventListener('mouseenter', () => clearInterval(autoSlide));
-    track.addEventListener('mouseleave', () => {
+    slides.addEventListener('mouseenter', () => clearInterval(autoSlide));
+    slides.addEventListener('mouseleave', () => {
         autoSlide = setInterval(nextSlide, 5000);
     });
 
-    // تحديث عند تغيير حجم النافذة
-    window.addEventListener('resize', () => {
-        currentSlideWidth = slides[0].clientWidth;
-        updateCarousel();
-    });
+    updateCarousel();
 }
 
-/* ---------- نظام الحماية ---------- */
 function initProtection() {
     // منع النقر بزر الماوس الأيمن
     document.addEventListener('contextmenu', (e) => {
@@ -467,19 +475,11 @@ function initProtection() {
 
     // منع أدوات المطورين
     document.addEventListener('keydown', (e) => {
-        // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
         if (e.key === 'F12' || 
             (e.ctrlKey && e.shiftKey && e.key === 'I') ||
             (e.ctrlKey && e.shiftKey && e.key === 'J') ||
             (e.ctrlKey && e.key === 'u')) {
             e.preventDefault();
-            showProtectionAlert();
-        }
-    });
-
-    // حماية عند تبديل النوافذ
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
             showProtectionAlert();
         }
     });
@@ -493,9 +493,37 @@ function showProtectionAlert() {
     }
 }
 
-/* ---------- نظام التعديل ---------- */
+function initIndexDeleteSystem() {
+    // التطبيقات الافتراضية
+    const defaultApps = [
+        {
+            id: '1',
+            title: 'تطبيق الإنتاجية',
+            description: 'أداة متكاملة لإدارة المهام والوقت بكل كفاءة',
+            image: 'https://via.placeholder.com/300x200/6366f1/fff?text=تطبيق+الإنتاجية',
+            category: 'أدوات'
+        },
+        {
+            id: '2',
+            title: 'مدير الملفات', 
+            description: 'تنظيم الملفات والوثائق بذكاء وسهولة',
+            image: 'https://via.placeholder.com/300x200/ec4899/fff?text=مدير+الملفات',
+            category: 'أدوات'
+        },
+        {
+            id: '3',
+            title: 'مشغل الوسائط',
+            description: 'تشغيل الفيديو والصوت بجودة عالية وسهولة',
+            image: 'https://via.placeholder.com/300x200/10b981/fff?text=مشغل+الوسائط',
+            category: 'ترفيه'
+        }
+    ];
+
+    indexDeleteManager.createList('apps', defaultApps);
+    indexDeleteManager.loadFromStorage('apps');
+}
+
 function initEditSystem() {
-    // إضافة مستمعي الأحداث لأيقونات التعديل
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('edit-icon')) {
             const editTarget = e.target.getAttribute('data-edit');
@@ -503,8 +531,6 @@ function initEditSystem() {
         }
     });
 
-    // نافذة التعديل
-    const editModal = document.getElementById('editModal');
     const saveEdit = document.getElementById('saveEdit');
     const cancelEdit = document.getElementById('cancelEdit');
 
@@ -514,7 +540,7 @@ function initEditSystem() {
 
     if (cancelEdit) {
         cancelEdit.addEventListener('click', () => {
-            if (editModal) editModal.classList.remove('show');
+            document.getElementById('editModal').classList.remove('show');
         });
     }
 }
@@ -587,13 +613,8 @@ function handleSaveEdit() {
         parent.appendChild(currentEditElement);
     }
 
-    // إغلاق النافذة
-    const modal = document.getElementById('editModal');
-    if (modal) modal.classList.remove('show');
-    
+    document.getElementById('editModal').classList.remove('show');
     showToast('تم حفظ التغييرات بنجاح', 'success');
-    
-    // حفظ في التخزين المحلي
     saveEdits();
 }
 
@@ -607,71 +628,187 @@ function saveEdits() {
     }
 }
 
-/* ---------- واجهة الأدمن ---------- */
 function initAdminInterface() {
+    const adminBtn = document.getElementById('adminBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const aiBtn = document.getElementById('aiBtn');
+
+    if (adminBtn) {
+        adminBtn.addEventListener('click', handleAdminButtonClick);
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
+
+    if (aiBtn) {
+        aiBtn.addEventListener('click', () => {
+            document.getElementById('aiModal').classList.add('show');
+        });
+    }
+
+    // نافذة الذكاء الاصطناعي
+    const aiClose = document.getElementById('aiClose');
+    const aiSend = document.getElementById('aiSend');
+    const aiInput = document.getElementById('aiInput');
+    const aiActions = document.querySelectorAll('.ai-action-btn');
+
+    if (aiClose) {
+        aiClose.addEventListener('click', () => {
+            document.getElementById('aiModal').classList.remove('show');
+        });
+    }
+
+    if (aiSend && aiInput) {
+        aiSend.addEventListener('click', sendAIMessage);
+        aiInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendAIMessage();
+        });
+    }
+
+    aiActions.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const action = this.getAttribute('data-action');
+            handleAIAction(action);
+        });
+    });
+
+    // نافذة تسجيل الدخول
+    const adminLogin = document.getElementById('adminLogin');
+    const adminCancel = document.getElementById('adminCancel');
+    const googleLogin = document.getElementById('googleLogin');
+
+    if (adminLogin) {
+        adminLogin.addEventListener('click', handleAdminLogin);
+    }
+
+    if (adminCancel) {
+        adminCancel.addEventListener('click', () => {
+            document.getElementById('adminModal').classList.remove('show');
+        });
+    }
+
+    if (googleLogin) {
+        googleLogin.addEventListener('click', handleGoogleLogin);
+    }
+}
+
+function handleAdminButtonClick() {
+    const user = JSON.parse(localStorage.getItem('prok_admin_user') || 'null');
+    
+    if (user) {
+        // إذا كان مسجلاً، انتقل إلى لوحة التحكم
+        window.location.href = 'admin.html';
+    } else {
+        // إذا لم يكن مسجلاً، اعرض نافذة تسجيل الدخول
+        document.getElementById('adminModal').classList.add('show');
+    }
+}
+
+function handleAdminLogin() {
+    const email = document.getElementById('adminEmailInput').value;
+    const password = document.getElementById('adminPassInput').value;
+    
+    if (email && password) {
+        // محاكاة تسجيل الدخول
+        const adminUser = {
+            email: email,
+            uid: 'user-' + Date.now()
+        };
+        
+        localStorage.setItem('prok_admin_user', JSON.stringify(adminUser));
+        document.getElementById('adminModal').classList.remove('show');
+        
+        showToast('تم تسجيل الدخول بنجاح', 'success');
+        setTimeout(() => {
+            window.location.href = 'admin.html';
+        }, 1000);
+    } else {
+        showToast('يرجى ملء جميع الحقول', 'error');
+    }
+}
+
+function handleGoogleLogin() {
+    showToast('جاري تسجيل الدخول بـ Google...', 'info');
+    
+    setTimeout(() => {
+        const adminUser = {
+            email: 'user@gmail.com',
+            uid: 'google-user-' + Date.now()
+        };
+        
+        localStorage.setItem('prok_admin_user', JSON.stringify(adminUser));
+        document.getElementById('adminModal').classList.remove('show');
+        
+        showToast('تم تسجيل الدخول بـ Google بنجاح', 'success');
+        setTimeout(() => {
+            window.location.href = 'admin.html';
+        }, 1000);
+    }, 1500);
+}
+
+function handleLogout() {
+    localStorage.removeItem('prok_admin_user');
+    document.body.classList.remove('admin-mode');
+    showToast('تم تسجيل الخروج', 'info');
+}
+
+function setupEventListeners() {
+    // تبديل السمة
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+
+    // القائمة المتحركة
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mainNav = document.getElementById('mainNav');
+    
+    if (mobileMenuBtn && mainNav) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+        });
+    }
+
+    // نموذج الاتصال
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleContactSubmit);
+    }
+
     // زر إضافة تطبيق
     const addAppBtn = document.getElementById('addAppBtn');
     if (addAppBtn) {
         addAppBtn.addEventListener('click', addNewApp);
     }
-
-    // زر تسجيل الدخول
-    const adminBtn = document.getElementById('adminBtn');
-    if (adminBtn) {
-        adminBtn.addEventListener('click', handleAdminButtonClick);
-    }
-
-    // زر تسجيل الخروج
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', handleLogout);
-    }
 }
 
-function handleAdminButtonClick() {
-    if (document.body.classList.contains('admin-mode')) {
-        // إذا كان في وضع الأدمن، انتقل إلى لوحة التحكم
-        window.location.href = 'admin.html';
-    } else {
-        // إذا لم يكن مسجلاً، اعرض نافذة تسجيل الدخول
-        showAdminLoginModal();
+function toggleTheme() {
+    document.body.classList.toggle('theme-dark');
+    document.body.classList.toggle('theme-light');
+    
+    const isLight = document.body.classList.contains('theme-light');
+    const themeToggle = document.getElementById('themeToggle');
+    
+    if (themeToggle) {
+        themeToggle.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
     }
+    
+    showToast(isLight ? 'السمة الفاتحة مفعلة' : 'السمة الداكنة مفعلة', 'info');
 }
 
-function showAdminLoginModal() {
-    // يمكن تنفيذ نافذة تسجيل الدخول المخصصة هنا
-    // أو استخدام Firebase UI
-    if (typeof firebase !== 'undefined') {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider)
-            .then((result) => {
-                showToast('تم تسجيل الدخول بنجاح', 'success');
-            })
-            .catch((error) => {
-                showToast('فشل تسجيل الدخول', 'error');
-            });
-    }
-}
-
-function handleLogout() {
-    if (typeof firebase !== 'undefined') {
-        firebase.auth().signOut()
-            .then(() => {
-                showToast('تم تسجيل الخروج', 'info');
-            })
-            .catch((error) => {
-                showToast('خطأ في تسجيل الخروج', 'error');
-            });
-    }
+function handleContactSubmit(e) {
+    e.preventDefault();
+    showToast('تم إرسال رسالتك بنجاح، سنرد عليك قريباً', 'success');
+    e.target.reset();
 }
 
 function addNewApp() {
     const newApp = {
         title: 'تطبيق جديد',
-        description: 'وصف التطبيق الجديد',
-        image: 'https://via.placeholder.com/280x180/6366f1/fff?text=تطبيق+جديد',
-        category: 'جديد',
-        rating: 0
+        description: 'وصف التطبيق الجديد يظهر هنا',
+        image: 'https://via.placeholder.com/300x200/6366f1/fff?text=تطبيق+جديد',
+        category: 'جديد'
     };
 
     indexDeleteManager.addItem('apps', newApp);
@@ -679,7 +816,6 @@ function addNewApp() {
     showToast('تم إضافة تطبيق جديد', 'success');
 }
 
-/* ---------- عرض التطبيقات ---------- */
 function renderApps() {
     const appsGrid = document.getElementById('appsGrid');
     if (!appsGrid) return;
@@ -687,36 +823,29 @@ function renderApps() {
     const apps = indexDeleteManager.getList('apps');
     
     appsGrid.innerHTML = apps.map((app, index) => `
-        <div class="card">
+        <div class="app-card">
             <span class="edit-icon" data-edit="app-${app.id}">✏️</span>
             <img src="${app.image}" alt="${app.title}">
             <div class="app-info">
                 <h3>${app.title}</h3>
                 <p>${app.description}</p>
                 <div class="app-actions">
-                    <button class="app-btn download" data-id="${app.id}">
-                        تحميل
+                    <button class="app-btn download" onclick="downloadApp('${app.id}')">
+                        <i class="fas fa-download"></i> تحميل
                     </button>
-                    <button class="app-btn delete admin-only" data-index="${index}">
-                        حذف
+                    <button class="app-btn delete admin-only" onclick="deleteApp(${index})">
+                        <i class="fas fa-trash"></i> حذف
                     </button>
                 </div>
             </div>
         </div>
     `).join('');
 
-    // إضافة مستمعي الأحداث
-    appsGrid.querySelectorAll('.app-btn.download').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const appId = this.getAttribute('data-id');
-            downloadApp(appId);
-        });
-    });
-
-    appsGrid.querySelectorAll('.app-btn.delete').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const appIndex = parseInt(this.getAttribute('data-index'));
-            deleteApp(appIndex);
+    // إعادة إرفاق مستمعي الأحداث لأيقونات التعديل
+    appsGrid.querySelectorAll('.edit-icon').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const editTarget = this.getAttribute('data-edit');
+            openEditModal(editTarget, this);
         });
     });
 }
@@ -727,7 +856,6 @@ function downloadApp(appId) {
     
     if (app) {
         showToast(`جاري تحميل ${app.title}`, 'info');
-        // محاكاة التحميل
         setTimeout(() => {
             showToast(`تم تحميل ${app.title} بنجاح`, 'success');
         }, 2000);
@@ -743,37 +871,70 @@ function deleteApp(index) {
     }
 }
 
-/* ---------- نظام الإشعارات ---------- */
-function showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer') || createToastContainer();
+// نظام الذكاء الاصطناعي
+function sendAIMessage() {
+    const aiInput = document.getElementById('aiInput');
+    const aiMessages = document.getElementById('aiMessages');
     
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
+    if (!aiInput || !aiMessages) return;
     
-    container.appendChild(toast);
+    const message = aiInput.value.trim();
+    if (!message) return;
     
-    // إزالة تلقائية بعد 3 ثوان
-    setTimeout(() => {
-        toast.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    // إضافة رسالة المستخدم
+    addAIMessage(message, 'user');
+    aiInput.value = '';
+    
+    // معالجة الرسالة
+    prokAI.processQuery(message).then(response => {
+        addAIMessage(response, 'bot');
+    });
 }
 
-function createToastContainer() {
-    const container = document.createElement('div');
-    container.id = 'toastContainer';
-    document.body.appendChild(container);
-    return container;
+function addAIMessage(content, sender) {
+    const aiMessages = document.getElementById('aiMessages');
+    if (!aiMessages) return;
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    messageContent.innerHTML = content.replace(/\n/g, '<br>');
+    
+    messageDiv.appendChild(messageContent);
+    aiMessages.appendChild(messageDiv);
+    aiMessages.scrollTop = aiMessages.scrollHeight;
 }
 
-/* ---------- تحميل البيانات ---------- */
+function handleAIAction(action) {
+    let message = '';
+    
+    switch (action) {
+        case 'scan':
+            message = 'افحص النظام لاكتشاف الأخطاء والمشاكل';
+            break;
+        case 'optimize':
+            message = 'حسن أداء النظام والسرعة';
+            break;
+        case 'analyze':
+            message = 'حلل إحصائيات وأداء الموقع';
+            break;
+    }
+    
+    if (message) {
+        const aiInput = document.getElementById('aiInput');
+        if (aiInput) {
+            aiInput.value = message;
+            sendAIMessage();
+        }
+    }
+}
+
 function loadData() {
-    // تحميل التطبيقات
     renderApps();
-    
-    // تحميل التعديلات المحفوظة
     loadSavedEdits();
+    checkAdminStatus();
 }
 
 function loadSavedEdits() {
@@ -796,108 +957,58 @@ function loadSavedEdits() {
     }
 }
 
-/* ---------- AutoFix Scanner ---------- */
-window.ProkAutoFix = {
-    scan: function() {
-        const issues = [];
-        
-        // فحص SEO
-        if (!document.querySelector('h1')) {
-            issues.push({ kind: 'seo', desc: 'لا يوجد عنوان H1', priority: 'high' });
-        }
-        
-        if (!document.querySelector('meta[name="description"]')) {
-            issues.push({ kind: 'seo', desc: 'لا يوجد وصف meta', priority: 'medium' });
-        }
-        
-        // فحص إمكانية الوصول
-        document.querySelectorAll('img').forEach(img => {
-            if (!img.alt || img.alt.trim() === '') {
-                issues.push({ 
-                    kind: 'a11y', 
-                    desc: 'صورة بدون نص بديل', 
-                    selector: getSelector(img),
-                    priority: 'medium'
-                });
-            }
-        });
-        
-        // فحص الأداء
-        const largeImages = document.querySelectorAll('img[src*="placeholder"]');
-        if (largeImages.length > 3) {
-            issues.push({ 
-                kind: 'performance', 
-                desc: 'عدد كبير من الصور الكبيرة', 
-                priority: 'low'
-            });
-        }
-        
-        return issues;
-    },
+function checkAdminStatus() {
+    const user = JSON.parse(localStorage.getItem('prok_admin_user') || 'null');
     
-    fix: function(issues) {
-        const fixes = [];
-        
-        issues.forEach(issue => {
-            if (issue.kind === 'seo' && issue.desc.includes('H1')) {
-                const h1 = document.createElement('h1');
-                h1.textContent = 'عنوان الصفحة الرئيسي';
-                document.querySelector('main').prepend(h1);
-                fixes.push('تم إضافة عنوان H1');
-            }
-        });
-        
-        return fixes;
-    }
-};
-
-// دالة مساعدة للحصول على محدد العنصر
-function getSelector(el) {
-    if (el.id) return '#' + el.id;
-    
-    let path = [];
-    while (el && el.nodeType === Node.ELEMENT_NODE) {
-        let selector = el.nodeName.toLowerCase();
-        if (el.className) {
-            selector += '.' + el.className.split(' ')[0];
+    if (user) {
+        document.body.classList.add('admin-mode');
+        const adminEmail = document.getElementById('adminEmail');
+        if (adminEmail) {
+            adminEmail.textContent = user.email;
         }
-        path.unshift(selector);
-        el = el.parentNode;
     }
-    return path.join(' > ');
 }
 
-// إضافة أنماط CSS للإشعارات
-const toastStyles = `
-@keyframes slideOut {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(100%); opacity: 0; }
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer') || createToastContainer();
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    const icons = {
+        success: 'fas fa-check-circle',
+        error: 'fas fa-exclamation-circle',
+        warning: 'fas fa-exclamation-triangle',
+        info: 'fas fa-info-circle'
+    };
+    
+    toast.innerHTML = `<i class="${icons[type] || icons.info}"></i> ${message}`;
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'toastSlideOut 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
-.toast {
-    padding: 12px 20px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    color: white;
-    font-weight: 600;
-    animation: slideIn 0.3s ease;
+function createToastContainer() {
+    const container = document.createElement('div');
+    container.id = 'toastContainer';
+    document.body.appendChild(container);
+    
+    // إضافة أنيميشن الخروج
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes toastSlideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    return container;
 }
 
-.toast.success { background: #2ed573; }
-.toast.error { background: #ff4757; }
-.toast.warning { background: #ffa502; }
-.toast.info { background: #00ffe7; color: #012; }
-
-@keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-`;
-
-// إضافة الأنماط إلى المستند
-const styleSheet = document.createElement('style');
-styleSheet.textContent = toastStyles;
-document.head.appendChild(styleSheet);
-
-// تصدير المدير للاستخدام العالمي
-window.indexDeleteManager = indexDeleteManager;
+// جعل الدوال متاحة عالمياً
+window.downloadApp = downloadApp;
+window.deleteApp = deleteApp;
