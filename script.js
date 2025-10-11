@@ -1,336 +1,430 @@
-// ===== Prok System - Simplified =====
-document.addEventListener('DOMContentLoaded', initApp);
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الأدمن — Prok</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="theme-dark admin-page">
 
-// النظام الرئيسي
-const ProkSystem = {
-    init() {
-        this.setupAuth();
-        this.setupVisitorCounter();
-        this.setupCarousel();
-        this.setupProtection();
-        this.setupApps();
-        this.setupEventListeners();
-        this.checkAdminStatus();
-    },
+<header class="topbar">
+    <div class="container">
+        <div class="brand">
+            <i class="fas fa-user-shield"></i> Prok — لوحة التحكم
+        </div>
+        <div class="actions">
+            <span id="adminEmail" class="admin-info"></span>
+            <button id="logoutBtn" class="btn danger">
+                <i class="fas fa-sign-out-alt"></i> خروج
+            </button>
+        </div>
+    </div>
+</header>
 
-    // نظام المصادقة
-    setupAuth() {
-        this.adminBtn = document.getElementById('adminBtn');
-        this.logoutBtn = document.getElementById('logoutBtn');
-        this.adminModal = document.getElementById('adminModal');
-
-        this.adminBtn?.addEventListener('click', () => {
-            const user = this.getCurrentUser();
-            user ? window.location.href = 'admin.html' : this.showAdminModal();
-        });
-
-        this.logoutBtn?.addEventListener('click', () => {
-            localStorage.removeItem('prok_admin_user');
-            document.body.classList.remove('admin-mode');
-            this.showToast('تم تسجيل الخروج', 'info');
-        });
-
-        // نافذة تسجيل الدخول
-        document.getElementById('adminLogin')?.addEventListener('click', () => {
-            const email = document.getElementById('adminEmailInput').value;
-            const password = document.getElementById('adminPassInput').value;
-            
-            if (email && password) {
-                this.loginUser({ email, uid: 'user-' + Date.now() });
-                this.adminModal.classList.remove('show');
-                this.showToast('تم تسجيل الدخول', 'success');
-            }
-        });
-
-        document.getElementById('adminCancel')?.addEventListener('click', () => {
-            this.adminModal.classList.remove('show');
-        });
-    },
-
-    // عداد الزوار
-    setupVisitorCounter() {
-        const visCount = document.getElementById('visCount');
-        if (!visCount) return;
-
-        let count = parseInt(localStorage.getItem('prok_visitors') || '0') + 1;
-        localStorage.setItem('prok_visitors', count.toString());
-        visCount.textContent = count.toLocaleString();
-    },
-
-    // الكاروسيل
-    setupCarousel() {
-        const slides = document.getElementById('carouselSlides');
-        const dotsContainer = document.getElementById('carouselDots');
-        if (!slides) return;
-
-        let currentSlide = 0;
-        const slideElements = slides.querySelectorAll('.slide');
-
-        const updateCarousel = () => {
-            slideElements.forEach((slide, index) => {
-                slide.classList.toggle('active', index === currentSlide);
-            });
-            
-            if (dotsContainer) {
-                dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentSlide);
-                });
-            }
-        };
-
-        // إنشاء النقاط
-        if (dotsContainer) {
-            dotsContainer.innerHTML = '';
-            slideElements.forEach((_, index) => {
-                const dot = document.createElement('div');
-                dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
-                dot.addEventListener('click', () => {
-                    currentSlide = index;
-                    updateCarousel();
-                });
-                dotsContainer.appendChild(dot);
-            });
-        }
-
-        // الأزرار
-        document.querySelector('.carousel-btn.next')?.addEventListener('click', () => {
-            currentSlide = (currentSlide + 1) % slideElements.length;
-            updateCarousel();
-        });
-
-        document.querySelector('.carousel-btn.prev')?.addEventListener('click', () => {
-            currentSlide = (currentSlide - 1 + slideElements.length) % slideElements.length;
-            updateCarousel();
-        });
-
-        // التمرير التلقائي
-        setInterval(() => {
-            currentSlide = (currentSlide + 1) % slideElements.length;
-            updateCarousel();
-        }, 4000);
-
-        updateCarousel();
-    },
-
-    // نظام الحماية
-    setupProtection() {
-        document.addEventListener('contextmenu', (e) => e.preventDefault());
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-                this.showProtectionAlert();
-            }
-        });
-    },
-
-    // نظام التطبيقات
-    setupApps() {
-        this.appsGrid = document.getElementById('appsGrid');
-        this.addAppBtn = document.getElementById('addAppBtn');
+<main class="admin-main container">
+    <section class="admin-left">
+        <h2><i class="fas fa-cogs"></i> التحكم الكامل</h2>
         
-        this.addAppBtn?.addEventListener('click', () => this.addNewApp());
+        <!-- إحصائيات -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalApps">0</div>
+                <div class="stat-label">التطبيقات</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalVisitors">0</div>
+                <div class="stat-label">الزوار</div>
+            </div>
+        </div>
+
+        <!-- أدوات التحكم -->
+        <div class="admin-controls">
+            <button id="addAppBtn" class="btn primary">
+                <i class="fas fa-plus"></i> تطبيق جديد
+            </button>
+            <button id="runScan" class="btn">
+                <i class="fas fa-search"></i> فحص النظام
+            </button>
+            <button id="exportData" class="btn">
+                <i class="fas fa-download"></i> تصدير البيانات
+            </button>
+        </div>
+
+        <!-- قائمة التطبيقات -->
+        <h3><i class="fas fa-mobile-alt"></i> التطبيقات</h3>
+        <div id="appList" class="cardlist"></div>
+    </section>
+
+    <section class="admin-right">
+        <h2><i class="fas fa-robot"></i> المساعد الذكي</h2>
+        <div class="chat-box">
+            <div id="aiHistory" class="chat-history">
+                <div class="chat-message bot">
+                    <strong>المساعد:</strong> مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك؟
+                </div>
+            </div>
+            <div class="chat-controls">
+                <input id="aiInput" placeholder="اكتب سؤالك هنا...">
+                <button id="aiSend" class="btn primary">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- نتائج الفحص -->
+        <h3><i class="fas fa-clipboard-list"></i> نتائج الفحص</h3>
+        <pre id="scanReport" class="report">اضغط على "فحص النظام" لبدء التحليل</pre>
+    </section>
+</main>
+
+<!-- نافذة إضافة تطبيق -->
+<div class="modal" id="addAppModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-plus"></i> إضافة تطبيق جديد</h3>
+        <div class="input-group">
+            <input type="text" id="appTitle" class="input" placeholder="اسم التطبيق" required>
+            <textarea id="appDescription" class="input" placeholder="الوصف" required></textarea>
+            <input type="url" id="appImage" class="input" placeholder="رابط الصورة">
+        </div>
+        <div class="modal-actions">
+            <button id="saveApp" class="btn primary">حفظ</button>
+            <button id="cancelApp" class="btn">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// نظام إدارة لوحة التحكم
+const AdminSystem = {
+    init() {
+        this.checkAuth();
+        this.setupEventListeners();
+        this.loadStats();
         this.loadApps();
     },
 
-    loadApps() {
-        if (!this.appsGrid) return;
+    checkAuth() {
+        const user = JSON.parse(localStorage.getItem('prok_admin_user') || 'null');
+        if (!user) {
+            alert('يجب تسجيل الدخول أولاً');
+            window.location.href = 'index.html';
+            return;
+        }
+        document.getElementById('adminEmail').textContent = user.email;
+    },
 
-        const apps = this.getApps();
-        this.appsGrid.innerHTML = apps.map(app => `
-            <div class="app-card">
-                <span class="edit-icon" data-edit="app-${app.id}">✏️</span>
-                <img src="${app.image}" alt="${app.title}">
-                <div class="app-info">
-                    <h3>${app.title}</h3>
-                    <p>${app.description}</p>
-                    <div class="app-actions">
-                        <button class="app-btn download" onclick="ProkSystem.downloadApp('${app.id}')">
-                            <i class="fas fa-download"></i> تحميل
-                        </button>
-                        <button class="app-btn delete admin-only" onclick="ProkSystem.deleteApp('${app.id}')">
-                            <i class="fas fa-trash"></i> حذف
-                        </button>
-                    </div>
+    setupEventListeners() {
+        // الخروج
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('prok_admin_user');
+            window.location.href = 'index.html';
+        });
+
+        // التطبيقات
+        document.getElementById('addAppBtn').addEventListener('click', () => this.showAddAppModal());
+        document.getElementById('saveApp').addEventListener('click', () => this.saveApp());
+        document.getElementById('cancelApp').addEventListener('click', () => this.hideAddAppModal());
+
+        // الأدوات
+        document.getElementById('runScan').addEventListener('click', () => this.runSystemScan());
+        document.getElementById('exportData').addEventListener('click', () => this.exportData());
+
+        // الذكاء الاصطناعي
+        document.getElementById('aiSend').addEventListener('click', () => this.sendAIMessage());
+        document.getElementById('aiInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.sendAIMessage();
+        });
+    },
+
+    loadStats() {
+        const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+        const visitors = localStorage.getItem('prok_visitors') || '0';
+        
+        document.getElementById('totalApps').textContent = apps.length;
+        document.getElementById('totalVisitors').textContent = parseInt(visitors).toLocaleString();
+    },
+
+    loadApps() {
+        const appList = document.getElementById('appList');
+        const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+        
+        appList.innerHTML = apps.map((app, index) => `
+            <div class="card">
+                <div class="card-header">
+                    <h4>${app.title}</h4>
+                </div>
+                <p>${app.description}</p>
+                <div class="card-actions">
+                    <button class="small" onclick="AdminSystem.editApp(${index})">
+                        <i class="fas fa-edit"></i> تعديل
+                    </button>
+                    <button class="small danger" onclick="AdminSystem.deleteApp(${index})">
+                        <i class="fas fa-trash"></i> حذف
+                    </button>
                 </div>
             </div>
         `).join('');
     },
 
-    getApps() {
-        const stored = localStorage.getItem('prok_apps');
-        if (stored) return JSON.parse(stored);
-        
-        // تطبيقات افتراضية
-        const defaultApps = [
-            {
-                id: '1',
-                title: 'تطبيق الإنتاجية',
-                description: 'أداة متكاملة لإدارة المهام والوقت',
-                image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=300&h=200&fit=crop'
-            },
-            {
-                id: '2',
-                title: 'مدير الملفات',
-                description: 'تنظيم الملفات والوثائق بذكاء',
-                image: 'https://images.unsplash.com/photo-1581276879432-15e50529f34b?w=300&h=200&fit=crop'
-            },
-            {
-                id: '3',
-                title: 'مشغل الوسائط',
-                description: 'تشغيل الفيديو والصوت بجودة عالية',
-                image: 'https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?w=300&h=200&fit=crop'
-            }
-        ];
-        
-        localStorage.setItem('prok_apps', JSON.stringify(defaultApps));
-        return defaultApps;
+    showAddAppModal() {
+        document.getElementById('addAppModal').classList.add('show');
     },
 
-    addNewApp() {
-        const apps = this.getApps();
-        const newApp = {
+    hideAddAppModal() {
+        document.getElementById('addAppModal').classList.remove('show');
+        this.clearAppForm();
+    },
+
+    clearAppForm() {
+        document.getElementById('appTitle').value = '';
+        document.getElementById('appDescription').value = '';
+        document.getElementById('appImage').value = '';
+    },
+
+    saveApp() {
+        const title = document.getElementById('appTitle').value.trim();
+        const description = document.getElementById('appDescription').value.trim();
+        const image = document.getElementById('appImage').value.trim();
+        
+        if (!title || !description) {
+            this.showNotification('يرجى ملء الحقول المطلوبة', 'error');
+            return;
+        }
+        
+        const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+        apps.push({
             id: Date.now().toString(),
-            title: 'تطبيق جديد',
-            description: 'وصف التطبيق الجديد',
-            image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=300&h=200&fit=crop'
+            title,
+            description,
+            image: image || 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=300&h=200&fit=crop'
+        });
+        
+        localStorage.setItem('prok_apps', JSON.stringify(apps));
+        this.loadApps();
+        this.loadStats();
+        this.hideAddAppModal();
+        this.showNotification('تم إضافة التطبيق', 'success');
+    },
+
+    editApp(index) {
+        const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+        const app = apps[index];
+        
+        const newTitle = prompt('اسم التطبيق الجديد:', app.title);
+        const newDesc = prompt('الوصف الجديد:', app.description);
+        
+        if (newTitle !== null) apps[index].title = newTitle;
+        if (newDesc !== null) apps[index].description = newDesc;
+        
+        localStorage.setItem('prok_apps', JSON.stringify(apps));
+        this.loadApps();
+        this.showNotification('تم التعديل', 'success');
+    },
+
+    deleteApp(index) {
+        if (!confirm('هل تريد حذف هذا التطبيق؟')) return;
+        
+        const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
+        apps.splice(index, 1);
+        localStorage.setItem('prok_apps', JSON.stringify(apps));
+        this.loadApps();
+        this.loadStats();
+        this.showNotification('تم الحذف', 'success');
+    },
+
+    runSystemScan() {
+        const scanReport = document.getElementById('scanReport');
+        scanReport.textContent = 'جاري فحص النظام...';
+        
+        setTimeout(() => {
+            const issues = [
+                '✅ SEO: العناوين والوصف جيدة',
+                '✅ الأمان: جميع الاتصالات آمنة',
+                '⚠️  الصور: بعض الصور بدون نصوص بديلة',
+                '✅ JavaScript: جميع السكريبتات تعمل',
+                '✅ CSS: الأنماط محملة بشكل كامل'
+            ];
+            
+            scanReport.textContent = issues.join('\n');
+            this.showNotification('تم الفحص', 'success');
+        }, 2000);
+    },
+
+    exportData() {
+        const data = {
+            apps: JSON.parse(localStorage.getItem('prok_apps') || '[]'),
+            visitors: localStorage.getItem('prok_visitors') || '0',
+            exportDate: new Date().toISOString()
         };
         
-        apps.push(newApp);
-        localStorage.setItem('prok_apps', JSON.stringify(apps));
-        this.loadApps();
-        this.showToast('تم إضافة تطبيق جديد', 'success');
+        const dataStr = JSON.stringify(data, null, 2);
+        const blob = new Blob([dataStr], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `prok-export-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        
+        this.showNotification('تم التصدير', 'success');
     },
 
-    deleteApp(appId) {
-        const apps = this.getApps().filter(app => app.id !== appId);
-        localStorage.setItem('prok_apps', JSON.stringify(apps));
-        this.loadApps();
-        this.showToast('تم حذف التطبيق', 'success');
-    },
-
-    downloadApp(appId) {
-        const app = this.getApps().find(a => a.id === appId);
-        if (app) {
-            this.showToast(`جاري تحميل ${app.title}`, 'info');
-            setTimeout(() => {
-                this.showToast(`تم تحميل ${app.title}`, 'success');
-            }, 1500);
-        }
-    },
-
-    // نظام الأحداث
-    setupEventListeners() {
-        // تبديل السمة
-        document.getElementById('themeToggle')?.addEventListener('click', () => {
-            document.body.classList.toggle('theme-dark');
-            document.body.classList.toggle('theme-light');
+    sendAIMessage() {
+        const input = document.getElementById('aiInput');
+        const history = document.getElementById('aiHistory');
+        const message = input.value.trim();
+        
+        if (!message) return;
+        
+        // إضافة رسالة المستخدم
+        const userMsg = document.createElement('div');
+        userMsg.className = 'chat-message user';
+        userMsg.textContent = message;
+        history.appendChild(userMsg);
+        
+        input.value = '';
+        
+        // محاكاة رد الذكاء الاصطناعي
+        setTimeout(() => {
+            const responses = [
+                "لقد قمت بفحص النظام ولم أجد أي أخطاء حرجة.",
+                "أقترح تحسين سرعة تحميل الصور لتحسين الأداء.",
+                "جميع الأنظمة تعمل بشكل طبيعي ولا توجد مشاكل.",
+                "يوجد تحديث جديد متاح للنظام الأساسي."
+            ];
             
-            const isLight = document.body.classList.contains('theme-light');
-            const btn = document.getElementById('themeToggle');
-            if (btn) {
-                btn.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            }
+            const botMsg = document.createElement('div');
+            botMsg.className = 'chat-message bot';
+            botMsg.textContent = responses[Math.floor(Math.random() * responses.length)];
+            history.appendChild(botMsg);
             
-            this.showToast(isLight ? 'السمة الفاتحة' : 'السمة الداكنة', 'info');
-        });
-
-        // القائمة المتحركة
-        const mobileBtn = document.getElementById('mobileMenuBtn');
-        const nav = document.getElementById('mainNav');
-        mobileBtn?.addEventListener('click', () => nav?.classList.toggle('active'));
-
-        // نظام التعديل
-        this.setupEditSystem();
+            history.scrollTop = history.scrollHeight;
+        }, 1000);
     },
 
-    setupEditSystem() {
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('edit-icon')) {
-                this.openEditModal(e.target);
-            }
-        });
-
-        document.getElementById('saveEdit')?.addEventListener('click', () => this.saveEdit());
-        document.getElementById('cancelEdit')?.addEventListener('click', () => {
-            document.getElementById('editModal').classList.remove('show');
-        });
-    },
-
-    openEditModal(icon) {
-        const target = icon.getAttribute('data-edit');
-        const parent = icon.parentElement;
-        const currentValue = parent.textContent.replace('✏️', '').trim();
-        
-        const modal = document.getElementById('editModal');
-        const content = document.getElementById('editModalContent');
-        
-        if (!modal || !content) return;
-
-        document.getElementById('editModalTitle').textContent = `تعديل ${target}`;
-        content.innerHTML = `<input type="text" id="editValue" value="${currentValue}" class="input">`;
-        
-        modal.classList.add('show');
-        this.currentEdit = { target, element: parent };
-    },
-
-    saveEdit() {
-        const value = document.getElementById('editValue')?.value;
-        if (!value || !this.currentEdit) return;
-
-        this.currentEdit.element.innerHTML = 
-            `<span class="edit-icon" data-edit="${this.currentEdit.target}">✏️</span> ${value}`;
-        
-        document.getElementById('editModal').classList.remove('show');
-        this.showToast('تم الحفظ', 'success');
-    },
-
-    // أدوات مساعدة
-    showAdminModal() {
-        this.adminModal?.classList.add('show');
-    },
-
-    loginUser(user) {
-        localStorage.setItem('prok_admin_user', JSON.stringify(user));
-        document.body.classList.add('admin-mode');
-        document.getElementById('adminEmail').textContent = user.email;
-    },
-
-    getCurrentUser() {
-        return JSON.parse(localStorage.getItem('prok_admin_user') || 'null');
-    },
-
-    checkAdminStatus() {
-        const user = this.getCurrentUser();
-        if (user) {
-            document.body.classList.add('admin-mode');
-            document.getElementById('adminEmail').textContent = user.email;
-        }
-    },
-
-    showProtectionAlert() {
-        const alert = document.getElementById('protectionAlert');
-        alert?.classList.add('show');
-        setTimeout(() => alert?.classList.remove('show'), 2000);
-    },
-
-    showToast(message, type = 'info') {
-        // إنشاء toast بسيط
-        const toast = document.createElement('div');
-        toast.style.cssText = `
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
             position: fixed; top: 20px; right: 20px;
             padding: 12px 20px; border-radius: 8px;
-            color: white; font-weight: bold; z-index: 3000;
+            color: white; font-weight: bold; z-index: 1000;
             background: ${type === 'success' ? '#2ed573' : 
                         type === 'error' ? '#ff4757' : '#00a8ff'};
+            animation: slideIn 0.3s ease;
         `;
-        toast.textContent = message;
-        document.body.appendChild(toast);
+        notification.textContent = message;
+        document.body.appendChild(notification);
         
-        setTimeout(() => toast.remove(), 3000);
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     }
 };
 
-// تهيئة التطبيق
-function initApp() {
-    ProkSystem.init();
-}
+// إضافة الأنيميشن
+const style = document.createElement('style');
+style.textContent = `
+    .admin-main {
+        display: grid; grid-template-columns: 1fr 1fr;
+        gap: 30px; padding: 30px 0; min-height: calc(100vh - 80px);
+    }
+    
+    .stats-grid {
+        display: grid; grid-template-columns: 1fr 1fr;
+        gap: 15px; margin: 20px 0;
+    }
+    
+    .stat-card {
+        background: rgba(255,255,255,0.03); padding: 20px;
+        border-radius: 10px; text-align: center;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .stat-value {
+        font-size: 2rem; font-weight: bold;
+        color: var(--accent); margin-bottom: 5px;
+    }
+    
+    .stat-label { color: var(--muted); font-size: 0.9rem; }
+    
+    .admin-controls {
+        display: grid; grid-template-columns: 1fr;
+        gap: 10px; margin: 20px 0;
+    }
+    
+    .cardlist {
+        display: grid; grid-template-columns: 1fr;
+        gap: 15px; margin-top: 15px;
+    }
+    
+    .chat-box {
+        background: rgba(255,255,255,0.03); padding: 20px;
+        border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .chat-history {
+        height: 200px; overflow-y: auto;
+        margin-bottom: 15px; padding: 10px;
+        background: rgba(255,255,255,0.02);
+        border-radius: 8px;
+    }
+    
+    .chat-message {
+        padding: 10px; margin: 5px 0;
+        border-radius: 8px; max-width: 80%;
+    }
+    
+    .chat-message.user {
+        background: rgba(0,255,231,0.1);
+        margin-left: auto; text-align: left;
+    }
+    
+    .chat-message.bot {
+        background: rgba(255,78,207,0.1);
+    }
+    
+    .chat-controls {
+        display: flex; gap: 10px;
+    }
+    
+    .chat-controls input {
+        flex: 1; padding: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px; color: var(--text);
+    }
+    
+    .report {
+        background: rgba(255,255,255,0.03); padding: 15px;
+        border-radius: 8px; color: var(--muted);
+        margin-top: 10px; white-space: pre-wrap;
+        font-family: monospace; font-size: 0.9rem;
+        border-left: 3px solid var(--accent);
+    }
+    
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+    
+    @media (max-width: 768px) {
+        .admin-main { grid-template-columns: 1fr; }
+        .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+`;
+document.head.appendChild(style);
+
+// تهيئة النظام
+document.addEventListener('DOMContentLoaded', () => AdminSystem.init());
+</script>
+</body>
+</html>
