@@ -1,648 +1,306 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>واجهة ذكية — Local</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prok — المتجر الذكي</title>
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0b0f1a; --card:#0f1724; --muted:#9aa4b2; --accent:#6366f1; --accent-2:#ec4899;
-      --glass: rgba(255,255,255,0.04);
-    }
-    /* Light theme */
-    :root[data-theme="light"]{
-      --bg:#f7f8fc; --card:#ffffff; --muted:#5b6673; --accent:#6d28d9; --accent-2:#db2777;
-      --glass: rgba(0,0,0,0.04);
-    }
-    /* Neon */
-    :root[data-theme="neon"]{
-      --bg:#020617; --card:linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      --muted:#9fb8ff; --accent:#07f; --accent-2:#ff1ac6; --glass: rgba(255,255,255,0.03);
-    }
-
-    *{box-sizing:border-box;font-family:'Cairo',sans-serif}
-    html,body{height:100%;margin:0;background:var(--bg);color: #e6eef8;transition:background .25s, color .25s}
-    body[data-theme="light"]{color:#0b1220}
-    .container{max-width:1100px;margin:0 auto;padding:20px}
-
-    header.topbar{background:transparent;padding:14px 0;position:sticky;top:0;z-index:90}
-    .brand{font-weight:700;font-size:20px;display:inline-flex;gap:8px;align-items:center}
-    .brand .dot{color:var(--accent);font-weight:900}
-    .topbar .container{display:flex;align-items:center;justify-content:space-between;gap:12px}
-
-    .nav{display:flex;gap:16px;align-items:center}
-    .nav a{color:inherit;text-decoration:none;padding:8px 10px;border-radius:8px}
-    .nav a:hover{background:var(--glass)}
-
-    .actions{display:flex;gap:8px;align-items:center}
-    .icon-btn{background:transparent;border:1px solid transparent;padding:8px;border-radius:8px;cursor:pointer}
-    .icon-btn:hover{background:var(--glass)}
-    .btn{background:var(--accent);color:#fff;padding:8px 12px;border-radius:10px;border:0;cursor:pointer}
-    .btn.secondary{background:transparent;border:1px solid var(--glass);color:inherit}
-
-    .hero{padding:36px 0}
-    .hero-grid{display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:center}
-    .title{font-size:34px;margin:0 0 12px}
-    .lead{color:var(--muted);margin:0 0 18px;line-height:1.6}
-    .cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;padding:10px 14px;border-radius:10px}
-    .cta.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff}
-    .cta.secondary{border:1px solid var(--glass);color:inherit;background:transparent}
-
-    .ad-card{background:var(--card);padding:8px;border-radius:10px;display:inline-block;margin-right:10px}
-    .ad-card img{display:block;border-radius:6px;max-width:100%}
-
-    .carousel{position:relative;background:var(--card);padding:12px;border-radius:12px;overflow:hidden}
-    .slides{height:260px;display:flex;align-items:center;justify-content:center}
-    .slide{min-width:100%;display:none;align-items:center;justify-content:center}
-    .slide.active{display:flex}
-    .carousel img{max-width:100%;border-radius:8px;height:240px;object-fit:cover}
-
-    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);border:0;background:var(--glass);padding:10px;border-radius:10px;cursor:pointer}
-    .carousel-btn.prev{right:12px}
-    .carousel-btn.next{left:12px}
-
-    .section-apps{padding:30px 0}
-    .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-    .apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-    .app-card{background:var(--card);padding:12px;border-radius:12px;display:flex;gap:10px;align-items:center}
-    .app-card img{width:64px;height:64px;border-radius:10px;object-fit:cover}
-    .app-meta{flex:1}
-    .app-meta h4{margin:0 0 6px}
-    .app-meta p{margin:0;color:var(--muted);font-size:13px}
-
-    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:18px}
-    .feature{background:var(--card);padding:12px;border-radius:12px}
-    .feat-icon{font-size:20px;margin-bottom:8px}
-
-    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .contact-form input,.contact-form textarea{width:100%;padding:10px;margin-bottom:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
-    .footer{padding:20px 0;margin-top:20px;border-top:1px dashed rgba(255,255,255,0.03)}
-
-    /* modals */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:120}
-    .modal.show{display:flex}
-    .modal-content{background:var(--card);padding:18px;border-radius:12px;max-width:880px;width:95%;color:inherit;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
-    .modal .input{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-
-    .editor{height:260px;width:100%;border-radius:8px;padding:10px;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg, rgba(0,0,0,0.03), rgba(255,255,255,0.01));color:inherit;white-space:pre-wrap;overflow:auto;font-family:monospace;font-size:13px}
-
-    .ai-messages{max-height:240px;overflow:auto;padding:8px;border-radius:8px;background:rgba(0,0,0,0.02);margin-bottom:8px}
-    .message{padding:8px;border-radius:8px;margin-bottom:8px}
-    .bot{background:rgba(255,255,255,0.03)}
-    .user{background:rgba(0,0,0,0.03);text-align:right}
-
-    .chip{display:inline-block;padding:6px 10px;border-radius:20px;background:var(--glass);cursor:pointer;margin:4px}
-    .small{font-size:13px;color:var(--muted)}
-
-    /* responsive */
-    @media (max-width:900px){
-      .hero-grid{grid-template-columns:1fr;gap:14px}
-      .carousel img{height:180px}
-      .contact-grid{grid-template-columns:1fr}
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body data-theme="dark">
+<body class="theme-dark">
 
+  <!-- تنبيه الحماية -->
+  <div class="protection-alert" id="protectionAlert">
+    <i class="fas fa-shield-alt"></i>
+    <div>⚠️ غير مصرح - محمي بواسطة Prok</div>
+  </div>
+
+  <!-- الرأس -->
   <header class="topbar">
     <div class="container">
-      <div class="brand" title="واجهة عامة قابلة للتعديل">
-        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);margin-left:6px"></span>
-        الواجهة الذكية
+      <div class="brand">
+        <span class="edit-icon" data-edit="logo">✏️</span>
+        Prok<span class="dot">.</span>
       </div>
+
+      <button class="mobile-menu" id="mobileMenuBtn">
+        <span></span><span></span><span></span>
+      </button>
 
       <nav class="nav" id="mainNav">
         <a href="#home">الرئيسية</a>
         <a href="#apps">التطبيقات</a>
-        <a href="#tools">الأدوات</a>
-        <a href="#contact">اتصل</a>
+        <a href="#about">عنّا</a>
+        <a href="#contact">اتصل بنا</a>
       </nav>
 
       <div class="actions">
-        <div class="chip" id="themeSwitcher">الثيم: داكن</div>
-        <button class="btn secondary" id="openAI">المساعد الذكي</button>
-        <button class="btn" id="openAdmin">لوحة الأدمن</button>
+        <div id="visitor" class="visitor-badge">
+          <i class="fas fa-users"></i> <span id="visCount">0</span>
+        </div>
+
+        <button id="themeToggle" class="icon-btn"><i class="fas fa-moon"></i></button>
+        <button id="animBtn" class="icon-btn admin-only"><i class="fas fa-palette"></i></button>
+        <button id="aiBtn" class="icon-btn admin-only"><i class="fas fa-robot"></i></button>
+        <button id="adminBtn" class="btn">لوحة الأدمن</button>
+        <button id="logoutBtn" class="btn admin-only"><i class="fas fa-sign-out-alt"></i> خروج</button>
       </div>
     </div>
   </header>
 
   <main>
-    <section id="home" class="hero container">
-      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
-        <div style="flex:1;min-width:260px">
-          <h1 class="title">واجهة قابلة للتخصيص — بدون بيانات تعريف</h1>
-          <p class="lead">واجهة عامة ذكية تستطيع تجربة التعديلات، فحص الأكواد، وتطبيق إصلاحات تلقائية — كل شيء محلي وبدون إرسال أي شيء للخارج.</p>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <a href="#apps" class="cta primary">استعرض أمثلة</a>
-            <button class="cta secondary" id="openEditorBtn">محرر الكود</button>
-            <button class="cta secondary" id="runDemo">تشغيل تجريبي</button>
+    <!-- قسم البطل -->
+    <section id="home" class="hero">
+      <span class="edit-icon" data-edit="hero">✏️</span>
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <h1 class="title">
+            <span class="edit-icon" data-edit="title">✏️</span>
+            مرحباً بك في <span class="accent">Prok</span>
+          </h1>
+
+          <p class="lead">
+            <span class="edit-icon" data-edit="lead">✏️</span>
+            منصة ذكية تتطور تلقائياً وتصحح الأخطاء بنفسها. تجربة مستخدم استثنائية مع حماية متقدمة.
+          </p>
+
+          <div class="cta-group">
+            <a href="#apps" class="cta primary">
+              <i class="fas fa-rocket"></i> استعرض التطبيقات
+            </a>
+            <a href="#about" class="cta secondary">
+              <i class="fas fa-info-circle"></i> اعرف المزيد
+            </a>
           </div>
 
-          <div style="margin-top:14px">
-            <span class="small">نصائح:</span>
-            <span class="chip" data-action="addApp">إضافة تطبيق تجريبي</span>
-            <span class="chip" data-action="clearStorage">مسح التخزين المحلي</span>
-            <span class="chip" data-action="export">تصدير الـHTML</span>
-          </div>
-        </div>
-
-        <div style="width:420px">
-          <div class="carousel" aria-hidden="false">
-            <div class="slides" id="carouselSlides">
-              <div class="slide active"><img src="https://via.placeholder.com/600x360/111827/fff?text=صورة+1" alt="صورة توضيحية"></div>
-              <div class="slide"><img src="https://via.placeholder.com/600x360/7c3aed/fff?text=صورة+2" alt="صورة توضيحية"></div>
-              <div class="slide"><img src="https://via.placeholder.com/600x360/06b6d4/fff?text=صورة+3" alt="صورة توضيحية"></div>
+          <!-- الإعلانات -->
+          <div class="ads-row">
+            <div class="ad-card">
+              <span class="edit-icon" data-edit="ad1">✏️</span>
+              <img src="https://via.placeholder.com/280x90/6366f1/fff?text=إعلان+1" alt="إعلان 1">
             </div>
-            <button class="carousel-btn prev" title="السابق">‹</button>
-            <button class="carousel-btn next" title="التالي">›</button>
+            <div class="ad-card">
+              <span class="edit-icon" data-edit="ad2">✏️</span>
+              <img src="https://via.placeholder.com/280x90/ec4899/fff?text=إعلان+2" alt="إعلان 2">
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="carousel">
+            <span class="edit-icon" data-edit="carousel">✏️</span>
+            <div class="slides" id="carouselSlides">
+              <div class="slide active">
+                <img src="https://via.placeholder.com/600x400/6366f1/fff?text=بانر+1" alt="بانر 1">
+              </div>
+              <div class="slide">
+                <img src="https://via.placeholder.com/600x400/ec4899/fff?text=بانر+2" alt="بانر 2">
+              </div>
+              <div class="slide">
+                <img src="https://via.placeholder.com/600x400/10b981/fff?text=بانر+3" alt="بانر 3">
+              </div>
+            </div>
+            <button class="carousel-btn prev"><i class="fas fa-chevron-right"></i></button>
+            <button class="carousel-btn next"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-dots" id="carouselDots"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="apps" class="section-apps container">
-      <div class="section-head">
-        <h2>أمثلة تطبيقات</h2>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn" id="addApp">إضافة</button>
-          <button class="btn secondary" id="resetApps">إعادة تعيين</button>
+    <!-- قسم التطبيقات -->
+    <section id="apps" class="section-apps">
+      <div class="container">
+        <div class="section-head">
+          <h2>
+            <span class="edit-icon" data-edit="apps-title">✏️</span>
+            <i class="fas fa-mobile-alt"></i> التطبيقات المميزة
+          </h2>
+          <button class="btn add-btn admin-only" id="addAppBtn">
+            <i class="fas fa-plus"></i> إضافة تطبيق
+          </button>
         </div>
-      </div>
-      <div class="apps-grid" id="appsGrid"></div>
-    </section>
-
-    <section id="tools" class="container" style="padding:28px 0">
-      <h2>أدوات مفيدة</h2>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:10px">
-        <div class="feature">
-          <h3>فحص الـHTML/CSS/JS</h3>
-          <p class="small">انسخ كودك أو افتح المحرر لتشغيل الفحص التلقائي. المساعد يكتشف الأخطاء الشائعة ويقترح إصلاحات قابلة للتطبيق.</p>
-        </div>
-        <div class="feature">
-          <h3>مراقبة أخطاء الجافاسكربت</h3>
-          <p class="small">أي خطأ يظهر في الـConsole سيتم التقاطه وإرساله للمساعد المحلي لاقتراح حل.</p>
-        </div>
-        <div class="feature">
-          <h3>تجارب الثيمات</h3>
-          <p class="small">انتقل بين ثلاث ثيمات: مودرن/داكن/نيون — يجري حفظ تفضيلك محلياً.</p>
-        </div>
+        <div class="apps-grid" id="appsGrid"></div>
       </div>
     </section>
 
-    <section id="contact" class="container" style="padding-bottom:80px">
-      <h2>اتصل (مزايدة مزيفة)</h2>
-      <p class="small">هذه واجهة تجريبية — لا توجد بيانات حقيقية هنا.</p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
-        <input placeholder="اسمك" class="input" id="fakeName" />
-        <input placeholder="بريد إلكتروني" class="input" id="fakeMail" />
-        <button class="btn" id="fakeSend">إرسال (محلي)</button>
+    <!-- قسم عنّا -->
+    <section id="about" class="section-about">
+      <span class="edit-icon" data-edit="about">✏️</span>
+      <div class="container">
+        <h2>
+          <span class="edit-icon" data-edit="about-title">✏️</span>
+          <i class="fas fa-info-circle"></i> عن Prok
+        </h2>
+        <p class="about-text">
+          <span class="edit-icon" data-edit="about-text">✏️</span>
+          منصة ذكية مبتكرة تجمع بين التقنية المتطورة والتصميم الحديث. نقدم حلولاً ذكية تتطور تلقائياً وتصحح الأخطاء بنفسها لتوفر تجربة مستخدم استثنائية.
+        </p>
+
+        <div class="features">
+          <div class="feature">
+            <div class="feat-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>حماية فائقة</h3>
+            <p>نظام حماية متعدد الطبقات مع مراقبة مستمرة</p>
+          </div>
+          <div class="feature">
+            <div class="feat-icon"><i class="fas fa-robot"></i></div>
+            <h3>ذكاء اصطناعي</h3>
+            <p>مساعد ذكي يصلح الأخطاء تلقائياً</p>
+          </div>
+          <div class="feature">
+            <div class="feat-icon"><i class="fas fa-bolt"></i></div>
+            <h3>سرعة عالية</h3>
+            <p>أداء محسّن مع أوقات تحميل فائقة السرعة</p>
+          </div>
+          <div class="feature">
+            <div class="feat-icon"><i class="fas fa-palette"></i></div>
+            <h3>تصميم متطور</h3>
+            <p>واجهات مستخدم جذابة وسهلة الاستخدام</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم اتصل بنا -->
+    <section id="contact" class="section-contact">
+      <div class="container">
+        <h2><i class="fas fa-envelope"></i> اتصل بنا</h2>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <h3>معلومات التواصل</h3>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>info@prok.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span>+966 123 456 789</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>الرياض، المملكة العربية السعودية</span>
+            </div>
+          </div>
+          <div class="contact-form">
+            <h3>أرسل رسالة</h3>
+            <form id="contactForm">
+              <input type="text" placeholder="الاسم الكامل" required>
+              <input type="email" placeholder="البريد الإلكتروني" required>
+              <textarea placeholder="رسالتك..." rows="5" required></textarea>
+              <button type="submit" class="cta primary">
+                <i class="fas fa-paper-plane"></i> إرسال الرسالة
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer container">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
-      <div class="small">واجهة عامة محلية — لا تحتوي معلومات تعريف</div>
-      <div class="small">© local</div>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Prok</h3>
+          <p>منصة ذكية لمستقبل أفضل</p>
+        </div>
+        <div class="footer-section">
+          <h3>روابط سريعة</h3>
+          <a href="#home">الرئيسية</a>
+          <a href="#apps">التطبيقات</a>
+          <a href="#about">عنّا</a>
+        </div>
+        <div class="footer-section">
+          <h3>التواصل</h3>
+          <a href="#contact">اتصل بنا</a>
+          <a href="#">الدعم الفني</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 Prok — جميع الحقوق محفوظة</p>
+        <div class="admin-info admin-only">
+          <span id="adminEmail"></span>
+        </div>
+      </div>
     </div>
   </footer>
 
-  <!-- Admin Modal -->
-  <div class="modal" id="adminModal" aria-hidden="true">
+  <!-- نافذة تسجيل الدخول للأدمن -->
+  <div class="modal" id="adminModal">
     <div class="modal-content">
-      <h3>تسجيل أدمن (محلي)</h3>
-      <input id="adminEmail" class="input" placeholder="بريد إلكتروني (اختياري)" />
-      <input id="adminPass" type="password" class="input" placeholder="كلمة مرور" />
-      <div style="display:flex;gap:8px;justify-content:flex-start;margin-top:10px">
-        <button class="btn" id="adminSave">حفظ محلي</button>
-        <button class="btn secondary" id="adminClose">إغلاق</button>
+      <h2><i class="fas fa-user-shield"></i> تسجيل دخول الأدمن</h2>
+      <div class="input-group">
+        <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني" class="input">
+        <input type="password" id="adminPassInput" placeholder="كلمة المرور" class="input">
       </div>
-      <p class="small" style="margin-top:8px">المصادقة محلية فقط — لا يتم إرسال شيء للخارج.</p>
+      <div class="modal-actions">
+        <button class="btn primary" id="adminLogin">
+          <i class="fas fa-sign-in-alt"></i> دخول
+        </button>
+        <button class="btn" id="adminCancel">إلغاء</button>
+      </div>
+      <button class="btn google" id="googleLogin">
+        <i class="fab fa-google"></i> تسجيل الدخول بـ Google
+      </button>
     </div>
   </div>
 
-  <!-- Editor Modal -->
-  <div class="modal" id="editorModal" aria-hidden="true">
+  <!-- نافذة التعديل -->
+  <div class="modal" id="editModal">
     <div class="modal-content">
-      <h3>محرر الكود — انسخ أو عدّل هنا</h3>
-      <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
-        <button class="btn" id="loadCurrent">تحميل واجهة الحالية</button>
-        <button class="btn secondary" id="applyCode">تطبيق الكود</button>
-        <button class="btn secondary" id="analyzeCodeBtn">فحص ذكي</button>
-        <button class="btn secondary" id="autoFixBtn">تطبيق الإصلاحات المقترحة</button>
-      </div>
-      <div id="codeEditor" class="editor" contenteditable="true" spellcheck="false">
-<!-- ضع كود HTML/CSS/JS هنا أو اضغط "تحميل واجهة الحالية" لتحرير واجهة الصفحة -->
-      </div>
-
-      <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-start">
-        <button class="btn" id="closeEditor">إغلاق</button>
+      <h2 id="editModalTitle"><i class="fas fa-edit"></i> تعديل</h2>
+      <div id="editModalContent" class="edit-content"></div>
+      <div class="modal-actions">
+        <button class="btn primary" id="saveEdit">
+          <i class="fas fa-save"></i> حفظ
+        </button>
+        <button class="btn" id="cancelEdit">إلغاء</button>
       </div>
     </div>
   </div>
 
-  <!-- AI Assistant Modal -->
-  <div class="modal" id="aiModal" aria-hidden="true">
-    <div class="modal-content" style="max-width:760px">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h3>المساعد الذكي المحلي</h3>
-        <button class="btn secondary" id="closeAI">إغلاق</button>
+  <!-- نافذة الذكاء الاصطناعي -->
+  <div class="modal ai-modal" id="aiModal">
+    <div class="modal-content">
+      <div class="ai-header">
+        <h2><i class="fas fa-robot"></i> المساعد الذكي</h2>
+        <button class="close-btn" id="aiClose"><i class="fas fa-times"></i></button>
       </div>
-
-      <div class="ai-messages" id="aiMessages" aria-live="polite">
-        <div class="message bot"><strong>المساعد:</strong> مرحباً! أنا مساعدك المحلي — أستطيع فحص كود HTML/CSS/JS، عرض الأخطاء، واقتراح إصلاحات تلقائية. ألصق كودك أو اضغط "تحميل واجهة الحالية".</div>
-      </div>
-
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <input id="aiInput" class="input" placeholder="اكتب سؤال للمساعد مثل: 'ما الأخطاء؟' أو 'حسّن الأداء'">
-        <button class="btn" id="aiSend">إرسال</button>
-      </div>
-
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="chip" data-cmd="scan">فحص سريع</button>
-        <button class="chip" data-cmd="fix">تقديم إصلاحات</button>
-        <button class="chip" data-cmd="optimize">تحسين أداء</button>
-        <button class="chip" data-cmd="errors">عرض أخطاء الجافاسكربت</button>
+      <div class="ai-body">
+        <div class="ai-messages" id="aiMessages">
+          <div class="message bot-message">
+            <div class="message-content">
+              <strong>المساعد:</strong> مرحباً! أنا مساعدك الذكي في Prok. كيف يمكنني مساعدتك اليوم؟
+            </div>
+          </div>
+        </div>
+        <div class="ai-input-group">
+          <input type="text" id="aiInput" placeholder="اكتب سؤالك هنا...">
+          <button class="btn primary" id="aiSend">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-action-btn" data-action="scan">
+            <i class="fas fa-search"></i> فحص الأخطاء
+          </button>
+          <button class="ai-action-btn" data-action="optimize">
+            <i class="fas fa-magic"></i> تحسين الأداء
+          </button>
+          <button class="ai-action-btn" data-action="analyze">
+            <i class="fas fa-chart-bar"></i> تحليل الإحصائيات
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Toast -->
-  <div id="toast" style="position:fixed;left:16px;bottom:16px;"></div>
+  <!-- حاوية الإشعارات -->
+  <div id="toastContainer"></div>
 
-  <script>
-    /*************** Starter state and utilities ***************/
-    const themeEl = document.documentElement;
-    const body = document.body;
-    const storage = window.localStorage;
-
-    // Persist theme
-    const savedTheme = storage.getItem('ui-theme') || 'dark';
-    body.setAttribute('data-theme', savedTheme);
-    updateThemeChip();
-
-    function updateThemeChip(){
-      const sw = document.getElementById('themeSwitcher');
-      if(!sw) return;
-      const t = body.getAttribute('data-theme') || 'dark';
-      sw.textContent = 'الثيم: ' + (t === 'dark' ? 'داكن' : (t === 'light' ? 'فاتح' : 'نيون'));
-    }
-
-    // Toast helper
-    function toast(msg, time=3000){
-      const t = document.getElementById('toast');
-      const el = document.createElement('div');
-      el.textContent = msg;
-      el.style.background = 'rgba(0,0,0,0.6)';
-      el.style.color = '#fff';
-      el.style.padding = '8px 12px';
-      el.style.borderRadius = '8px';
-      el.style.marginTop = '6px';
-      t.appendChild(el);
-      setTimeout(()=>{ el.remove(); }, time);
-    }
-
-    /*************** Carousel ***************/
-    (function(){
-      const slides = document.querySelectorAll('.slide');
-      let idx = 0;
-      const show = (i)=>{
-        slides.forEach((s,si)=> s.classList.toggle('active', si===i));
-      }
-      document.querySelector('.carousel-btn.prev').addEventListener('click', ()=>{ idx = (idx-1+slides.length)%slides.length; show(idx); });
-      document.querySelector('.carousel-btn.next').addEventListener('click', ()=>{ idx = (idx+1)%slides.length; show(idx); });
-      // auto rotate
-      setInterval(()=>{ idx = (idx+1)%slides.length; show(idx); }, 4500);
-    })();
-
-    /*************** Apps grid (demo content) ***************/
-    const appsGrid = document.getElementById('appsGrid');
-    function sampleApps(){
-      const saved = JSON.parse(storage.getItem('apps-demo') || 'null');
-      if(saved && saved.length) return saved;
-      return [
-        {id:uid(),title:'تطبيق تعليمي',desc:'مثال سريع لتطبيق صغير',img:'https://via.placeholder.com/120x120/7c3aed/fff?text=A'},
-        {id:uid(),title:'مُعالج صور',desc:'معالجة وتأثيرات',img:'https://via.placeholder.com/120x120/0ea5e9/fff?text=B'},
-        {id:uid(),title:'ملاحظات',desc:'تخزين محلي سريع',img:'https://via.placeholder.com/120x120/10b981/fff?text=C'}
-      ];
-    }
-    function renderApps(){
-      const list = JSON.parse(storage.getItem('apps-demo') || 'null') || sampleApps();
-      storage.setItem('apps-demo', JSON.stringify(list));
-      appsGrid.innerHTML = '';
-      list.forEach(app=>{
-        const el = document.createElement('div');
-        el.className = 'app-card';
-        el.innerHTML = \`
-          <img src="\${app.img}" alt="app">
-          <div class="app-meta">
-            <h4>\${app.title}</h4>
-            <p>\${app.desc}</p>
-          </div>
-          <div style="display:flex;gap:6px">
-            <button data-id="\${app.id}" class="btn small edit-app">تعديل</button>
-            <button data-id="\${app.id}" class="btn secondary small del-app">حذف</button>
-          </div>
-        \`;
-        appsGrid.appendChild(el);
-      });
-    }
-    function uid(){ return 'id-'+Math.random().toString(36).slice(2,9); }
-
-    document.getElementById('addApp')?.addEventListener('click', ()=>{
-      const arr = JSON.parse(storage.getItem('apps-demo')||'[]');
-      arr.push({id:uid(),title:'تطبيق جديد',desc:'وصف افتراضي',img:'https://via.placeholder.com/120x120/374151/fff?text=New'});
-      storage.setItem('apps-demo', JSON.stringify(arr));
-      renderApps(); toast('تمت إضافة تطبيق تجريبي');
-    });
-
-    document.getElementById('resetApps')?.addEventListener('click', ()=>{
-      storage.removeItem('apps-demo'); renderApps(); toast('عودة للحالة الافتراضية');
-    });
-
-    appsGrid.addEventListener('click', (e)=>{
-      if(e.target.classList.contains('del-app')){
-        const id = e.target.dataset.id;
-        let arr = JSON.parse(storage.getItem('apps-demo')||'[]');
-        arr = arr.filter(a=>a.id!==id);
-        storage.setItem('apps-demo', JSON.stringify(arr));
-        renderApps(); toast('حذف التطبيق');
-      } else if(e.target.classList.contains('edit-app')){
-        toast('خاصية التعديل السريع غير مفعّلة هنا — استخدم محرر الكود');
-      }
-    });
-
-    renderApps();
-
-    /*************** Editor modal ***************/
-    const editorModal = document.getElementById('editorModal');
-    const adminModal = document.getElementById('adminModal');
-    const aiModal = document.getElementById('aiModal');
-
-    document.getElementById('openEditorBtn')?.addEventListener('click', ()=> openEditor());
-    document.getElementById('openAdmin')?.addEventListener('click', ()=> adminModal.classList.add('show'));
-    document.getElementById('adminClose')?.addEventListener('click', ()=> adminModal.classList.remove('show'));
-    document.getElementById('openAI')?.addEventListener('click', ()=> aiModal.classList.add('show'));
-    document.getElementById('closeAI')?.addEventListener('click', ()=> aiModal.classList.remove('show'));
-
-    document.getElementById('editorModal')?.addEventListener('click', (e)=>{ if(e.target === editorModal) editorModal.classList.remove('show') });
-
-    const codeEditor = document.getElementById('codeEditor');
-
-    function openEditor(){
-      // load a snapshot of current body content (simple)
-      const snapshot = document.documentElement.outerHTML;
-      codeEditor.textContent = snapshot;
-      editorModal.classList.add('show');
-    }
-
-    document.getElementById('closeEditor')?.addEventListener('click', ()=> editorModal.classList.remove('show'));
-    document.getElementById('loadCurrent')?.addEventListener('click', ()=> {
-      const snap = document.documentElement.outerHTML;
-      codeEditor.textContent = snap;
-      toast('تم تحميل الواجهة الحالية في المحرر — انسخ/عدّل ثم اضغط "تطبيق الكود"');
-    });
-
-    document.getElementById('applyCode')?.addEventListener('click', ()=>{
-      // Danger zone: we'll replace body with user's provided HTML (but keep script safety)
-      try{
-        const text = codeEditor.textContent;
-        // simple safety: do not allow external scripts or <script src=> by removing them
-        const cleaned = text.replace(/<script[\\s\\S]*?>[\\s\\S]*?<\\/script>/gi, '');
-        // parse and replace
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(cleaned, 'text/html');
-        // keep head title/meta and style (we won't replace head to avoid breaking)
-        const newBody = doc.body;
-        if(newBody){
-          document.body.innerHTML = newBody.innerHTML;
-          // re-run some bindings after replacing body
-          reinitBindings();
-          editorModal.classList.remove('show');
-          toast('تم تطبيق الكود (تم إزالة سكربتات لأسباب أمان محلي).');
-        } else toast('تعذر تطبيق الكود — تأكد من صحة الـHTML');
-      }catch(err){
-        toast('خطأ أثناء التطبيق: ' + err.message);
-      }
-    });
-
-    // safe reinit: reattach events that we need for this page to function after body replacement
-    function reinitBindings(){
-      // theme switcher
-      document.getElementById('themeSwitcher')?.addEventListener('click', toggleTheme);
-      document.getElementById('openAI')?.addEventListener('click', ()=> aiModal.classList.add('show'));
-      document.getElementById('openAdmin')?.addEventListener('click', ()=> adminModal.classList.add('show'));
-      document.querySelectorAll('[data-action="addApp"]').forEach(el=>el.addEventListener('click', ()=> document.getElementById('addApp')?.click()));
-      document.querySelectorAll('[data-action="clearStorage"]').forEach(el=>el.addEventListener('click', ()=> { localStorage.clear(); toast('تم مسح التخزين المحلي'); }));
-    }
-
-    /*************** Theme switching ***************/
-    function toggleTheme(){
-      const current = body.getAttribute('data-theme') || 'dark';
-      const next = current === 'dark' ? 'light' : (current === 'light' ? 'neon' : 'dark');
-      body.setAttribute('data-theme', next);
-      storage.setItem('ui-theme', next);
-      updateThemeChip();
-    }
-    document.getElementById('themeSwitcher')?.addEventListener('click', toggleTheme);
-
-    /*************** Admin (local) ***************/
-    document.getElementById('adminSave')?.addEventListener('click', ()=>{
-      const email = document.getElementById('adminEmail').value || '';
-      const pass = document.getElementById('adminPass').value || '';
-      if(!pass || pass.length < 4){ toast('اختر كلمة مرور أقوى (4+ حروف)'); return; }
-      // store simple hashed (not cryptographically secure) local
-      const hash = btoa(pass.split('').reverse().join(''));
-      storage.setItem('local-admin', JSON.stringify({email,hash}));
-      adminModal.classList.remove('show');
-      toast('تم حفظ بيانات الأدمن محلياً');
-    });
-
-    /*************** Fake contact send ***************/
-    document.getElementById('fakeSend')?.addEventListener('click', ()=>{
-      const n = document.getElementById('fakeName').value || 'مجهول';
-      const m = document.getElementById('fakeMail').value || '—';
-      toast('تمت المحاكاة: ' + n + ' — ' + m);
-    });
-
-    /*************** Editor analysis / AI (local heuristic) ***************/
-    function appendAIMessage(txt, who='bot'){
-      const box = document.getElementById('aiMessages');
-      const el = document.createElement('div');
-      el.className = 'message ' + (who==='bot' ? 'bot' : 'user');
-      el.innerHTML = (who==='bot' ? '<strong>المساعد:</strong> ' : '<strong>أنت:</strong> ') + ' ' + txt;
-      box.appendChild(el);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    document.getElementById('aiSend')?.addEventListener('click', ()=>{
-      const q = document.getElementById('aiInput').value.trim();
-      if(!q) return;
-      appendAIMessage(q,'user');
-      setTimeout(()=> handleAI(q), 400);
-      document.getElementById('aiInput').value = '';
-    });
-
-    document.querySelectorAll('.chip[data-cmd]').forEach(c=>{
-      c.addEventListener('click', ()=> handleAI(c.dataset.cmd));
-    });
-
-    // Collect JS runtime errors and keep them in memory
-    const runtimeErrors = [];
-    window.addEventListener('error', (ev)=>{
-      runtimeErrors.push({msg: ev.message, file: ev.filename, line: ev.lineno, col: ev.colno});
-      // send a little toast so user notices
-      toast('حدث خطأ في الجافاسكربت — افتح المساعد لمزيد من التفاصيل');
-    });
-
-    function handleAI(cmd){
-      // Very small local "AI" that analyzes given HTML in editor or current page snapshot
-      const code = codeEditor.textContent || document.documentElement.outerHTML;
-      if(cmd === 'scan' || cmd.toLowerCase().includes('خطأ') || cmd === 'scan quick'){
-        const issues = analyzeCode(code);
-        if(issues.length===0) appendAIMessage('لا توجد أخطاء واضحة. كل شيء يبدو جيداً على مستوى الفحص السريع.');
-        else{
-          appendAIMessage('<strong>اكتشفت هذه القضايا:</strong><ul style="margin:8px 0;padding-left:16px;color:var(--muted)">' + issues.map(i=>'<li>'+escapeHTML(i.summary)+'</li>').join('') + '</ul>');
-          // also store lastIssues
-          storage.setItem('last-issues', JSON.stringify(issues));
-        }
-      } else if(cmd === 'fix' || cmd.toLowerCase().includes('إصلاح')){
-        const issues = JSON.parse(storage.getItem('last-issues') || '[]');
-        if(!issues || issues.length===0){
-          appendAIMessage('لم أجد إصلاحات محفوظة — شغّل الفحص أولاً (فحص سريع).');
-          return;
-        }
-        appendAIMessage('أقترح تطبيق إصلاحات تلقائية على المحرر. اضغط "تطبيق الإصلاحات المقترحة".');
-      } else if(cmd === 'optimize' || cmd.toLowerCase().includes('تحسين')){
-        const tips = generateOptimizationTips(code);
-        appendAIMessage('<strong>نصائح تحسين:</strong><ul style="margin:8px 0;padding-left:16px;color:var(--muted)">' + tips.map(t=>'<li>'+escapeHTML(t)+'</li>').join('') + '</ul>');
-      } else if(cmd === 'errors' || cmd.toLowerCase().includes('أخطاء')){
-        if(runtimeErrors.length===0) appendAIMessage('لا توجد أخطاء جارية تم تسجيلها في الجلسة.');
-        else appendAIMessage('<strong>أخطاء الجافاسكربت المسجلة:</strong><ul style="margin:8px 0;padding-left:16px;color:var(--muted)">' + runtimeErrors.map(e=>'<li>'+escapeHTML(e.msg+' — '+(e.file||'نافذة')+' : '+(e.line||'?'))+'</li>').join('') + '</ul>');
-      } else {
-        appendAIMessage('آسف، أمر غير معروف — جرّب "فحص سريع" أو "تحسين الأداء" أو "عرض أخطاء الجافاسكربت".');
-      }
-    }
-
-    // Analyze code heuristics
-    function analyzeCode(code){
-      const issues = [];
-      // missing alt images
-      const imgs = [...code.matchAll(/<img\\s+[^>]*>/gi)];
-      imgs.forEach(m=>{
-        if(!/\\salt=/.test(m[0])) issues.push({type:'img-alt', summary:'صورة بدون خاصية alt — أضف alt لوصف الصورة.'});
-      });
-      // inline styles
-      if(/style=/.test(code)) issues.push({type:'inline-style', summary:'وجود "style=" داخل العناصر — يفضّل نقل CSS إلى ملف أو عنصر <style>.'});
-      // console.log usage
-      if(/console\\.log\\(/.test(code)) issues.push({type:'console', summary:'يوجد console.log في الكود — ينصح إزالته للإنتاج.'});
-      // dangerous tags (e.g., <font>)
-      if(/<font\\b/i.test(code)) issues.push({type:'deprecated', summary:'استخدام وسوم قديمة مثل <font> — استخدم CSS بدلاً منها.'});
-      // missing lang attribute on html
-      if(!/^\\s*<!doctype/i.test(code)){} // ignore
-      if(!/<html[^>]*\\blang=/.test(code)) issues.push({type:'missing-lang', summary:'الوسم <html> يفتقد خاصية lang — أضف lang="ar" أو اللغة المناسبة.'});
-      // duplicate IDs
-      const ids = [...code.matchAll(/id=["']([^"']+)["']/gi)].map(m=>m[1]);
-      const dup = findDuplicates(ids);
-      if(dup.length) issues.push({type:'dup-id', summary:'معرفات مكررة: ' + dup.join(', ')});
-      // forms without labels
-      const inputs = [...code.matchAll(/<input\\b[^>]*>/gi)];
-      const labels = [...code.matchAll(/<label\\b[^>]*>/gi)];
-      if(inputs.length && labels.length===0) issues.push({type:'a11y', summary:'نماذج بدون عناصر <label> — ضع تسميات لتحسين الوصولية.'});
-      // long inline scripts
-      const scripts = [...code.matchAll(/<script[^>]*>([\\s\\S]*?)<\\/script>/gi)];
-      if(scripts.length > 0){
-        const long = scripts.some(s=>s[1].length > 400);
-        if(long) issues.push({type:'inline-script', summary:'سكربتات داخلية طويلة — قد تريد نقلها لملف خارجي.'});
-      }
-      return issues;
-    }
-    function findDuplicates(arr){ const map={}; const d=[]; arr.forEach(a=>{ map[a]=(map[a]||0)+1; if(map[a]===2) d.push(a)}); return d; }
-    function escapeHTML(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-    // Apply fixes: simple heuristics: add alt to imgs, remove console.log, remove <font>, add lang attr if missing, remove inline style attributes
-    document.getElementById('autoFixBtn')?.addEventListener('click', ()=>{
-      const code = codeEditor.textContent;
-      let fixed = code;
-      // alt
-      fixed = fixed.replace(/<img\\s+([^>]*)(?<!alt)(\\/?)>/gi, function(m, attrs, end){
-        if(/alt=/.test(attrs)) return m;
-        return '<img ' + attrs + ' alt=\\"صورة توضيحية\\"' + (end? end : '') + '>';
-      });
-      // console.log remove
-      fixed = fixed.replace(/console\\.log\\([^;]*\\);?/gi, '');
-      // font tags remove
-      fixed = fixed.replace(/<\\/?font[^>]*>/gi, '');
-      // remove inline style attributes (simple)
-      fixed = fixed.replace(/\\sstyle=(["'])(.*?)\\1/gi, '');
-      // add lang attribute to html if missing
-      if(!/\\<html[^>]*\\blang=/.test(fixed)){
-        fixed = fixed.replace(/<html(.*?)>/i, '<html$1 lang="ar">');
-      }
-      codeEditor.textContent = fixed;
-      // store last-issues as applied
-      storage.setItem('last-issues', JSON.stringify([{type:'auto-applied', summary:'تم تطبيق إصلاحات بسيطة: إضافة alt، إزالة console.log، حذف وسم <font>، إزالة style inline، إضافة lang.'}]));
-      toast('تم تطبيق إصلاحات بسيطة في المحرّر. راجع التغييرات ثم "تطبيق الكود".');
-    });
-
-    // optimization tips generator (naive)
-    function generateOptimizationTips(code){
-      const tips = [];
-      if(/<img\\s+[^>]*src=/.test(code)) tips.push('الصور: استخدم صوراً مضغوطة وصيغ WebP إن أمكن للتحميل الأسرع.');
-      if(/<link[^>]+rel=["']stylesheet/.test(code)) tips.push('نقل CSS الحرجي إلى <head> وتحميل باقي CSS بشكل غير متزامن لتحسين الأداء.');
-      if(/<script[^>]+src=/.test(code)) tips.push('استخدم defer أو async لسكربتات خارجية لتحسين وقت التحميل.');
-      if(/font-family/.test(code)) tips.push('تحميل خطوط لاحقاً أو استخدام system fonts لتقليل زمن التحميل.');
-      if(!tips.length) tips.push('لا توجد توصيات خاصة — الكود يبدو خفيفاً.');
-      return tips;
-    }
-
-    /*************** Small helpers for UI actions ***************/
-    document.querySelectorAll('[data-action]').forEach(el=>{
-      el.addEventListener('click', (e)=>{
-        const action = e.currentTarget.getAttribute('data-action');
-        if(action === 'addApp') document.getElementById('addApp')?.click();
-        else if(action === 'clearStorage'){ localStorage.clear(); toast('تم مسح التخزين'); setTimeout(()=>location.reload(),800) }
-        else if(action === 'export'){
-          const html = document.documentElement.outerHTML;
-          const blob = new Blob([html], {type:'text/html'});
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url; a.download = 'exported_page.html';
-          a.click();
-          URL.revokeObjectURL(url);
-          toast('تم إنشاء ملف التصدير');
-        }
-      })
-    });
-
-    /*************** Run demo button ***************/
-    document.getElementById('runDemo')?.addEventListener('click', ()=> {
-      // minor animation and sample change
-      const app = document.querySelector('.apps-grid .app-card:first-child .app-meta h4');
-      if(app){
-        app.textContent = 'تطبيق — تحديث تجريبي';
-        toast('تشغيل تجريبي: تم تحديث عنصر واحد');
-      } else toast('لا توجد عناصر للتحديث');
-    });
-
-    /*************** Simple keyboard shortcuts ***************/
-    window.addEventListener('keydown', (e)=>{
-      if(e.ctrlKey && e.key === 'b'){ // toggle theme
-        e.preventDefault(); toggleTheme();
-      }
-      if(e.ctrlKey && e.key === 'e'){ // open editor
-        e.preventDefault(); openEditor();
-      }
-    });
-
-    /*************** Initialize bindings (first time) ***************/
-    reinitBindings();
-    updateThemeChip();
-
-    // friendly quick guide
-    console.info('واجهة ذكية محلية — استخدم Ctrl+E لفتح المحرر، Ctrl+B لتبديل الثيم.');
-
-  </script>
+  <script src="ai-assistant.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
