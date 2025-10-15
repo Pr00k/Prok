@@ -1,367 +1,313 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prok — المنصة الذكية</title>
-  <meta name="description" content="منصة Prok الذكية - حلول تقنية متطورة تصلح الأخطاء تلقائياً">
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prok — المنصة الذكية المتطورة</title>
+    <meta name="description" content="منصة Prok الذكية - نظام يتطور تلقائياً ويصلح الأخطاء بنفسه">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="theme-dark">
 
-  <!-- تنبيه الحماية -->
-  <div class="protection-alert" id="protectionAlert">
+<!-- تنبيه الحماية -->
+<div class="protection-alert" id="protectionAlert">
     <i class="fas fa-shield-alt"></i>
     <div>غير مصرح - محمي بواسطة Prok</div>
-  </div>
+</div>
 
-  <!-- الرأس -->
-  <header class="topbar">
+<!-- الرأس -->
+<header class="topbar">
     <div class="container">
-      <div class="brand">
-        <span class="edit-icon" data-edit="logo">✏️</span>
-        Prok<span class="dot">.</span>
-      </div>
-
-      <button class="mobile-menu" id="mobileMenuBtn" aria-label="قائمة الهاتف">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav class="nav" id="mainNav">
-        <a href="#home" class="nav-link">الرئيسية</a>
-        <a href="#apps" class="nav-link">التطبيقات</a>
-        <a href="#about" class="nav-link">عنّا</a>
-        <a href="#contact" class="nav-link">اتصل بنا</a>
-      </nav>
-
-      <div class="actions">
-        <div class="visitor-badge">
-          <i class="fas fa-users"></i> <span id="visCount">0</span>
+        <div class="brand">
+            <span class="edit-icon" data-edit="logo">✏️</span>
+            Prok<span class="dot">.</span>
         </div>
-
-        <button id="themeToggle" class="icon-btn" aria-label="تبديل السمة">
-          <i class="fas fa-moon"></i>
+        
+        <button class="mobile-menu" id="mobileMenuBtn" aria-label="فتح القائمة">
+            <span></span><span></span><span></span>
         </button>
         
-        <button id="adminBtn" class="btn">لوحة الأدمن</button>
-        <button id="logoutBtn" class="btn admin-only">
-          <i class="fas fa-sign-out-alt"></i> خروج
-        </button>
-      </div>
+        <nav class="nav" id="mainNav">
+            <a href="#home" class="nav-link active">الرئيسية</a>
+            <a href="#apps" class="nav-link">التطبيقات</a>
+            <a href="#features" class="nav-link">المميزات</a>
+            <a href="#about" class="nav-link">عنّا</a>
+        </nav>
+        
+        <div class="actions">
+            <div class="visitor-badge" title="عدد الزوار">
+                <i class="fas fa-users"></i> <span id="visCount">0</span>
+            </div>
+            
+            <button id="themeToggle" class="icon-btn" aria-label="تبديل السمة">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button id="adminBtn" class="btn">لوحة التحكم</button>
+            <button id="logoutBtn" class="btn admin-only" title="تسجيل الخروج">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
     </div>
-  </header>
+</header>
 
-  <main>
+<main>
     <!-- قسم البطل -->
     <section id="home" class="hero">
-      <div class="container hero-grid">
-        <div class="hero-left">
-          <h1 class="title">
-            <span class="edit-icon" data-edit="title">✏️</span>
-            منصة <span class="accent">Prok</span> الذكية
-          </h1>
+        <div class="container hero-grid">
+            <div class="hero-left">
+                <h1 class="title">
+                    <span class="edit-icon" data-edit="title">✏️</span>
+                    <span class="accent">Prok</span> .. حيث الذكاء يلتقي بالإبداع
+                </h1>
+                
+                <p class="lead">
+                    <span class="edit-icon" data-edit="lead">✏️</span>
+                    منصة ذكية تتعلم من أخطائها وتطور نفسها تلقائياً. وفر وقتك ودع التقنية تعمل لأجلك.
+                </p>
+                
+                <div class="cta-group">
+                    <a href="#apps" class="cta primary">
+                        <i class="fas fa-rocket"></i> ابدأ الرحلة
+                    </a>
+                    <a href="#features" class="cta secondary">
+                        <i class="fas fa-play-circle"></i> شاهد العرض
+                    </a>
+                </div>
 
-          <p class="lead">
-            <span class="edit-icon" data-edit="lead">✏️</span>
-            نظام ذكي يتطور تلقائياً ويصلح الأخطاء بنفسه. وفر وقتك وركز على إبداعك.
-          </p>
-
-          <div class="cta-group">
-            <a href="#apps" class="cta primary">
-              <i class="fas fa-rocket"></i> اكتشف التطبيقات
-            </a>
-            <a href="#about" class="cta secondary">
-              <i class="fas fa-play-circle"></i> شاهد العرض
-            </a>
-          </div>
-
-          <!-- إحصائيات -->
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-number" data-count="500">0</div>
-              <div class="stat-label">تطبيق نشط</div>
+                <!-- إحصائيات سريعة -->
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number" data-count="250">0</div>
+                        <div class="stat-label">تطبيق ذكي</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" data-count="50">0</div>
+                        <div class="stat-label">ألف مستخدم</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" data-count="99">0</div>
+                        <div class="stat-label">% رضا</div>
+                    </div>
+                </div>
             </div>
-            <div class="stat">
-              <div class="stat-number" data-count="50">0</div>
-              <div class="stat-label">ألف مستخدم</div>
+            
+            <div class="hero-right">
+                <div class="carousel">
+                    <div class="slides" id="carouselSlides">
+                        <div class="slide active">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" alt="واجهة Prok الذكية">
+                            <div class="slide-overlay">
+                                <h3>نظام يتعلم ذاتياً</h3>
+                                <p>يتطور مع كل استخدام لتحسين تجربتك</p>
+                            </div>
+                        </div>
+                        <div class="slide">
+                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=400&fit=crop" alt="حماية متقدمة">
+                            <div class="slide-overlay">
+                                <h3>حماية استثنائية</h3>
+                                <p>أمان متعدد الطبقات يحمي بياناتك</p>
+                            </div>
+                        </div>
+                        <div class="slide">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&h=400&fit=crop" alt="أداء فائق">
+                            <div class="slide-overlay">
+                                <h3>أداء فائق السرعة</h3>
+                                <p>تجربة مستخدم سلسة وسريعة</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-btn prev" aria-label="الشريحة السابقة">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="carousel-btn next" aria-label="الشريحة التالية">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="carousel-dots" id="carouselDots"></div>
+                </div>
             </div>
-            <div class="stat">
-              <div class="stat-number" data-count="99">0</div>
-              <div class="stat-label">% رضا</div>
-            </div>
-          </div>
         </div>
-
-        <div class="hero-right">
-          <div class="carousel">
-            <div class="slides" id="carouselSlides">
-              <div class="slide active">
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" alt="واجهة Prok الذكية">
-                <div class="slide-content">
-                  <h3>ذكاء اصطناعي متقدم</h3>
-                  <p>يتعلم النظام من أخطائه ويطور نفسه تلقائياً</p>
-                </div>
-              </div>
-              <div class="slide">
-                <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=400&fit=crop" alt="حماية متقدمة">
-                <div class="slide-content">
-                  <h3>حماية شاملة</h3>
-                  <p>نظام أمان متعدد الطبقات يحمي بياناتك</p>
-                </div>
-              </div>
-              <div class="slide">
-                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&h=400&fit=crop" alt="أداء عالي">
-                <div class="slide-content">
-                  <h3>أداء فائق</h3>
-                  <p>سرعة تحميل فائقة وتجربة مستخدم سلسة</p>
-                </div>
-              </div>
-            </div>
-            <button class="carousel-btn prev" aria-label="الشريحة السابقة">
-              <i class="fas fa-chevron-right"></i>
-            </button>
-            <button class="carousel-btn next" aria-label="الشريحة التالية">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <div class="carousel-dots" id="carouselDots"></div>
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- قسم التطبيقات -->
     <section id="apps" class="section-apps">
-      <div class="container">
-        <div class="section-head">
-          <h2>
-            <i class="fas fa-cube"></i> تطبيقاتنا المميزة
-          </h2>
-          <p class="section-subtitle">اكتشف مجموعة التطبيقات الذكية المصممة لتحسين إنتاجيتك</p>
+        <div class="container">
+            <div class="section-head">
+                <div class="section-title">
+                    <h2><i class="fas fa-cubes"></i> تطبيقاتنا الذكية</h2>
+                    <p class="section-subtitle">اكتشف مجموعة التطبيقات المصممة لتحسين إنتاجيتك وتبسيط عملك</p>
+                </div>
+                <button class="btn primary admin-only" id="addAppBtn">
+                    <i class="fas fa-plus"></i> تطبيق جديد
+                </button>
+            </div>
+            <div class="apps-grid" id="appsGrid">
+                <!-- التطبيقات تُحمّل ديناميكياً -->
+            </div>
         </div>
-        <div class="apps-grid" id="appsGrid">
-          <!-- التطبيقات تُحمّل ديناميكياً -->
-        </div>
-        <div class="section-footer">
-          <button class="btn primary admin-only" id="addAppBtn">
-            <i class="fas fa-plus"></i> إضافة تطبيق جديد
-          </button>
-        </div>
-      </div>
     </section>
 
-    <!-- قسم الميزات -->
+    <!-- قسم المميزات -->
     <section id="features" class="section-features">
-      <div class="container">
-        <h2><i class="fas fa-star"></i> لماذا تختار Prok؟</h2>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">
-              <i class="fas fa-brain"></i>
+        <div class="container">
+            <div class="section-head">
+                <h2><i class="fas fa-star"></i> مميزات Prok الاستثنائية</h2>
+                <p class="section-subtitle">لماذا نختلف عن الآخرين؟</p>
             </div>
-            <h3>ذكاء تلقائي</h3>
-            <p>يتعلم النظام من استخدامك ويطور نفسه تلقائياً دون تدخل</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">
-              <i class="fas fa-shield-alt"></i>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>ذكاء تلقائي</h3>
+                    <p>يتعلم النظام من استخدامك ويطور نفسه تلقائياً دون حاجة للتدخل البشري</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>حماية متقدمة</h3>
+                    <p>نظام أمان متعدد الطبقات مع تشفير متقدم يحمي بياناتك من أي تهديد</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>سرعة فائقة</h3>
+                    <p>أداء محسن مع أوقات تحميل لا تتجاوز الثواني لتجربة مستخدم استثنائية</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>تحديث تلقائي</h3>
+                    <p>جميع التحديثات والتطويرات تتم تلقائياً في الخلفية دون انقطاع الخدمة</p>
+                </div>
             </div>
-            <h3>حماية متقدمة</h3>
-            <p>نظام أمان متعدد الطبقات مع تشفير متقدم للبيانات</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">
-              <i class="fas fa-bolt"></i>
-            </div>
-            <h3>سرعة فائقة</h3>
-            <p>أداء محسن مع أوقات تحميل لا تتجاوز الثواني</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">
-              <i class="fas fa-sync-alt"></i>
-            </div>
-            <h3>تحديث تلقائي</h3>
-            <p>جميع التحديثات والتطويرات تتم تلقائياً في الخلفية</p>
-          </div>
         </div>
-      </div>
     </section>
 
     <!-- قسم عنّا -->
     <section id="about" class="section-about">
-      <div class="container">
-        <div class="about-grid">
-          <div class="about-content">
-            <h2><i class="fas fa-info-circle"></i> عن منصة Prok</h2>
-            <p class="about-text">
-              نقدم حلاً تقنياً متكاملاً يجمع بين الذكاء الاصطناعي والتطوير التلقائي. 
-              نظامنا يتعلم من الأخطاء ويطور نفسه باستمرار لتقديم أفضل تجربة مستخدم.
-            </p>
-            <div class="about-stats">
-              <div class="about-stat">
-                <div class="stat-value">+3</div>
-                <div class="stat-label">سنوات من التطوير</div>
-              </div>
-              <div class="about-stat">
-                <div class="stat-value">24/7</div>
-                <div class="stat-label">دعم فني</div>
-              </div>
-              <div class="about-stat">
-                <div class="stat-value">99.9%</div>
-                <div class="stat-label">وقت تشغيل</div>
-              </div>
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <h2><i class="fas fa-info-circle"></i> قصة Prok</h2>
+                    <p class="about-text">
+                        نبدأ من حيث ينتهي الآخرون. في Prok، نؤمن بأن التقنية يجب أن تعمل لأجلك، وليس العكس. 
+                        منصة ذكية تجمع بين أحدث تقنيات الذكاء الاصطناعي وتجربة المستخدم الاستثنائية.
+                    </p>
+                    <div class="about-stats">
+                        <div class="about-stat">
+                            <div class="stat-value">+3</div>
+                            <div class="stat-label">سنوات خبرة</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="stat-value">24/7</div>
+                            <div class="stat-label">دعم فني</div>
+                        </div>
+                        <div class="about-stat">
+                            <div class="stat-value">99.9%</div>
+                            <div class="stat-label">وقت تشغيل</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="tech-stack">
+                        <div class="tech-item">
+                            <i class="fab fa-js"></i>
+                            <span>JavaScript ES6+</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fab fa-python"></i>
+                            <span>Python AI</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-database"></i>
+                            <span>قواعد بيانات</span>
+                        </div>
+                        <div class="tech-item">
+                            <i class="fas fa-cloud"></i>
+                            <span>سحابة آمنة</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="about-visual">
-            <div class="visual-card">
-              <i class="fas fa-code"></i>
-              <h4>تطوير ذكي</h4>
-              <p>أنظمة تتطور تلقائياً مع كل استخدام</p>
-            </div>
-            <div class="visual-card">
-              <i class="fas fa-chart-line"></i>
-              <h4>تحليل متقدم</h4>
-              <p>تقارير ذكية تساعد في اتخاذ القرارات</p>
-            </div>
-          </div>
         </div>
-      </div>
     </section>
+</main>
 
-    <!-- قسم اتصل بنا -->
-    <section id="contact" class="section-contact">
-      <div class="container">
-        <h2><i class="fas fa-envelope"></i> تواصل معنا</h2>
-        <div class="contact-grid">
-          <div class="contact-info">
-            <h3>معلومات التواصل</h3>
-            <div class="contact-item">
-              <i class="fas fa-envelope"></i>
-              <div>
-                <strong>البريد الإلكتروني</strong>
-                <span>info@prok.com</span>
-              </div>
-            </div>
-            <div class="contact-item">
-              <i class="fas fa-phone"></i>
-              <div>
-                <strong>الهاتف</strong>
-                <span>+966 123 456 789</span>
-              </div>
-            </div>
-            <div class="contact-item">
-              <i class="fas fa-map-marker-alt"></i>
-              <div>
-                <strong>العنوان</strong>
-                <span>الرياض، المملكة العربية السعودية</span>
-              </div>
-            </div>
-          </div>
-          <div class="contact-form">
-            <h3>أرسل رسالة</h3>
-            <form id="contactForm">
-              <div class="form-group">
-                <input type="text" placeholder="الاسم الكامل" required>
-              </div>
-              <div class="form-group">
-                <input type="email" placeholder="البريد الإلكتروني" required>
-              </div>
-              <div class="form-group">
-                <textarea placeholder="رسالتك..." rows="5" required></textarea>
-              </div>
-              <button type="submit" class="cta primary">
-                <i class="fas fa-paper-plane"></i> إرسال الرسالة
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- الفوتر -->
-  <footer class="footer">
+<footer class="footer">
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>Prok</h3>
-          <p>منصة ذكية لمستقبل رقمي أفضل</p>
-          <div class="social-links">
-            <a href="#" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
-            <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
-            <a href="#" aria-label="لينكدإن"><i class="fab fa-linkedin"></i></a>
-          </div>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Prok</h3>
+                <p>منصة ذكية لمستقبل رقمي أفضل</p>
+                <div class="social-links">
+                    <a href="#" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-labelفيسبوك"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="لينكدإن"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>اكتشف</h3>
+                <a href="#home">الرئيسية</a>
+                <a href="#apps">التطبيقات</a>
+                <a href="#features">المميزات</a>
+                <a href="#about">عنّا</a>
+            </div>
+            <div class="footer-section">
+                <h3>الدعم</h3>
+                <a href="#">المساعدة</a>
+                <a href="#">الشروط</a>
+                <a href="#">الخصوصية</a>
+            </div>
         </div>
-        <div class="footer-section">
-          <h3>الروابط</h3>
-          <a href="#home">الرئيسية</a>
-          <a href="#apps">التطبيقات</a>
-          <a href="#about">عنّا</a>
-          <a href="#contact">اتصل بنا</a>
+        <div class="footer-bottom">
+            <p>© 2024 Prok. جميع الحقوق محفوظة</p>
+            <div class="admin-info admin-only">
+                <span id="adminEmail"></span>
+            </div>
         </div>
-        <div class="footer-section">
-          <h3>الدعم</h3>
-          <a href="#">الأسئلة الشائعة</a>
-          <a href="#">الشروط والأحكام</a>
-          <a href="#">سياسة الخصوصية</a>
-        </div>
-        <div class="footer-section">
-          <h3>التحديثات</h3>
-          <p>اشترك لتصلك آخر التحديثات</p>
-          <div class="newsletter">
-            <input type="email" placeholder="بريدك الإلكتروني">
-            <button class="btn primary">اشتراك</button>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>© 2024 Prok. جميع الحقوق محفوظة</p>
-        <div class="admin-info admin-only">
-          <span id="adminEmail"></span>
-        </div>
-      </div>
     </div>
-  </footer>
+</footer>
 
-  <!-- النوافذ المنبثقة -->
-  <div class="modal" id="adminModal">
+<!-- النوافذ المنبثقة -->
+<div class="modal" id="adminModal">
     <div class="modal-content">
-      <h2><i class="fas fa-user-shield"></i> تسجيل الدخول</h2>
-      <div class="input-group">
-        <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني" class="input" required>
-        <input type="password" id="adminPassInput" placeholder="كلمة المرور" class="input" required>
-      </div>
-      <div class="modal-actions">
-        <button class="btn primary" id="adminLogin">
-          <i class="fas fa-sign-in-alt"></i> دخول
-        </button>
-        <button class="btn" id="adminCancel">إلغاء</button>
-      </div>
+        <h2><i class="fas fa-user-shield"></i> دخول المدير</h2>
+        <div class="input-group">
+            <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني" class="input" required>
+            <input type="password" id="adminPassInput" placeholder="كلمة المرور" class="input" required>
+        </div>
+        <div class="modal-actions">
+            <button class="btn primary" id="adminLogin">
+                <i class="fas fa-sign-in-alt"></i> دخول
+            </button>
+            <button class="btn" id="adminCancel">إلغاء</button>
+        </div>
     </div>
-  </div>
+</div>
 
-  <div class="modal" id="editModal">
+<div class="modal" id="editModal">
     <div class="modal-content">
-      <h2 id="editModalTitle"><i class="fas fa-edit"></i> تعديل المحتوى</h2>
-      <div id="editModalContent" class="edit-content"></div>
-      <div class="modal-actions">
-        <button class="btn primary" id="saveEdit">
-          <i class="fas fa-save"></i> حفظ
-        </button>
-        <button class="btn" id="cancelEdit">إلغاء</button>
-      </div>
+        <h2 id="editModalTitle"><i class="fas fa-edit"></i> تعديل المحتوى</h2>
+        <div id="editModalContent" class="edit-content"></div>
+        <div class="modal-actions">
+            <button class="btn primary" id="saveEdit">
+                <i class="fas fa-save"></i> حفظ
+            </button>
+            <button class="btn" id="cancelEdit">إلغاء</button>
+        </div>
     </div>
-  </div>
+</div>
 
-  <!-- حاوية الإشعارات -->
-  <div id="toastContainer"></div>
-
-  <!-- زر العودة للأعلى -->
-  <button id="scrollToTop" class="scroll-top" aria-label="العودة للأعلى">
+<!-- زر العودة للأعلى -->
+<button id="scrollToTop" class="scroll-top" aria-label="العودة للأعلى">
     <i class="fas fa-chevron-up"></i>
-  </button>
+</button>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
