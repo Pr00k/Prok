@@ -1,306 +1,1286 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prok — المتجر الذكي</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="theme-dark">
+/* ===== Prok System - Modern CSS ===== */
+:root {
+  /* الألوان الأساسية */
+  --bg: #041021;
+  --bg2: #062934;
+  --card: #0d2630;
+  --accent: #00ffe7;
+  --accent2: #ff4ecf;
+  --muted: #99c9c9;
+  --text: #eafbf9;
+  
+  /* ألوان الحالة */
+  --danger: #ff4757;
+  --success: #2ed573;
+  --warning: #ffa502;
+  --info: #00a8ff;
+  
+  /* الظلال */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.2);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.3);
+  
+  /* الأنيميشن */
+  --transition: all 0.3s ease;
+  --transition-slow: all 0.5s ease;
+}
 
-  <!-- تنبيه الحماية -->
-  <div class="protection-alert" id="protectionAlert">
-    <i class="fas fa-shield-alt"></i>
-    <div>⚠️ غير مصرح - محمي بواسطة Prok</div>
-  </div>
+/* ===== RESET & BASE ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  <!-- الرأس -->
-  <header class="topbar">
-    <div class="container">
-      <div class="brand">
-        <span class="edit-icon" data-edit="logo">✏️</span>
-        Prok<span class="dot">.</span>
-      </div>
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
 
-      <button class="mobile-menu" id="mobileMenuBtn">
-        <span></span><span></span><span></span>
-      </button>
+body {
+  font-family: 'Cairo', sans-serif;
+  background: linear-gradient(135deg, var(--bg), var(--bg2));
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
 
-      <nav class="nav" id="mainNav">
-        <a href="#home">الرئيسية</a>
-        <a href="#apps">التطبيقات</a>
-        <a href="#about">عنّا</a>
-        <a href="#contact">اتصل بنا</a>
-      </nav>
+/* ===== THEMES ===== */
+body.theme-light {
+  --bg: #f8fafc;
+  --bg2: #e2e8f0;
+  --card: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+}
 
-      <div class="actions">
-        <div id="visitor" class="visitor-badge">
-          <i class="fas fa-users"></i> <span id="visCount">0</span>
-        </div>
+/* ===== LAYOUT ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
 
-        <button id="themeToggle" class="icon-btn"><i class="fas fa-moon"></i></button>
-        <button id="animBtn" class="icon-btn admin-only"><i class="fas fa-palette"></i></button>
-        <button id="aiBtn" class="icon-btn admin-only"><i class="fas fa-robot"></i></button>
-        <button id="adminBtn" class="btn">لوحة الأدمن</button>
-        <button id="logoutBtn" class="btn admin-only"><i class="fas fa-sign-out-alt"></i> خروج</button>
-      </div>
-    </div>
-  </header>
+/* ===== PROTECTION ===== */
+.protection-alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--danger);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 900;
+  text-align: center;
+  backdrop-filter: blur(20px);
+}
 
-  <main>
-    <!-- قسم البطل -->
-    <section id="home" class="hero">
-      <span class="edit-icon" data-edit="hero">✏️</span>
-      <div class="container hero-grid">
-        <div class="hero-left">
-          <h1 class="title">
-            <span class="edit-icon" data-edit="title">✏️</span>
-            مرحباً بك في <span class="accent">Prok</span>
-          </h1>
+.protection-alert.show {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
 
-          <p class="lead">
-            <span class="edit-icon" data-edit="lead">✏️</span>
-            منصة ذكية تتطور تلقائياً وتصحح الأخطاء بنفسها. تجربة مستخدم استثنائية مع حماية متقدمة.
-          </p>
+.protection-alert i {
+  font-size: clamp(3rem, 8vw, 5rem);
+  margin-bottom: 2rem;
+  animation: pulse 2s infinite;
+}
 
-          <div class="cta-group">
-            <a href="#apps" class="cta primary">
-              <i class="fas fa-rocket"></i> استعرض التطبيقات
-            </a>
-            <a href="#about" class="cta secondary">
-              <i class="fas fa-info-circle"></i> اعرف المزيد
-            </a>
-          </div>
+/* ===== HEADER ===== */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: var(--transition);
+}
 
-          <!-- الإعلانات -->
-          <div class="ads-row">
-            <div class="ad-card">
-              <span class="edit-icon" data-edit="ad1">✏️</span>
-              <img src="https://via.placeholder.com/280x90/6366f1/fff?text=إعلان+1" alt="إعلان 1">
-            </div>
-            <div class="ad-card">
-              <span class="edit-icon" data-edit="ad2">✏️</span>
-              <img src="https://via.placeholder.com/280x90/ec4899/fff?text=إعلان+2" alt="إعلان 2">
-            </div>
-          </div>
-        </div>
+.topbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
 
-        <div class="hero-right">
-          <div class="carousel">
-            <span class="edit-icon" data-edit="carousel">✏️</span>
-            <div class="slides" id="carouselSlides">
-              <div class="slide active">
-                <img src="https://via.placeholder.com/600x400/6366f1/fff?text=بانر+1" alt="بانر 1">
-              </div>
-              <div class="slide">
-                <img src="https://via.placeholder.com/600x400/ec4899/fff?text=بانر+2" alt="بانر 2">
-              </div>
-              <div class="slide">
-                <img src="https://via.placeholder.com/600x400/10b981/fff?text=بانر+3" alt="بانر 3">
-              </div>
-            </div>
-            <button class="carousel-btn prev"><i class="fas fa-chevron-right"></i></button>
-            <button class="carousel-btn next"><i class="fas fa-chevron-left"></i></button>
-            <div class="carousel-dots" id="carouselDots"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+.brand {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 900;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
-    <!-- قسم التطبيقات -->
-    <section id="apps" class="section-apps">
-      <div class="container">
-        <div class="section-head">
-          <h2>
-            <span class="edit-icon" data-edit="apps-title">✏️</span>
-            <i class="fas fa-mobile-alt"></i> التطبيقات المميزة
-          </h2>
-          <button class="btn add-btn admin-only" id="addAppBtn">
-            <i class="fas fa-plus"></i> إضافة تطبيق
-          </button>
-        </div>
-        <div class="apps-grid" id="appsGrid"></div>
-      </div>
-    </section>
+.brand .dot {
+  color: var(--accent2);
+  animation: bounce 2s infinite;
+}
 
-    <!-- قسم عنّا -->
-    <section id="about" class="section-about">
-      <span class="edit-icon" data-edit="about">✏️</span>
-      <div class="container">
-        <h2>
-          <span class="edit-icon" data-edit="about-title">✏️</span>
-          <i class="fas fa-info-circle"></i> عن Prok
-        </h2>
-        <p class="about-text">
-          <span class="edit-icon" data-edit="about-text">✏️</span>
-          منصة ذكية مبتكرة تجمع بين التقنية المتطورة والتصميم الحديث. نقدم حلولاً ذكية تتطور تلقائياً وتصحح الأخطاء بنفسها لتوفر تجربة مستخدم استثنائية.
-        </p>
+/* ===== NAVIGATION ===== */
+.nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
 
-        <div class="features">
-          <div class="feature">
-            <div class="feat-icon"><i class="fas fa-shield-alt"></i></div>
-            <h3>حماية فائقة</h3>
-            <p>نظام حماية متعدد الطبقات مع مراقبة مستمرة</p>
-          </div>
-          <div class="feature">
-            <div class="feat-icon"><i class="fas fa-robot"></i></div>
-            <h3>ذكاء اصطناعي</h3>
-            <p>مساعد ذكي يصلح الأخطاء تلقائياً</p>
-          </div>
-          <div class="feature">
-            <div class="feat-icon"><i class="fas fa-bolt"></i></div>
-            <h3>سرعة عالية</h3>
-            <p>أداء محسّن مع أوقات تحميل فائقة السرعة</p>
-          </div>
-          <div class="feature">
-            <div class="feat-icon"><i class="fas fa-palette"></i></div>
-            <h3>تصميم متطور</h3>
-            <p>واجهات مستخدم جذابة وسهلة الاستخدام</p>
-          </div>
-        </div>
-      </div>
-    </section>
+.nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
 
-    <!-- قسم اتصل بنا -->
-    <section id="contact" class="section-contact">
-      <div class="container">
-        <h2><i class="fas fa-envelope"></i> اتصل بنا</h2>
-        <div class="contact-grid">
-          <div class="contact-info">
-            <h3>معلومات التواصل</h3>
-            <div class="contact-item">
-              <i class="fas fa-envelope"></i>
-              <span>info@prok.com</span>
-            </div>
-            <div class="contact-item">
-              <i class="fas fa-phone"></i>
-              <span>+966 123 456 789</span>
-            </div>
-            <div class="contact-item">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>الرياض، المملكة العربية السعودية</span>
-            </div>
-          </div>
-          <div class="contact-form">
-            <h3>أرسل رسالة</h3>
-            <form id="contactForm">
-              <input type="text" placeholder="الاسم الكامل" required>
-              <input type="email" placeholder="البريد الإلكتروني" required>
-              <textarea placeholder="رسالتك..." rows="5" required></textarea>
-              <button type="submit" class="cta primary">
-                <i class="fas fa-paper-plane"></i> إرسال الرسالة
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+.nav a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: var(--transition-slow);
+}
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>Prok</h3>
-          <p>منصة ذكية لمستقبل أفضل</p>
-        </div>
-        <div class="footer-section">
-          <h3>روابط سريعة</h3>
-          <a href="#home">الرئيسية</a>
-          <a href="#apps">التطبيقات</a>
-          <a href="#about">عنّا</a>
-        </div>
-        <div class="footer-section">
-          <h3>التواصل</h3>
-          <a href="#contact">اتصل بنا</a>
-          <a href="#">الدعم الفني</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>© 2024 Prok — جميع الحقوق محفوظة</p>
-        <div class="admin-info admin-only">
-          <span id="adminEmail"></span>
-        </div>
-      </div>
-    </div>
-  </footer>
+.nav a:hover::before {
+  left: 100%;
+}
 
-  <!-- نافذة تسجيل الدخول للأدمن -->
-  <div class="modal" id="adminModal">
-    <div class="modal-content">
-      <h2><i class="fas fa-user-shield"></i> تسجيل دخول الأدمن</h2>
-      <div class="input-group">
-        <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني" class="input">
-        <input type="password" id="adminPassInput" placeholder="كلمة المرور" class="input">
-      </div>
-      <div class="modal-actions">
-        <button class="btn primary" id="adminLogin">
-          <i class="fas fa-sign-in-alt"></i> دخول
-        </button>
-        <button class="btn" id="adminCancel">إلغاء</button>
-      </div>
-      <button class="btn google" id="googleLogin">
-        <i class="fab fa-google"></i> تسجيل الدخول بـ Google
-      </button>
-    </div>
-  </div>
+.nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
 
-  <!-- نافذة التعديل -->
-  <div class="modal" id="editModal">
-    <div class="modal-content">
-      <h2 id="editModalTitle"><i class="fas fa-edit"></i> تعديل</h2>
-      <div id="editModalContent" class="edit-content"></div>
-      <div class="modal-actions">
-        <button class="btn primary" id="saveEdit">
-          <i class="fas fa-save"></i> حفظ
-        </button>
-        <button class="btn" id="cancelEdit">إلغاء</button>
-      </div>
-    </div>
-  </div>
+/* ===== ACTIONS ===== */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
 
-  <!-- نافذة الذكاء الاصطناعي -->
-  <div class="modal ai-modal" id="aiModal">
-    <div class="modal-content">
-      <div class="ai-header">
-        <h2><i class="fas fa-robot"></i> المساعد الذكي</h2>
-        <button class="close-btn" id="aiClose"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="ai-body">
-        <div class="ai-messages" id="aiMessages">
-          <div class="message bot-message">
-            <div class="message-content">
-              <strong>المساعد:</strong> مرحباً! أنا مساعدك الذكي في Prok. كيف يمكنني مساعدتك اليوم؟
-            </div>
-          </div>
-        </div>
-        <div class="ai-input-group">
-          <input type="text" id="aiInput" placeholder="اكتب سؤالك هنا...">
-          <button class="btn primary" id="aiSend">
-            <i class="fas fa-paper-plane"></i>
-          </button>
-        </div>
-        <div class="ai-actions">
-          <button class="ai-action-btn" data-action="scan">
-            <i class="fas fa-search"></i> فحص الأخطاء
-          </button>
-          <button class="ai-action-btn" data-action="optimize">
-            <i class="fas fa-magic"></i> تحسين الأداء
-          </button>
-          <button class="ai-action-btn" data-action="analyze">
-            <i class="fas fa-chart-bar"></i> تحليل الإحصائيات
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+.visitor-badge {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  padding: 0.75rem 1.25rem;
+  border-radius: 50px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-md);
+  animation: glow 2s ease-in-out infinite alternate;
+}
 
-  <!-- حاوية الإشعارات -->
-  <div id="toastContainer"></div>
+/* ===== BUTTONS ===== */
+.btn, .icon-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 1rem;
+}
 
-  <script src="ai-assistant.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+.btn:hover, .icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #012;
+  border: none;
+}
+
+.btn.primary:hover {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  transform: translateY(-2px) scale(1.05);
+}
+
+.btn.danger {
+  background: var(--danger);
+  color: white;
+  border: none;
+}
+
+.btn.success {
+  background: var(--success);
+  color: white;
+  border: none;
+}
+
+.btn.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* ===== MOBILE MENU ===== */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1001;
+}
+
+.mobile-menu span {
+  width: 25px;
+  height: 3px;
+  background: var(--text);
+  transition: var(--transition);
+  border-radius: 2px;
+}
+
+.mobile-menu.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+  margin-top: 80px;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  padding: clamp(4rem, 10vw, 8rem) 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.1;
+  animation: float 6s ease-in-out infinite;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-left {
+  padding-right: 2rem;
+}
+
+.title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: slideInLeft 1s ease;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.lead {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: var(--muted);
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
+  animation: slideInLeft 1s ease 0.2s both;
+}
+
+.cta-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  animation: slideInLeft 1s ease 0.4s both;
+}
+
+.cta {
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.cta.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #012;
+  box-shadow: var(--shadow-md);
+}
+
+.cta.secondary {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+}
+
+.cta:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+.cta.secondary:hover {
+  background: var(--accent);
+  color: #012;
+}
+
+/* ===== CAROUSEL ===== */
+.carousel {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  animation: slideInRight 1s ease;
+}
+
+.slides {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.slide {
+  min-width: 100%;
+  display: none;
+  position: relative;
+}
+
+.slide.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+.slide img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: var(--transition);
+  z-index: 2;
+}
+
+.carousel-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-btn.prev {
+  right: 20px;
+}
+
+.carousel-btn.next {
+  left: 20px;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 2;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.carousel-dot.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+/* ===== SECTIONS ===== */
+.section-apps, .section-about, .section-contact {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.section-head h2 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ===== APPS GRID ===== */
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.app-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: var(--transition);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.app-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 255, 231, 0.3);
+  box-shadow: var(--shadow-lg);
+}
+
+.app-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.app-card:hover img {
+  transform: scale(1.05);
+}
+
+.app-info {
+  padding: 1.5rem;
+}
+
+.app-info h3 {
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  font-size: 1.3rem;
+}
+
+.app-info p {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.app-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.app-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.app-btn.download {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #012;
+}
+
+.app-btn.delete {
+  background: var(--danger);
+  color: white;
+}
+
+.app-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== FEATURES ===== */
+.about-text {
+  font-size: 1.2rem;
+  color: var(--muted);
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  line-height: 1.8;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.feature {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  text-align: center;
+  transition: var(--transition);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,255,231,0.1), transparent);
+  transition: var(--transition-slow);
+}
+
+.feature:hover::before {
+  left: 100%;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 255, 231, 0.3);
+  box-shadow: var(--shadow-lg);
+}
+
+.feat-icon {
+  font-size: 3rem;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  animation: bounce 2s infinite;
+}
+
+.feature h3 {
+  color: var(--text);
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.feature p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ===== CONTACT ===== */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.contact-info, .contact-form {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 2.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-info h3, .contact-form h3 {
+  color: var(--accent);
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  transition: var(--transition);
+}
+
+.contact-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(10px);
+}
+
+.contact-item i {
+  color: var(--accent);
+  font-size: 1.2rem;
+  width: 20px;
+}
+
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 1rem;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 3rem 0 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-section h3 {
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+}
+
+.footer-section p {
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.footer-section a {
+  display: block;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: var(--transition);
+}
+
+.footer-section a:hover {
+  color: var(--accent);
+  transform: translateX(5px);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted);
+}
+
+.admin-info {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+
+/* ===== EDIT SYSTEM ===== */
+.edit-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  background: var(--accent);
+  color: #012;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+  border: 2px solid #012;
+}
+
+.edit-icon:hover {
+  background: var(--accent2);
+  transform: scale(1.1);
+}
+
+/* ===== ADMIN MODE ===== */
+body.admin-mode .edit-icon {
+  display: flex;
+}
+
+.admin-only {
+  display: none !important;
+}
+
+body.admin-mode .admin-only {
+  display: flex !important;
+}
+
+/* ===== MODALS ===== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.modal.show {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: modalSlideIn 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-content h2 {
+  color: var(--accent);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.input {
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 1rem;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ===== AI MODAL ===== */
+.ai-modal .modal-content {
+  max-width: 600px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ai-header {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  padding: 1.5rem 2rem;
+  color: #012;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-header h2 {
+  margin: 0;
+  color: #012;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #012;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+.ai-body {
+  padding: 2rem;
+}
+
+.ai-messages {
+  height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.message {
+  margin-bottom: 1rem;
+  animation: messageSlideIn 0.3s ease;
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bot-message .message-content {
+  background: rgba(0, 255, 231, 0.1);
+  padding: 1rem;
+  border-radius: 15px;
+  border-bottom-right-radius: 5px;
+}
+
+.user-message .message-content {
+  background: rgba(255, 78, 207, 0.1);
+  padding: 1rem;
+  border-radius: 15px;
+  border-bottom-left-radius: 5px;
+  margin-left: auto;
+  text-align: left;
+  max-width: 80%;
+}
+
+.ai-input-group {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ai-input-group input {
+  flex: 1;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.ai-input-group input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.ai-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.ai-action-btn {
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.ai-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* ===== TOAST NOTIFICATIONS ===== */
+#toastContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toast {
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  animation: slideInRight 0.3s ease;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 280px;
+  border-left: 4px solid var(--accent);
+}
+
+.toast.success {
+  background: var(--success);
+  border-left-color: var(--success);
+}
+
+.toast.error {
+  background: var(--danger);
+  border-left-color: var(--danger);
+}
+
+.toast.warning {
+  background: var(--warning);
+  border-left-color: var(--warning);
+}
+
+.toast.info {
+  background: var(--info);
+  border-left-color: var(--info);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 20px var(--accent);
+  }
+  to {
+    box-shadow: 0 0 30px var(--accent2);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    text-align: center;
+  }
+  
+  .hero-left {
+    padding-right: 0;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-menu {
+    display: flex;
+  }
+  
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--card);
+    flex-direction: column;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav.active {
+    display: flex;
+  }
+  
+  .actions {
+    gap: 0.75rem;
+  }
+  
+  .btn, .icon-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .modal-content {
+    padding: 2rem;
+    margin: 1rem;
+  }
+  
+  .features {
+    grid-template-columns: 1fr;
+  }
+  
+  .apps-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cta-group {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .lead {
+    font-size: 1.1rem;
+  }
+  
+  .cta {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .modal-content {
+    padding: 1.5rem;
+  }
+  
+  .ai-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent2);
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== FOCUS INDICATORS ===== */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .topbar,
+  .protection-alert,
+  .modal,
+  #toastContainer,
+  .edit-icon,
+  .admin-only {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .hero {
+    padding: 2rem 0 !important;
+  }
+}
