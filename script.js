@@ -1,341 +1,443 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prok — المنصة الذكية المتطورة</title>
-    <meta name="description" content="منصة Prok الذكية - نظام يتطور تلقائياً ويصلح الأخطاء بنفسه">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-</head>
-<body class="theme-dark">
+/**
+ * النظام المتطور - Main Application Script
+ * نظام إدارة متكامل مع تحليلات ذكية
+ */
 
-<!-- تنبيه الحماية -->
-<div class="protection-alert" id="protectionAlert">
-    <i class="fas fa-shield-alt"></i>
-    <div>غير مصرح - محمي بواسطة Prok</div>
-</div>
+class SystemManager {
+    constructor() {
+        this.currentUser = null;
+        this.apps = [];
+        this.settings = {
+            theme: 'dark',
+            language: 'ar',
+            notifications: true
+        };
+        this.init();
+    }
 
-<!-- الرأس -->
-<header class="topbar">
-    <div class="container">
-        <div class="brand">
-            <span class="edit-icon" data-edit="logo">✏️</span>
-            Prok<span class="dot">.</span>
-        </div>
+    init() {
+        this.loadSettings();
+        this.setupEventListeners();
+        this.initializeApps();
+        this.setupIntersectionObserver();
+        this.startPerformanceMonitoring();
         
-        <button class="mobile-menu" id="mobileMenuBtn" aria-label="فتح القائمة">
-            <span></span><span></span><span></span>
-        </button>
+        console.log('✅ النظام جاهز للعمل');
+    }
+
+    setupEventListeners() {
+        // Header scroll effect
+        window.addEventListener('scroll', this.handleScroll.bind(this));
         
-        <nav class="nav" id="mainNav">
-            <a href="#home" class="nav-link active">الرئيسية</a>
-            <a href="#apps" class="nav-link">التطبيقات</a>
-            <a href="#features" class="nav-link">المميزات</a>
-            <a href="#about" class="nav-link">عنّا</a>
-        </nav>
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', this.handleNavigation.bind(this));
+        });
         
-        <div class="actions">
-            <div class="visitor-badge" title="عدد الزوار">
-                <i class="fas fa-users"></i> <span id="visCount">0</span>
-            </div>
+        // Auth buttons
+        document.getElementById('loginBtn')?.addEventListener('click', () => this.showAuthModal('login'));
+        document.getElementById('registerBtn')?.addEventListener('click', () => this.showAuthModal('register'));
+        
+        // Modal handling
+        this.setupModalHandlers();
+        
+        // Theme toggle
+        this.setupThemeToggle();
+    }
+
+    handleScroll() {
+        const header = document.getElementById('header');
+        if (window.scrollY > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }
+
+    handleNavigation(e) {
+        e.preventDefault();
+        const target = e.target.getAttribute('href');
+        const element = document.querySelector(target);
+        
+        if (element) {
+            element.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
             
-            <button id="themeToggle" class="icon-btn" aria-label="تبديل السمة">
-                <i class="fas fa-moon"></i>
-            </button>
-            <button id="adminBtn" class="btn">لوحة التحكم</button>
-            <button id="logoutBtn" class="btn admin-only" title="تسجيل الخروج" style="display: none;">
-                <i class="fas fa-sign-out-alt"></i> خروج
-            </button>
-        </div>
-    </div>
-</header>
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            e.target.classList.add('active');
+        }
+    }
 
-<main>
-    <!-- قسم البطل -->
-    <section id="home" class="hero">
-        <div class="container hero-grid">
-            <div class="hero-left">
-                <h1 class="title">
-                    <span class="edit-icon" data-edit="title">✏️</span>
-                    <span class="accent">Prok</span> .. حيث الذكاء يلتقي بالإبداع
-                </h1>
-                
-                <p class="lead">
-                    <span class="edit-icon" data-edit="lead">✏️</span>
-                    منصة ذكية تتعلم من أخطائها وتطور نفسها تلقائياً. وفر وقتك ودع التقنية تعمل لأجلك.
-                </p>
-                
-                <div class="cta-group">
-                    <a href="#apps" class="cta primary">
-                        <i class="fas fa-rocket"></i> ابدأ الرحلة
-                    </a>
-                    <a href="#features" class="cta secondary">
-                        <i class="fas fa-play-circle"></i> شاهد العرض
-                    </a>
-                </div>
+    showAuthModal(type) {
+        const modal = document.getElementById('loginModal');
+        if (modal) {
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+    }
 
-                <!-- إحصائيات سريعة -->
-                <div class="hero-stats">
-                    <div class="stat">
-                        <div class="stat-number" data-count="250">0</div>
-                        <div class="stat-label">تطبيق ذكي</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number" data-count="50">0</div>
-                        <div class="stat-label">ألف مستخدم</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number" data-count="99">0</div>
-                        <div class="stat-label">% رضا</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="hero-right">
-                <div class="carousel">
-                    <div class="slides" id="carouselSlides">
-                        <div class="slide active">
-                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" alt="واجهة Prok الذكية">
-                            <div class="slide-overlay">
-                                <h3>نظام يتعلم ذاتياً</h3>
-                                <p>يتطور مع كل استخدام لتحسين تجربتك</p>
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=400&fit=crop" alt="حماية متقدمة">
-                            <div class="slide-overlay">
-                                <h3>حماية استثنائية</h3>
-                                <p>أمان متعدد الطبقات يحمي بياناتك</p>
-                            </div>
-                        </div>
-                        <div class="slide">
-                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&h=400&fit=crop" alt="أداء فائق">
-                            <div class="slide-overlay">
-                                <h3>أداء فائق السرعة</h3>
-                                <p>تجربة مستخدم سلسة وسريعة</p>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="carousel-btn prev" aria-label="الشريحة السابقة">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                    <button class="carousel-btn next" aria-label="الشريحة التالية">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <div class="carousel-dots" id="carouselDots"></div>
-                </div>
-            </div>
-        </div>
-    </section>
+    setupModalHandlers() {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.hideModal(modal);
+                }
+            });
+        });
+    }
 
-    <!-- قسم التطبيقات -->
-    <section id="apps" class="section-apps">
-        <div class="container">
-            <div class="section-head">
-                <div class="section-title">
-                    <h2><i class="fas fa-cubes"></i> تطبيقاتنا الذكية</h2>
-                    <p class="section-subtitle">اكتشف مجموعة التطبيقات المصممة لتحسين إنتاجيتك وتبسيط عملك</p>
-                </div>
-                <button class="btn primary admin-only" id="addAppBtn" style="display: none;">
-                    <i class="fas fa-plus"></i> تطبيق جديد
-                </button>
-            </div>
-            <div class="apps-grid" id="appsGrid">
-                <!-- التطبيقات تُحمّل ديناميكياً -->
-            </div>
-        </div>
-    </section>
+    hideModal(modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
 
-    <!-- قسم المميزات -->
-    <section id="features" class="section-features">
-        <div class="container">
-            <div class="section-head">
-                <h2><i class="fas fa-star"></i> مميزات Prok الاستثنائية</h2>
-                <p class="section-subtitle">لماذا نختلف عن الآخرين؟</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3>ذكاء تلقائي</h3>
-                    <p>يتعلم النظام من استخدامك ويطور نفسه تلقائياً دون حاجة للتدخل البشري</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>حماية متقدمة</h3>
-                    <p>نظام أمان متعدد الطبقات مع تشفير متقدم يحمي بياناتك من أي تهديد</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>سرعة فائقة</h3>
-                    <p>أداء محسن مع أوقات تحميل لا تتجاوز الثواني لتجربة مستخدم استثنائية</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <h3>تحديث تلقائي</h3>
-                    <p>جميع التحديثات والتطويرات تتم تلقائياً في الخلفية دون انقطاع الخدمة</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    setupThemeToggle() {
+        // يمكن إضافة تبديل السمة هنا
+    }
 
-    <!-- قسم عنّا -->
-    <section id="about" class="section-about">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-content">
-                    <h2><i class="fas fa-info-circle"></i> قصة Prok</h2>
-                    <p class="about-text">
-                        نبدأ من حيث ينتهي الآخرون. في Prok، نؤمن بأن التقنية يجب أن تعمل لأجلك، وليس العكس. 
-                        منصة ذكية تجمع بين أحدث تقنيات الذكاء الاصطناعي وتجربة المستخدم الاستثنائية.
-                    </p>
-                    <div class="about-stats">
-                        <div class="about-stat">
-                            <div class="stat-value">+3</div>
-                            <div class="stat-label">سنوات خبرة</div>
-                        </div>
-                        <div class="about-stat">
-                            <div class="stat-value">24/7</div>
-                            <div class="stat-label">دعم فني</div>
-                        </div>
-                        <div class="about-stat">
-                            <div class="stat-value">99.9%</div>
-                            <div class="stat-label">وقت تشغيل</div>
-                        </div>
-                    </div>
+    setupIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.feature-card, .app-card').forEach(el => {
+            observer.observe(el);
+        });
+    }
+
+    initializeApps() {
+        // تحميل التطبيقات من localStorage أو API
+        this.loadApps();
+    }
+
+    loadApps() {
+        const savedApps = localStorage.getItem('system_apps');
+        if (savedApps) {
+            this.apps = JSON.parse(savedApps);
+        } else {
+            // تطبيقات افتراضية
+            this.apps = [
+                {
+                    id: 1,
+                    name: 'إدارة المحتوى',
+                    description: 'نظام متكامل لإدارة المحتوى الرقمي',
+                    enabled: true,
+                    category: 'content'
+                },
+                {
+                    id: 2,
+                    name: 'التقارير الذكية',
+                    description: 'تحليلات متقدمة وتقارير تفاعلية',
+                    enabled: false,
+                    category: 'analytics'
+                }
+            ];
+            this.saveApps();
+        }
+        this.renderApps();
+    }
+
+    saveApps() {
+        localStorage.setItem('system_apps', JSON.stringify(this.apps));
+    }
+
+    renderApps() {
+        const appsGrid = document.querySelector('.apps-grid');
+        if (!appsGrid) return;
+
+        appsGrid.innerHTML = this.apps.map(app => `
+            <div class="app-card" data-app-id="${app.id}">
+                <div class="app-icon">
+                    <i class="fas fa-cube"></i>
                 </div>
-                <div class="about-visual">
-                    <div class="tech-stack">
-                        <div class="tech-item">
-                            <i class="fab fa-js"></i>
-                            <span>JavaScript ES6+</span>
-                        </div>
-                        <div class="tech-item">
-                            <i class="fab fa-python"></i>
-                            <span>Python AI</span>
-                        </div>
-                        <div class="tech-item">
-                            <i class="fas fa-database"></i>
-                            <span>قواعد بيانات</span>
-                        </div>
-                        <div class="tech-item">
-                            <i class="fas fa-cloud"></i>
-                            <span>سحابة آمنة</span>
-                        </div>
+                <div class="app-info">
+                    <h3>${app.name}</h3>
+                    <p>${app.description}</p>
+                    <div class="app-actions">
+                        <button class="btn ${app.enabled ? 'btn-secondary' : 'btn-primary'}" 
+                                onclick="systemManager.toggleApp(${app.id})">
+                            ${app.enabled ? 'تعطيل' : 'تفعيل'}
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</main>
+        `).join('');
+    }
 
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Prok</h3>
-                <p>منصة ذكية لمستقبل رقمي أفضل</p>
-                <div class="social-links">
-                    <a href="#" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
-                    <a href="#" aria-label="لينكدإن"><i class="fab fa-linkedin"></i></a>
-                </div>
+    toggleApp(appId) {
+        const app = this.apps.find(a => a.id === appId);
+        if (app) {
+            app.enabled = !app.enabled;
+            this.saveApps();
+            this.renderApps();
+            this.showNotification(
+                `تم ${app.enabled ? 'تفعيل' : 'تعطيل'} ${app.name}`,
+                app.enabled ? 'success' : 'warning'
+            );
+        }
+    }
+
+    showNotification(message, type = 'info') {
+        // إنشاء عنصر الإشعار
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-${this.getNotificationIcon(type)}"></i>
+                <span>${message}</span>
             </div>
-            <div class="footer-section">
-                <h3>اكتشف</h3>
-                <a href="#home">الرئيسية</a>
-                <a href="#apps">التطبيقات</a>
-                <a href="#features">المميزات</a>
-                <a href="#about">عنّا</a>
-            </div>
-            <div class="footer-section">
-                <h3>الدعم</h3>
-                <a href="#">المساعدة</a>
-                <a href="#">الشروط</a>
-                <a href="#">الخصوصية</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2024 Prok. جميع الحقوق محفوظة</p>
-            <div class="admin-info admin-only" style="display: none;">
-                <span id="adminEmail"></span>
-            </div>
-        </div>
-    </div>
-</footer>
+        `;
 
-<!-- نافذة تسجيل الدخول -->
-<div class="modal" id="adminModal">
-    <div class="modal-content">
-        <h2><i class="fas fa-user-shield"></i> دخول المدير</h2>
-        <div class="input-group">
-            <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني" class="input" required>
-            <input type="password" id="adminPassInput" placeholder="كلمة المرور" class="input" required>
-        </div>
-        <div class="modal-actions">
-            <button class="btn primary" id="adminLogin">
-                <i class="fas fa-sign-in-alt"></i> دخول
-            </button>
-            <button class="btn" id="adminCancel">إلغاء</button>
-        </div>
-        <div class="auth-links">
-            <button id="showRegister" class="link-btn">إنشاء حساب جديد</button>
-        </div>
-    </div>
-</div>
+        // إضافة الأنيميشن
+        notification.style.animation = 'slideInRight 0.3s ease';
+        
+        // إضافة للإشعارات
+        const container = document.getElementById('notifications') || this.createNotificationsContainer();
+        container.appendChild(notification);
 
-<!-- نافذة تسجيل جديد -->
-<div class="modal" id="registerModal">
-    <div class="modal-content">
-        <h2><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h2>
-        <div class="input-group">
-            <input type="text" id="registerName" placeholder="الاسم الكامل" class="input" required>
-            <input type="email" id="registerEmail" placeholder="البريد الإلكتروني" class="input" required>
-            <input type="password" id="registerPassword" placeholder="كلمة المرور (6 أحرف على الأقل)" class="input" required>
-        </div>
-        <div class="modal-actions">
-            <button class="btn primary" id="registerBtn">
-                <i class="fas fa-user-plus"></i> إنشاء حساب
-            </button>
-            <button class="btn" id="cancelRegister">إلغاء</button>
-        </div>
-        <div class="auth-links">
-            <button id="showLogin" class="link-btn">لديك حساب بالفعل؟</button>
-        </div>
-    </div>
-</div>
+        // إزالة تلقائية بعد 5 ثواني
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 5000);
+    }
 
-<!-- نافذة التعديل -->
-<div class="modal" id="editModal">
-    <div class="modal-content">
-        <h2 id="editModalTitle"><i class="fas fa-edit"></i> تعديل المحتوى</h2>
-        <div id="editModalContent" class="edit-content"></div>
-        <div class="modal-actions">
-            <button class="btn primary" id="saveEdit">
-                <i class="fas fa-save"></i> حفظ
-            </button>
-            <button class="btn" id="cancelEdit">إلغاء</button>
-        </div>
-    </div>
-</div>
+    getNotificationIcon(type) {
+        const icons = {
+            success: 'check-circle',
+            warning: 'exclamation-triangle',
+            error: 'times-circle',
+            info: 'info-circle'
+        };
+        return icons[type] || 'info-circle';
+    }
 
-<!-- زر العودة للأعلى -->
-<button id="scrollToTop" class="scroll-top" aria-label="العودة للأعلى">
-    <i class="fas fa-chevron-up"></i>
-</button>
+    createNotificationsContainer() {
+        const container = document.createElement('div');
+        container.id = 'notifications';
+        container.className = 'notifications-container';
+        document.body.appendChild(container);
+        return container;
+    }
 
-<script src="script.js"></script>
-</body>
-</html>
+    startPerformanceMonitoring() {
+        // مراقبة أداء الصفحة
+        if ('performance' in window) {
+            const observer = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (entry.entryType === 'navigation') {
+                        console.log('Page Load Time:', entry.loadEventEnd - entry.navigationStart);
+                    }
+                }
+            });
+            observer.observe({ entryTypes: ['navigation', 'paint'] });
+        }
+    }
+
+    loadSettings() {
+        const saved = localStorage.getItem('system_settings');
+        if (saved) {
+            this.settings = { ...this.settings, ...JSON.parse(saved) };
+        }
+        this.applySettings();
+    }
+
+    saveSettings() {
+        localStorage.setItem('system_settings', JSON.stringify(this.settings));
+    }
+
+    applySettings() {
+        // تطبيق الإعدادات
+        document.documentElement.setAttribute('data-theme', this.settings.theme);
+        document.documentElement.setAttribute('dir', this.settings.language === 'ar' ? 'rtl' : 'ltr');
+    }
+
+    // إدارة المستخدمين
+    async login(email, password) {
+        try {
+            // محاكاة عملية تسجيل الدخول
+            await this.simulateApiCall();
+            this.currentUser = { email, name: 'مستخدم' };
+            this.showNotification('تم تسجيل الدخول بنجاح', 'success');
+            return true;
+        } catch (error) {
+            this.showNotification('فشل تسجيل الدخول', 'error');
+            return false;
+        }
+    }
+
+    logout() {
+        this.currentUser = null;
+        this.showNotification('تم تسجيل الخروج', 'info');
+    }
+
+    simulateApiCall() {
+        return new Promise((resolve) => {
+            setTimeout(resolve, 1000);
+        });
+    }
+
+    // تحليلات واستخدام
+    trackEvent(eventName, data = {}) {
+        const analytics = {
+            event: eventName,
+            timestamp: new Date().toISOString(),
+            ...data
+        };
+        console.log('📊 Analytics Event:', analytics);
+    }
+}
+
+// CSS إضافي للأنيميشن والإشعارات
+const additionalStyles = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+
+    .notifications-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .notification {
+        background: var(--card-bg);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: var(--radius-md);
+        padding: var(--space-md);
+        box-shadow: var(--shadow-lg);
+        min-width: 300px;
+    }
+
+    .notification-success {
+        border-left: 4px solid var(--success);
+    }
+
+    .notification-warning {
+        border-left: 4px solid var(--warning);
+    }
+
+    .notification-error {
+        border-left: 4px solid var(--error);
+    }
+
+    .notification-info {
+        border-left: 4px solid var(--info);
+    }
+
+    .notification-content {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+
+    .animate-in {
+        animation: fadeInUp 0.6s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .btn-sm {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.8rem;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+    .auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+
+    .input-group input {
+        padding: var(--space-md);
+        border: 1px solid rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.05);
+        border-radius: var(--radius-md);
+        color: var(--text-primary);
+        font-size: 1rem;
+        transition: var(--transition-normal);
+    }
+
+    .input-group input:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+        background: rgba(255,255,255,0.1);
+    }
+
+    .link {
+        color: var(--accent-primary);
+        text-decoration: none;
+        transition: var(--transition-fast);
+    }
+
+    .link:hover {
+        color: var(--accent-secondary);
+    }
+`;
+
+// إضافة الـ CSS الإضافي
+const styleSheet = document.createElement('style');
+styleSheet.textContent = additionalStyles;
+document.head.appendChild(styleSheet);
+
+// تهيئة النظام
+const systemManager = new SystemManager();
+
+// جعل النظام متاحاً globally
+window.systemManager = systemManager;
+
+// تهيئة عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    systemManager.trackEvent('page_loaded');
+});
