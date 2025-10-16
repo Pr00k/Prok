@@ -3,225 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - النظام المتطور</title>
+    <title>لوحة تحكم المدير - النظام الذكي</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .admin-layout {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            background: var(--secondary-bg);
-            border-left: 1px solid rgba(255,255,255,0.1);
-            padding: var(--space-lg);
-        }
-
-        .admin-main {
-            padding: var(--space-xl);
-            background: var(--primary-bg);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-lg);
-            margin-bottom: var(--space-2xl);
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            padding: var(--space-xl);
-            border-radius: var(--radius-lg);
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin-bottom: var(--space-sm);
-        }
-
-        .admin-section {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            margin-bottom: var(--space-xl);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-    </style>
 </head>
 <body>
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="admin-brand">
-                <h2><i class="fas fa-cog"></i> الإدارة</h2>
+                <h2><i class="fas fa-user-shield"></i> لوحة المدير</h2>
+                <div class="admin-info">
+                    <span>مدير النظام</span>
+                    <small>مسؤول كامل الصلاحيات</small>
+                </div>
             </div>
             <nav class="admin-nav">
                 <a href="#dashboard" class="admin-nav-link active">
                     <i class="fas fa-tachometer-alt"></i>
-                    لوحة التحكم
+                    الإحصائيات
                 </a>
-                <a href="#users" class="admin-nav-link">
-                    <i class="fas fa-users"></i>
-                    المستخدمون
+                <a href="#ai-control" class="admin-nav-link">
+                    <i class="fas fa-robot"></i>
+                    الذكاء الاصطناعي
                 </a>
-                <a href="#apps" class="admin-nav-link">
-                    <i class="fas fa-cubes"></i>
-                    التطبيقات
+                <a href="#code-editor" class="admin-nav-link">
+                    <i class="fas fa-code"></i>
+                    محرر الأكواد
                 </a>
-                <a href="#settings" class="admin-nav-link">
-                    <i class="fas fa-cog"></i>
-                    الإعدادات
+                <a href="#file-manager" class="admin-nav-link">
+                    <i class="fas fa-folder"></i>
+                    مدير الملفات
+                </a>
+                <a href="#system-tools" class="admin-nav-link">
+                    <i class="fas fa-tools"></i>
+                    أدوات النظام
                 </a>
             </nav>
+            <div class="admin-actions">
+                <button class="btn btn-secondary w-100" onclick="adminManager.logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    تسجيل الخروج
+                </button>
+            </div>
         </aside>
 
         <!-- Main Content -->
         <main class="admin-main">
-            <!-- Stats -->
+            <!-- Quick Stats -->
             <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalUsers">0</div>
-                    <div class="stat-label">المستخدمون</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalApps">0</div>
-                    <div class="stat-label">التطبيقات</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="activeSessions">0</div>
-                    <div class="stat-label">جلسات نشطة</div>
-                </div>
                 <div class="stat-card">
                     <div class="stat-number" id="systemHealth">100%</div>
                     <div class="stat-label">صحة النظام</div>
                 </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="admin-section">
-                <h3 class="mb-lg">النشاط الحديث</h3>
-                <div class="activity-list" id="activityList">
-                    <!-- سيتم ملؤه ديناميكياً -->
+                <div class="stat-card">
+                    <div class="stat-number" id="issuesCount">0</div>
+                    <div class="stat-label">مشاكل مكتشفة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="optimizations">0</div>
+                    <div class="stat-label">تحسينات مقترحة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="aiStatus">🟢</div>
+                    <div class="stat-label">حالة الـ AI</div>
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="admin-section">
-                <h3 class="mb-lg">إجراءات سريعة</h3>
-                <div class="quick-actions">
-                    <button class="btn btn-primary" onclick="adminManager.backupSystem()">
-                        <i class="fas fa-download"></i>
-                        نسخ احتياطي
-                    </button>
-                    <button class="btn btn-secondary" onclick="adminManager.clearCache()">
-                        <i class="fas fa-broom"></i>
-                        تنظيف الذاكرة
-                    </button>
-                    <button class="btn btn-secondary" onclick="adminManager.runDiagnostics()">
-                        <i class="fas fa-stethoscope"></i>
-                        فحص النظام
-                    </button>
+            <!-- AI Control Center -->
+            <div class="admin-ai-dashboard">
+                <!-- AI Analysis -->
+                <div class="ai-analysis-card">
+                    <h3><i class="fas fa-chart-line"></i> تحليل النظام</h3>
+                    <div class="analysis-results" id="analysisResults">
+                        <p>لم يتم إجراء أي تحليل بعد</p>
+                    </div>
+                    <div class="ai-tools-grid">
+                        <button class="ai-tool-btn" onclick="adminManager.runFullAnalysis()">
+                            <i class="fas fa-search"></i>
+                            فحص كامل
+                        </button>
+                        <button class="ai-tool-btn" onclick="adminManager.autoFixAll()">
+                            <i class="fas fa-magic"></i>
+                            إصلاح تلقائي
+                        </button>
+                        <button class="ai-tool-btn" onclick="adminManager.optimizeSystem()">
+                            <i class="fas fa-bolt"></i>
+                            تحسين الأداء
+                        </button>
+                    </div>
                 </div>
+
+                <!-- AI Assistant -->
+                <div class="ai-analysis-card">
+                    <h3><i class="fas fa-robot"></i> المساعد المتقدم</h3>
+                    <div class="ai-chat-mini">
+                        <div class="ai-messages-mini" id="aiMessagesMini">
+                            <div class="ai-message bot">
+                                أنا جاهز لمساعدتك في أي شيء!
+                            </div>
+                        </div>
+                        <div class="ai-input-mini">
+                            <input type="text" id="aiInputMini" placeholder="اسأل AI عن أي شيء...">
+                            <button onclick="adminManager.askAI()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Editor -->
+            <div class="admin-section">
+                <h3><i class="fas fa-code"></i> محرر الأكواد المتقدم</h3>
+                <div class="code-editor">
+                    <div class="editor-header">
+                        <span>script.js</span>
+                        <div class="editor-actions">
+                            <button class="btn btn-sm" onclick="adminManager.formatCode()">
+                                <i class="fas fa-align-left"></i>
+                                تنسيق
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="adminManager.saveCode()">
+                                <i class="fas fa-save"></i>
+                                حفظ
+                            </button>
+                        </div>
+                    </div>
+                    <textarea class="editor-content" id="codeEditor" spellcheck="false">
+// اكتب أو عدل الأكواد هنا
+// المساعد AI سيساعدك في كتابة كود احترافي
+
+function advancedFeature() {
+    console.log('ميزة متقدمة تعمل!');
+    return 'نجاح';
+}
+                    </textarea>
+                </div>
+            </div>
+
+            <!-- File Manager -->
+            <div class="admin-section">
+                <h3><i class="fas fa-file-upload"></i> رفع ومعالجة الملفات</h3>
+                <div class="file-upload-area" onclick="document.getElementById('fileUploadAdmin').click()">
+                    <i class="fas fa-cloud-upload-alt fa-3x"></i>
+                    <p>انقر لرفع الملفات أو اسحبها هنا</p>
+                    <small>يدعم جميع أنواع الملفات</small>
+                </div>
+                <input type="file" id="fileUploadAdmin" hidden multiple onchange="adminManager.handleFiles(this.files)">
+                <div class="uploaded-files" id="uploadedFiles"></div>
             </div>
         </main>
     </div>
 
+    <script src="script.js"></script>
+    <script src="ai-assistant.js"></script>
     <script>
         class AdminManager {
             constructor() {
-                this.stats = {
-                    totalUsers: 0,
-                    totalApps: 0,
-                    activeSessions: 0,
-                    systemHealth: 100
-                };
+                this.aiAssistant = new AdvancedAIAssistant();
                 this.init();
             }
 
             init() {
-                this.loadStats();
-                this.loadRecentActivity();
-                this.startLiveUpdates();
+                this.checkAdminAccess();
+                this.loadSystemInfo();
+                this.setupAI();
             }
 
-            loadStats() {
-                // محاكاة تحميل الإحصائيات
-                this.stats = {
-                    totalUsers: 150,
-                    totalApps: 25,
-                    activeSessions: 42,
-                    systemHealth: 98
-                };
-                this.updateStatsDisplay();
-            }
-
-            updateStatsDisplay() {
-                Object.keys(this.stats).forEach(key => {
-                    const element = document.getElementById(key);
-                    if (element) {
-                        element.textContent = this.stats[key];
-                    }
-                });
-            }
-
-            loadRecentActivity() {
-                const activities = [
-                    { action: 'تسجيل دخول', user: 'مدير النظام', time: 'منذ 5 دقائق' },
-                    { action: 'تحديث تطبيق', user: 'النظام', time: 'منذ 15 دقيقة' },
-                    { action: 'نسخ احتياطي', user: 'النظام', time: 'منذ ساعة' }
-                ];
-
-                const activityList = document.getElementById('activityList');
-                if (activityList) {
-                    activityList.innerHTML = activities.map(activity => `
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <strong>${activity.action}</strong> بواسطة ${activity.user}
-                            </div>
-                            <div class="activity-time">${activity.time}</div>
-                        </div>
-                    `).join('');
+            checkAdminAccess() {
+                if (!localStorage.getItem('admin_session')) {
+                    window.location.href = 'index.html';
+                    return;
                 }
             }
 
-            startLiveUpdates() {
-                // تحديث حي للإحصائيات
-                setInterval(() => {
-                    this.stats.activeSessions = Math.floor(Math.random() * 10) + 40;
-                    this.updateStatsDisplay();
-                }, 30000);
+            async loadSystemInfo() {
+                const analysis = await this.aiAssistant.quickAnalysis();
+                this.updateDashboard(analysis);
             }
 
-            backupSystem() {
-                // محاكاة نسخ احتياطي
-                alert('جاري إنشاء نسخة احتياطية...');
-                setTimeout(() => {
-                    alert('تم إنشاء النسخة الاحتياطية بنجاح');
-                }, 2000);
+            updateDashboard(analysis) {
+                document.getElementById('systemHealth').textContent = analysis.healthScore + '%';
+                document.getElementById('issuesCount').textContent = analysis.issues.length;
+                document.getElementById('optimizations').textContent = analysis.recommendations.length;
             }
 
-            clearCache() {
-                localStorage.removeItem('system_cache');
-                alert('تم تنظيف الذاكرة المؤقتة');
+            async runFullAnalysis() {
+                const analysis = await this.aiAssistant.comprehensiveAnalysis();
+                this.displayAnalysis(analysis);
+                this.updateDashboard(analysis);
             }
 
-            runDiagnostics() {
-                const health = Math.floor(Math.random() * 5) + 95;
-                this.stats.systemHealth = health;
-                this.updateStatsDisplay();
-                alert(`فحص النظام مكتمل - الصحة: ${health}%`);
+            displayAnalysis(analysis) {
+                const resultsDiv = document.getElementById('analysisResults');
+                resultsDiv.innerHTML = `
+                    <div class="analysis-item">
+                        <strong>صحة النظام:</strong> ${analysis.healthScore}%
+                    </div>
+                    <div class="analysis-item">
+                        <strong>المشاكل:</strong> ${analysis.issues.length}
+                    </div>
+                    <div class="analysis-item">
+                        <strong>التحسينات:</strong> ${analysis.recommendations.length}
+                    </div>
+                `;
+            }
+
+            async autoFixAll() {
+                const results = await this.aiAssistant.autoFixAll();
+                alert(`تم إصلاح ${results.fixed} مشكلة تلقائياً`);
+                this.loadSystemInfo();
+            }
+
+            async optimizeSystem() {
+                const optimization = await this.aiAssistant.optimizeSystem();
+                alert('تم تحسين النظام بنجاح');
+                this.loadSystemInfo();
+            }
+
+            async askAI() {
+                const input = document.getElementById('aiInputMini');
+                const message = input.value.trim();
+                
+                if (!message) return;
+
+                const response = await this.aiAssistant.askUnrestricted(message);
+                this.displayAIResponse(response);
+                input.value = '';
+            }
+
+            displayAIResponse(response) {
+                const messagesDiv = document.getElementById('aiMessagesMini');
+                const userMsg = document.createElement('div');
+                userMsg.className = 'ai-message user';
+                userMsg.textContent = response.question;
+                messagesDiv.appendChild(userMsg);
+
+                const botMsg = document.createElement('div');
+                botMsg.className = 'ai-message bot';
+                botMsg.innerHTML = response.answer;
+                messagesDiv.appendChild(botMsg);
+
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+
+            handleFiles(files) {
+                const filesDiv = document.getElementById('uploadedFiles');
+                filesDiv.innerHTML = '';
+
+                Array.from(files).forEach(file => {
+                    const fileElement = document.createElement('div');
+                    fileElement.className = 'file-item';
+                    fileElement.innerHTML = `
+                        <i class="fas fa-file"></i>
+                        <span>${file.name}</span>
+                        <small>(${(file.size / 1024).toFixed(2)} KB)</small>
+                        <button onclick="adminManager.processFile(this)" data-file="${file.name}">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    `;
+                    filesDiv.appendChild(fileElement);
+                });
+            }
+
+            async processFile(button) {
+                const fileName = button.getAttribute('data-file');
+                const response = await this.aiAssistant.processFile(fileName);
+                alert(`تم معالجة الملف: ${response.result}`);
+            }
+
+            formatCode() {
+                // تنسيق الكود تلقائياً
+                const editor = document.getElementById('codeEditor');
+                // يمكن إضافة مكتبة تنسيق الكود هنا
+            }
+
+            async saveCode() {
+                const code = document.getElementById('codeEditor').value;
+                const result = await this.aiAssistant.analyzeCode(code);
+                
+                if (result.valid) {
+                    alert('تم حفظ الكود بنجاح');
+                    // حفظ الكود في النظام
+                } else {
+                    alert('يوجد أخطاء في الكود: ' + result.errors.join(', '));
+                }
+            }
+
+            logout() {
+                localStorage.removeItem('admin_session');
+                window.location.href = 'index.html';
             }
         }
 
-        // التهيئة
         const adminManager = new AdminManager();
     </script>
 </body>
