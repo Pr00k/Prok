@@ -1,577 +1,228 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة التحكم — Prok</title>
-  <meta name="description" content="لوحة تحكم Prok - نظام إدارة متكامل مع ذكاء اصطناعي">
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .admin-page {
-      background: linear-gradient(135deg, var(--bg), var(--bg2));
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - النظام المتطور</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
 
-    .admin-main {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      padding: 30px 0;
-      min-height: calc(100vh - 140px);
-    }
+        .sidebar {
+            background: var(--secondary-bg);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            padding: var(--space-lg);
+        }
 
-    .admin-section {
-      background: rgba(255, 255, 255, 0.02);
-      padding: 25px;
-      border-radius: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-    }
+        .admin-main {
+            padding: var(--space-xl);
+            background: var(--primary-bg);
+        }
 
-    .admin-section h2 {
-      color: var(--accent);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.4rem;
-    }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin: 20px 0;
-    }
+        .stat-card {
+            background: var(--card-bg);
+            padding: var(--space-xl);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
 
-    .stat-card {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
-    }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: var(--space-sm);
+        }
 
-    .stat-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent);
-    }
-
-    .stat-value {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--accent);
-      margin-bottom: 5px;
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .index-nav {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 15px;
-      border-radius: 10px;
-      margin: 20px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .index-info {
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .index-controls {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .admin-controls {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin: 20px 0;
-    }
-
-    .cardlist {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .app-card {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
-    }
-
-    .app-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent);
-    }
-
-    .app-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-    }
-
-    .app-category {
-      background: var(--accent);
-      color: #012;
-      padding: 4px 12px;
-      border-radius: 15px;
-      font-size: 0.8rem;
-      font-weight: bold;
-    }
-
-    .app-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 15px;
-    }
-
-    .chat-box {
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      overflow: hidden;
-    }
-
-    .chat-history {
-      height: 200px;
-      overflow-y: auto;
-      padding: 15px;
-      background: rgba(0, 0, 0, 0.2);
-    }
-
-    .chat-message {
-      padding: 10px 15px;
-      margin: 8px 0;
-      border-radius: 10px;
-      max-width: 85%;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .chat-message.bot {
-      background: rgba(0, 255, 231, 0.1);
-      margin-right: auto;
-      border-bottom-right-radius: 2px;
-    }
-
-    .chat-message.user {
-      background: rgba(255, 78, 207, 0.1);
-      margin-left: auto;
-      border-bottom-left-radius: 2px;
-    }
-
-    .chat-controls {
-      display: flex;
-      padding: 15px;
-      gap: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .chat-controls input {
-      flex: 1;
-      padding: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      color: var(--text);
-    }
-
-    .ai-actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 8px;
-      padding: 0 15px 15px;
-    }
-
-    .ai-action-btn {
-      padding: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-    }
-
-    .ai-action-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateY(-1px);
-    }
-
-    .report {
-      background: rgba(0, 0, 0, 0.2);
-      padding: 15px;
-      border-radius: 8px;
-      color: var(--muted);
-      margin-top: 10px;
-      border-left: 3px solid var(--accent);
-      white-space: pre-wrap;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      max-height: 150px;
-      overflow-y: auto;
-    }
-
-    .small-note {
-      margin-top: 20px;
-      padding: 12px;
-      background: rgba(0, 255, 231, 0.1);
-      border-radius: 8px;
-      color: var(--muted);
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid rgba(0, 255, 231, 0.2);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 1024px) {
-      .admin-main {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-      
-      .stats-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .index-nav {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .index-controls {
-        justify-content: center;
-      }
-      
-      .admin-section {
-        padding: 20px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .ai-actions {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+        .admin-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+    </style>
 </head>
-<body class="theme-dark admin-page">
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="admin-brand">
+                <h2><i class="fas fa-cog"></i> الإدارة</h2>
+            </div>
+            <nav class="admin-nav">
+                <a href="#dashboard" class="admin-nav-link active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    لوحة التحكم
+                </a>
+                <a href="#users" class="admin-nav-link">
+                    <i class="fas fa-users"></i>
+                    المستخدمون
+                </a>
+                <a href="#apps" class="admin-nav-link">
+                    <i class="fas fa-cubes"></i>
+                    التطبيقات
+                </a>
+                <a href="#settings" class="admin-nav-link">
+                    <i class="fas fa-cog"></i>
+                    الإعدادات
+                </a>
+            </nav>
+        </aside>
 
-  <header class="topbar">
-    <div class="container">
-      <div class="brand" onclick="window.location.href='index.html'" style="cursor: pointer;">
-        <i class="fas fa-user-shield"></i> Prok — لوحة التحكم
-      </div>
-      <div class="actions">
-        <span id="adminEmail" class="admin-info"></span>
-        <button id="backToSite" class="btn" onclick="window.location.href='index.html'">
-          <i class="fas fa-home"></i> الموقع الرئيسي
-        </button>
-        <button id="logoutBtn" class="btn danger">
-          <i class="fas fa-sign-out-alt"></i> خروج
-        </button>
-      </div>
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalUsers">0</div>
+                    <div class="stat-label">المستخدمون</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalApps">0</div>
+                    <div class="stat-label">التطبيقات</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="activeSessions">0</div>
+                    <div class="stat-label">جلسات نشطة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="systemHealth">100%</div>
+                    <div class="stat-label">صحة النظام</div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="admin-section">
+                <h3 class="mb-lg">النشاط الحديث</h3>
+                <div class="activity-list" id="activityList">
+                    <!-- سيتم ملؤه ديناميكياً -->
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="admin-section">
+                <h3 class="mb-lg">إجراءات سريعة</h3>
+                <div class="quick-actions">
+                    <button class="btn btn-primary" onclick="adminManager.backupSystem()">
+                        <i class="fas fa-download"></i>
+                        نسخ احتياطي
+                    </button>
+                    <button class="btn btn-secondary" onclick="adminManager.clearCache()">
+                        <i class="fas fa-broom"></i>
+                        تنظيف الذاكرة
+                    </button>
+                    <button class="btn btn-secondary" onclick="adminManager.runDiagnostics()">
+                        <i class="fas fa-stethoscope"></i>
+                        فحص النظام
+                    </button>
+                </div>
+            </div>
+        </main>
     </div>
-  </header>
 
-  <main class="admin-main container">
-    <!-- القسم الأيسر - التحكم والإدارة -->
-    <section class="admin-section">
-      <h2><i class="fas fa-cogs"></i> لوحة التحكم</h2>
+    <script>
+        class AdminManager {
+            constructor() {
+                this.stats = {
+                    totalUsers: 0,
+                    totalApps: 0,
+                    activeSessions: 0,
+                    systemHealth: 100
+                };
+                this.init();
+            }
 
-      <!-- إحصائيات سريعة -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="totalApps">0</div>
-          <div class="stat-label">التطبيقات</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="totalVisitors">0</div>
-          <div class="stat-label">الزوار</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="activeUsers">0</div>
-          <div class="stat-label">نشطون الآن</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="systemHealth">100%</div>
-          <div class="stat-label">صحة النظام</div>
-        </div>
-      </div>
+            init() {
+                this.loadStats();
+                this.loadRecentActivity();
+                this.startLiveUpdates();
+            }
 
-      <!-- أدوات سريعة -->
-      <div class="admin-controls">
-        <button id="addAppBtn" class="btn success">
-          <i class="fas fa-plus"></i> تطبيق جديد
-        </button>
-        <button id="runScan" class="btn">
-          <i class="fas fa-search"></i> فحص النظام
-        </button>
-        <button id="exportData" class="btn">
-          <i class="fas fa-download"></i> نسخ احتياطي
-        </button>
-        <button id="clearCache" class="btn">
-          <i class="fas fa-broom"></i> تنظيف الذاكرة
-        </button>
-      </div>
+            loadStats() {
+                // محاكاة تحميل الإحصائيات
+                this.stats = {
+                    totalUsers: 150,
+                    totalApps: 25,
+                    activeSessions: 42,
+                    systemHealth: 98
+                };
+                this.updateStatsDisplay();
+            }
 
-      <!-- قائمة التطبيقات -->
-      <h3><i class="fas fa-boxes"></i> إدارة التطبيقات</h3>
-      <div id="appList" class="cardlist">
-        <!-- التطبيقات تُحمّل ديناميكياً -->
-      </div>
+            updateStatsDisplay() {
+                Object.keys(this.stats).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.textContent = this.stats[key];
+                    }
+                });
+            }
 
-      <!-- ملاحظة النظام -->
-      <div class="small-note">
-        <i class="fas fa-info-circle"></i>
-        النظام يعمل بشكل طبيعي. آخر تحديث: <span id="lastUpdate">الآن</span>
-      </div>
-    </section>
+            loadRecentActivity() {
+                const activities = [
+                    { action: 'تسجيل دخول', user: 'مدير النظام', time: 'منذ 5 دقائق' },
+                    { action: 'تحديث تطبيق', user: 'النظام', time: 'منذ 15 دقيقة' },
+                    { action: 'نسخ احتياطي', user: 'النظام', time: 'منذ ساعة' }
+                ];
 
-    <!-- القسم الأيمن - المساعد والتحليلات -->
-    <section class="admin-section">
-      <h2><i class="fas fa-robot"></i> المساعد الذكي</h2>
-      
-      <div class="chat-box">
-        <div class="chat-history" id="aiHistory">
-          <div class="chat-message bot">
-            <strong>المساعد:</strong> أهلاً! أنا مساعدك في إدارة Prok. يمكنني:
-            <br>• مراقبة أداء النظام 📊
-            <br>• اكتشاف المشاكل تلقائياً 🔍
-            <br>• اقتراح تحسينات الأداء ⚡
-            <br>• مساعدتك في إدارة المحتوى 📝
-          </div>
-        </div>
-        <div class="chat-controls">
-          <input id="aiInput" placeholder="اسألني عن أي شيء..." />
-          <button id="aiSend" class="btn primary">
-            <i class="fas fa-paper-plane"></i>
-          </button>
-        </div>
-        <div class="ai-actions">
-          <button class="ai-action-btn" data-action="health">
-            <i class="fas fa-heartbeat"></i> صحة النظام
-          </button>
-          <button class="ai-action-btn" data-action="performance">
-            <i class="fas fa-tachometer-alt"></i> الأداء
-          </button>
-          <button class="ai-action-btn" data-action="security">
-            <i class="fas fa-shield-alt"></i> الأمان
-          </button>
-        </div>
-      </div>
+                const activityList = document.getElementById('activityList');
+                if (activityList) {
+                    activityList.innerHTML = activities.map(activity => `
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <strong>${activity.action}</strong> بواسطة ${activity.user}
+                            </div>
+                            <div class="activity-time">${activity.time}</div>
+                        </div>
+                    `).join('');
+                }
+            }
 
-      <!-- تحليلات النظام -->
-      <h3><i class="fas fa-chart-bar"></i> تقرير النظام</h3>
-      <div id="systemReport" class="report">
-        ◉ صحة النظام: ممتاز
-        ◉ الذاكرة: 65% مستخدمة
-        ◉ التخزين: 1.2GB / 5GB
-        ◉ آخر فحص: الآن
-      </div>
+            startLiveUpdates() {
+                // تحديث حي للإحصائيات
+                setInterval(() => {
+                    this.stats.activeSessions = Math.floor(Math.random() * 10) + 40;
+                    this.updateStatsDisplay();
+                }, 30000);
+            }
 
-      <!-- النشاط الحديث -->
-      <h3><i class="fas fa-history"></i> النشاط الحديث</h3>
-      <div id="recentActivity" class="report">
-        • تم تسجيل الدخول إلى لوحة التحكم
-        • تحميل 5 تطبيقات
-        • النظام يعمل بشكل طبيعي
-        • آخر تحديث: قبل 5 دقائق
-      </div>
-    </section>
-  </main>
+            backupSystem() {
+                // محاكاة نسخ احتياطي
+                alert('جاري إنشاء نسخة احتياطية...');
+                setTimeout(() => {
+                    alert('تم إنشاء النسخة الاحتياطية بنجاح');
+                }, 2000);
+            }
 
-  <!-- نافذة إضافة تطبيق -->
-  <div class="modal" id="addAppModal">
-    <div class="modal-content">
-      <h3><i class="fas fa-plus-circle"></i> تطبيق جديد</h3>
-      <div class="input-group">
-        <input type="text" id="appTitle" class="input" placeholder="اسم التطبيق *" required>
-        <textarea id="appDescription" class="input" placeholder="وصف التطبيق *" rows="3" required></textarea>
-        <input type="url" id="appImage" class="input" placeholder="رابط الصورة (اختياري)">
-        <input type="text" id="appCategory" class="input" placeholder="الفئة *" required>
-      </div>
-      <div class="modal-actions">
-        <button id="saveApp" class="btn primary">
-          <i class="fas fa-save"></i> إنشاء التطبيق
-        </button>
-        <button id="cancelApp" class="btn">
-          <i class="fas fa-times"></i> إلغاء
-        </button>
-      </div>
-    </div>
-  </div>
+            clearCache() {
+                localStorage.removeItem('system_cache');
+                alert('تم تنظيف الذاكرة المؤقتة');
+            }
 
-  <!-- نافذة تأكيد الحذف -->
-  <div class="modal" id="deleteModal">
-    <div class="modal-content">
-      <h3><i class="fas fa-exclamation-triangle"></i> تأكيد الحذف</h3>
-      <p style="text-align: center; color: var(--muted); margin: 20px 0; line-height: 1.6;">
-        هل أنت متأكد من رغبتك في حذف هذا التطبيق؟<br>
-        <span style="color: var(--danger); font-weight: bold;">هذا الإجراء لا يمكن التراجع عنه.</span>
-      </p>
-      <div class="modal-actions">
-        <button id="confirmDelete" class="btn danger">
-          <i class="fas fa-trash"></i> نعم، احذف
-        </button>
-        <button id="cancelDelete" class="btn">
-          <i class="fas fa-times"></i> إبقاء التطبيق
-        </button>
-      </div>
-    </div>
-  </div>
+            runDiagnostics() {
+                const health = Math.floor(Math.random() * 5) + 95;
+                this.stats.systemHealth = health;
+                this.updateStatsDisplay();
+                alert(`فحص النظام مكتمل - الصحة: ${health}%`);
+            }
+        }
 
-  <footer class="footer">
-    <div class="container">
-      <p style="text-align: center; color: var(--muted);">
-        <i class="fas fa-shield-alt"></i> Prok نظام الإدارة المتقدم 
-        | <span id="currentTime"></span>
-        | <span id="systemStatus" style="color: var(--success);">● متصل</span>
-      </p>
-    </div>
-  </footer>
-
-  <script>
-    // نظام الوقت الحي
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('currentTime').textContent = 
-        now.toLocaleTimeString('ar-SA') + ' - ' + 
-        now.toLocaleDateString('ar-SA');
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // تحميل الإحصائيات
-    function loadStats() {
-      const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
-      const visitors = localStorage.getItem('prok_visitors') || '0';
-      
-      document.getElementById('totalApps').textContent = apps.length;
-      document.getElementById('totalVisitors').textContent = parseInt(visitors).toLocaleString();
-      document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 20) + 5;
-    }
-
-    // تحميل التطبيقات
-    function loadApps() {
-      const appList = document.getElementById('appList');
-      const apps = JSON.parse(localStorage.getItem('prok_apps') || '[]');
-      
-      if (apps.length === 0) {
-        appList.innerHTML = '<div class="app-card" style="text-align: center; color: var(--muted);">لا توجد تطبيقات بعد</div>';
-        return;
-      }
-      
-      appList.innerHTML = apps.map((app, index) => `
-        <div class="app-card">
-          <div class="app-card-header">
-            <h4 style="margin: 0; color: var(--accent);">${app.title}</h4>
-            <span class="app-category">${app.category}</span>
-          </div>
-          <p style="color: var(--muted); margin: 10px 0; line-height: 1.5;">${app.description}</p>
-          <div class="app-actions">
-            <button class="btn small" onclick="editApp(${index})">
-              <i class="fas fa-edit"></i> تعديل
-            </button>
-            <button class="btn small danger" onclick="deleteApp(${index})">
-              <i class="fas fa-trash"></i> حذف
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // الذكاء الاصطناعي البسيط
-    document.getElementById('aiSend').addEventListener('click', function() {
-      const input = document.getElementById('aiInput');
-      const history = document.getElementById('aiHistory');
-      const message = input.value.trim();
-      
-      if (!message) return;
-      
-      // إضافة رسالة المستخدم
-      const userMsg = document.createElement('div');
-      userMsg.className = 'chat-message user';
-      userMsg.textContent = message;
-      history.appendChild(userMsg);
-      
-      input.value = '';
-      
-      // محاكاة رد المساعد
-      setTimeout(() => {
-        const responses = [
-          "فحصت النظام وهو يعمل بشكل ممتاز. لا توجد مشاكل حرجة.",
-          "أقترح تحديث الصور لتحسين سرعة التحميل.",
-          "جميع خدمات النظام تعمل بشكل طبيعي.",
-          "تم اكتشاف بعض الملفات المؤقتة التي يمكن حذفها لتحسين الأداء.",
-          "النظام آمن ومحمي من التهديدات."
-        ];
-        
-        const botMsg = document.createElement('div');
-        botMsg.className = 'chat-message bot';
-        botMsg.textContent = responses[Math.floor(Math.random() * responses.length)];
-        history.appendChild(botMsg);
-        
-        history.scrollTop = history.scrollHeight;
-      }, 1000);
-    });
-
-    // تهيئة الصفحة
-    document.addEventListener('DOMContentLoaded', function() {
-      loadStats();
-      loadApps();
-      
-      // التحقق من تسجيل الدخول
-      const user = JSON.parse(localStorage.getItem('prok_admin_user') || 'null');
-      if (!user) {
-        window.location.href = 'index.html';
-        return;
-      }
-      document.getElementById('adminEmail').textContent = user.email;
-      
-      // تحديث الإحصائيات كل 30 ثانية
-      setInterval(loadStats, 30000);
-    });
-  </script>
+        // التهيئة
+        const adminManager = new AdminManager();
+    </script>
 </body>
 </html>
