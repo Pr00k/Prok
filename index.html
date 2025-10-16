@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>النظام المتطور - منصة إدارة ذكية</title>
-    <meta name="description" content="منصة إدارة ذكية متكاملة مع تحليلات متقدمة وأداء فائق">
+    <title>النظام المتطور - منصة ذكاء اصطناعي متكاملة</title>
+    <meta name="description" content="منصة إدارة ذكية مع مساعد AI متطور يحل جميع المشاكل">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,25 +15,20 @@
         <div class="container">
             <div class="header-content">
                 <a href="#" class="logo">
-                    <i class="fas fa-rocket"></i>
-                    النظام
+                    <i class="fas fa-robot"></i>
+                    النظام الذكي
                 </a>
                 
                 <nav class="nav">
                     <a href="#home" class="nav-link active">الرئيسية</a>
                     <a href="#features" class="nav-link">المميزات</a>
                     <a href="#apps" class="nav-link">التطبيقات</a>
-                    <a href="#contact" class="nav-link">اتصل بنا</a>
                 </nav>
                 
                 <div class="header-actions">
-                    <button class="btn btn-secondary" id="loginBtn">
-                        <i class="fas fa-sign-in-alt"></i>
-                        تسجيل الدخول
-                    </button>
-                    <button class="btn btn-primary" id="registerBtn">
-                        <i class="fas fa-user-plus"></i>
-                        إنشاء حساب
+                    <button class="btn btn-primary" id="adminLoginBtn">
+                        <i class="fas fa-user-shield"></i>
+                        دخول المدير
                     </button>
                 </div>
             </div>
@@ -45,108 +40,32 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h1>نظام إدارة متكامل</h1>
-                    <p>منصة ذكية تجمع بين القوة والمرونة لتلبية جميع احتياجاتك الإدارية بأعلى معايير الأداء والأمان.</p>
+                    <h1>نظام ذكاء اصطناعي متكامل</h1>
+                    <p>مساعد AI متطور يحل جميع مشاكل الموقع، يضيف أكواد، يحذف أكواد، ويدير النظام تلقائياً بأعلى معايير الكفاءة.</p>
                     <div class="hero-actions">
-                        <button class="btn btn-primary">
-                            <i class="fas fa-play"></i>
-                            ابدأ الآن
+                        <button class="btn btn-primary" onclick="showAdminLogin()">
+                            <i class="fas fa-key"></i>
+                            دخول المدير
                         </button>
-                        <button class="btn btn-secondary">
-                            <i class="fas fa-info-circle"></i>
-                            المزيد
+                        <button class="btn btn-secondary" onclick="assistant.togglePanel()">
+                            <i class="fas fa-robot"></i>
+                            المساعد الذكي
                         </button>
                     </div>
                 </div>
                 <div class="hero-visual">
-                    <div class="hero-card">
-                        <i class="fas fa-chart-line"></i>
-                        <h3>تحليلات متقدمة</h3>
-                        <p>تقارير ذكية ولوحات تحكم تفاعلية</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="container">
-            <div class="section-title">
-                <h2>مميزات النظام</h2>
-                <p>اكتشف القوة الكامنة وراء منصتنا الذكية</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>أمان متقدم</h3>
-                    <p>نظام حماية متعدد الطبقات مع تشفير متقدم لحماية بياناتك.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>أداء فائق</h3>
-                    <p>سرعة استجابة غير مسبوقة مع بنية تحتية قوية ومحسنة.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <h3>تحديث تلقائي</h3>
-                    <p>جميع التحديثات تتم تلقائياً دون انقطاع الخدمة.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>متجاوب كلياً</h3>
-                    <p>تصميم متكامل يعمل على جميع الأجهزة والشاشات.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Apps Section -->
-    <section class="apps" id="apps">
-        <div class="container">
-            <div class="section-title">
-                <h2>التطبيقات المتاحة</h2>
-                <p>مجموعة متكاملة من الأدوات الذكية</p>
-            </div>
-            <div class="apps-grid">
-                <div class="app-card">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop" alt="إدارة المحتوى" class="app-image">
-                    <div class="app-content">
-                        <h3>إدارة المحتوى</h3>
-                        <p>نظام متكامل لإدارة المحتوى الرقمي بكل كفاءة واحترافية.</p>
-                        <div class="app-actions">
-                            <button class="btn btn-primary btn-sm">تفعيل</button>
-                            <button class="btn btn-secondary btn-sm">معاينة</button>
+                    <div class="ai-features">
+                        <div class="ai-feature">
+                            <i class="fas fa-code"></i>
+                            <span>تحليل وتعديل الأكواد</span>
                         </div>
-                    </div>
-                </div>
-                <div class="app-card">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop" alt="التقارير" class="app-image">
-                    <div class="app-content">
-                        <h3>التقارير الذكية</h3>
-                        <p>تحليلات متقدمة وتقارير تفاعلية لاتخاذ القرارات.</p>
-                        <div class="app-actions">
-                            <button class="btn btn-primary btn-sm">تفعيل</button>
-                            <button class="btn btn-secondary btn-sm">معاينة</button>
+                        <div class="ai-feature">
+                            <i class="fas fa-bug"></i>
+                            <span>اكتشاف وإصلاح الأخطاء</span>
                         </div>
-                    </div>
-                </div>
-                <div class="app-card">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop" alt="الإشعارات" class="app-image">
-                    <div class="app-content">
-                        <h3>نظام الإشعارات</h3>
-                        <p>إشعارات ذكية ومتعددة القنوات للتواصل الفعال.</p>
-                        <div class="app-actions">
-                            <button class="btn btn-primary btn-sm">تفعيل</button>
-                            <button class="btn btn-secondary btn-sm">معاينة</button>
+                        <div class="ai-feature">
+                            <i class="fas fa-file-upload"></i>
+                            <span>معالجة جميع الملفات</span>
                         </div>
                     </div>
                 </div>
@@ -154,58 +73,67 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>النظام</h3>
-                    <p>منصة إدارة ذكية متكاملة توفر حلولاً مبتكرة لأعمالك.</p>
-                    <div class="social-links">
-                        <a href="#" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
-                        <a href="#" aria-label="لينكدإن"><i class="fab fa-linkedin"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h3>روابط سريعة</h3>
-                    <a href="#home">الرئيسية</a>
-                    <a href="#features">المميزات</a>
-                    <a href="#apps">التطبيقات</a>
-                    <a href="#contact">اتصل بنا</a>
-                </div>
-                <div class="footer-section">
-                    <h3>الدعم</h3>
-                    <a href="#">المساعدة</a>
-                    <a href="#">الشروط</a>
-                    <a href="#">الخصوصية</a>
+    <!-- AI Assistant -->
+    <div class="ai-assistant">
+        <button class="ai-toggle" onclick="assistant.togglePanel()">
+            <i class="fas fa-robot"></i>
+        </button>
+        <div class="ai-panel" id="aiPanel">
+            <div class="ai-header">
+                <span>المساعد الذكي</span>
+                <button class="ai-action-btn" onclick="assistant.togglePanel()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ai-messages" id="aiMessages">
+                <div class="ai-message bot">
+                    مرحباً! أنا المساعد الذكي. كيف يمكنني مساعدتك اليوم؟
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>© 2024 النظام. جميع الحقوق محفوظة.</p>
+            <div class="ai-input-area">
+                <textarea class="ai-input" id="aiInput" placeholder="اكتب سؤالك أو ارفع ملف..."></textarea>
+                <div class="ai-actions">
+                    <input type="file" id="fileUpload" hidden accept="*/*">
+                    <button class="ai-action-btn" onclick="document.getElementById('fileUpload').click()">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button class="ai-action-btn" onclick="assistant.sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
             </div>
         </div>
-    </footer>
+    </div>
 
-    <!-- Login Modal -->
-    <div class="modal" id="loginModal">
+    <!-- Admin Login Modal -->
+    <div class="modal" id="adminModal">
         <div class="modal-content">
-            <h2 class="text-center mb-lg">تسجيل الدخول</h2>
-            <form class="auth-form">
+            <h2 class="text-center mb-lg">
+                <i class="fas fa-user-shield"></i>
+                دخول المدير
+            </h2>
+            <form class="auth-form" onsubmit="handleAdminLogin(event)">
                 <div class="input-group">
-                    <input type="email" placeholder="البريد الإلكتروني" required>
+                    <input type="text" id="adminUsername" placeholder="اسم المستخدم" required value="admin">
                 </div>
                 <div class="input-group">
-                    <input type="password" placeholder="كلمة المرور" required>
+                    <input type="password" id="adminPassword" placeholder="كلمة المرور" required>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">تسجيل الدخول</button>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-sign-in-alt"></i>
+                    دخول
+                </button>
             </form>
-            <div class="auth-links text-center mt-md">
-                <a href="#" class="link">نسيت كلمة المرور؟</a>
+            <div class="auth-info mt-md">
+                <p class="text-center text-muted">
+                    اسم المستخدم: <strong>admin</strong><br>
+                    كلمة المرور: أدخل كلمة المرور المخصصة
+                </p>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
+    <script src="ai-assistant.js"></script>
 </body>
 </html>
