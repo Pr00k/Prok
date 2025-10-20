@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prok — المتجر الشخصي</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <meta name="description" content="Prok - متجرك الذكي" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="index.html">Prok<span class="dot">.</span></a>
+    <nav id="topNav" class="top-nav">
+      <a href="#home" data-i18n="nav.home">الرئيسية</a>
+      <a href="#apps" data-i18n="nav.apps">التطبيقات</a>
+      <a href="#about" data-i18n="nav.about">عنّا</a>
+      <a href="#contact" data-i18n="nav.contact">اتصل</a>
+    </nav>
+    <div class="actions">
+      <select id="langSel" aria-label="language switch">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+      </select>
+      <button id="themeToggle" class="btn">🌓</button>
+      <a id="adminLink" class="btn" href="admin/login.html">أدمن</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-inner">
+        <h1 id="heroTitle">أهلاً بك في Prok — متجر التطبيقات</h1>
+        <p id="heroDesc">منصة متطورة مرتبطة بالتطبيق، تعرض المنتجات تلقائياً وتدير الأسعار بمرونة.</p>
+        <a class="cta" href="#apps" id="ctaBrowse">تصفح التطبيقات</a>
+      </div>
+      <div class="hero-carousel" id="carousel">
+        <div class="slide active"><img src="assets/img/banner1.jpg" alt="banner1"></div>
+        <div class="slide"><img src="assets/img/banner2.jpg" alt="banner2"></div>
+        <div class="slide"><img src="assets/img/banner3.jpg" alt="banner3"></div>
+      </div>
+    </section>
+
+    <section id="apps" class="apps-section">
+      <div class="apps-controls">
+        <input id="search" placeholder="ابحث عن منتج..." aria-label="search"/>
+        <select id="category"><option value="all">الكل</option></select>
+      </div>
+      <h2 data-i18n="featured.title">منتجاتنا</h2>
+      <div id="appsGrid" class="apps-grid" aria-live="polite"></div>
+    </section>
+
+    <section id="about" class="about">
+      <h2 data-i18n="about.title">عن Prok</h2>
+      <p>منصة ذكية تعرض منتجات التطبيق تلقائياً. السعر في الموقع = أقل سعر متاح + هامش ربح تحدده.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p id="footerText">© 2025 Prok — كل الحقوق محفوظة</p>
+  </footer>
+
+  <script src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/lang.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
