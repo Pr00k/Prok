@@ -1,363 +1,0 @@
-import torch
-import torch.nn as nn
-from transformers import (
-    pipeline, 
-    WhisperProcessor, 
-    WhisperForConditionalGeneration,
-    Trainer, 
-    TrainingArguments,
-    AutoTokenizer,
-    AutoModelForCausalLM,
-    AutoModelForSeq2SeqLM
-)
-from diffusers import (
-    StableDiffusionPipeline, 
-    DPMSolverMultistepScheduler,
-    StableDiffusionImg2ImgPipeline
-)
-import speech_recognition as sr
-from gtts import gTTS
-import pygame
-import os
-from datetime import datetime
-import json
-from datasets import load_dataset, Dataset
-import logging
-from typing import Dict, List, Optional, Union
-import numpy as np
-from PIL import Image, ImageDraw, ImageFont
-import requests
-from io import BytesIO
-
-# إعداد التسجيل
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-class AdvancedAISystem:
-    def __init__(self):
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        logger.info(f"Using device: {self.device}")
-        
-        self.load_models()
-        self.conversation_history = []
-        self.setup_audio_system()
-        
-    def load_models(self):
-        """تحميل جميع النماذج"""
-        try:
-            # نموذج النص المتقدم
-            self.text_model = pipeline(
-                "text-generation",
-                model="microsoft/DialoGPT-large",
-                torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
-                device_map="auto" if self.device == "cuda" else None
-            )
-            
-            # نموذج إنشاء الصور
-            self.image_pipe = StableDiffusionPipeline.from_pretrained(
-                "runwayml/stable-diffusion-v1-5",
-                torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
-                safety_checker=None,
-                requires_safety_checker=False
-            )
-            self.image_pipe.scheduler = DPMSolverMultistepScheduler.from_config(
-                self.image_pipe.scheduler.config
-            )
-            self.image_pipe = self.image_pipe.to(self.device)
-            
-            # نموذج التعرف على الكلام
-            self.whisper_processor = WhisperProcessor.from_pretrained("openai/whisper-small")
-            self.whisper_model = WhisperForConditionalGeneration.from_pretrained(
-                "openai/whisper-small"
-            ).to(self.device)
-            
-            # نموذج الترجمة
-            self.translator = pipeline(
-                "translation_en_to_ar",
-                model="Helsinki-NLP/opus-mt-en-ar"
-            )
-            
-            # نموذج تحليل المشاعر
-            self.sentiment_analyzer = pipeline(
-                "sentiment-analysis",
-                model="cardiffnlp/twitter-xlm-roberta-base-sentiment"
-            )
-            
-            logger.info("All models loaded successfully!")
-            
-        except Exception as e:
-            logger.error(f"Error loading models: {e}")
-            raise
-
-    def setup_audio_system(self):
-        """إعداد نظام الصوت"""
-        self.recognizer = sr.Recognizer()
-        self.microphone = sr.Microphone()
-        
-        # معايرة ضوضاء البيئة
-        with self.microphone as source:
-            self.recognizer.adjust_for_ambient_noise(source)
-
-    def generate_text(self, prompt: str, context: List[str] = None, **kwargs) -> Dict:
-        """إنشاء نص مع السياق والخيارات المتقدمة"""
-        try:
-            # بناء السياق من التاريخ
-            if context:
-                full_prompt = "\n".join(context) + "\n" + prompt
-            else:
-                full_prompt = prompt
-            
-            response = self.text_model(
-                full_prompt,
-                max_length=kwargs.get('max_length', 150),
-                num_return_sequences=kwargs.get('num_return_sequences', 1),
-                temperature=kwargs.get('temperature', 0.7),
-                do_sample=True,
-                pad_token_id=self.text_model.tokenizer.eos_token_id,
-                repetition_penalty=kwargs.get('repetition_penalty', 1.2)
-            )
-            
-            generated_text = response[0]['generated_text']
-            
-            # تحديث تاريخ المحادثة
-            self.conversation_history.append({
-                'user': prompt,
-                'ai': generated_text,
-                'timestamp': datetime.now().isoformat()
-            })
-            
-            return {
-                'text': generated_text,
-                'tokens': len(self.text_model.tokenizer.encode(generated_text)),
-                'timestamp': datetime.now().isoformat()
-            }
-            
-        except Exception as e:
-            logger.error(f"Error in text generation: {e}")
-            return {'error': str(e), 'text': ''}
-
-    def generate_image(self, prompt: str, **kwargs) -> Dict:
-        """إنشاء صورة مع خيارات متقدمة"""
-        try:
-            # تحسين ال prompt تلقائياً
-            enhanced_prompt = self.enhance_prompt(prompt)
-            
-            image = self.image_pipe(
-                enhanced_prompt,
-                height=kwargs.get('height', 512),
-                width=kwargs.get('width', 512),
-                num_inference_steps=kwargs.get('steps', 20),
-                guidance_scale=kwargs.get('guidance_scale', 7.5),
-                negative_prompt=kwargs.get('negative_prompt', '')
-            ).images[0]
-            
-            # حفظ الصورة مع اسم فريد
-            filename = f"generated_image_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-            image.save(filename)
-            
-            return {
-                'filename': filename,
-                'prompt': prompt,
-                'enhanced_prompt': enhanced_prompt,
-                'dimensions': image.size
-            }
-            
-        except Exception as e:
-            logger.error(f"Error in image generation: {e}")
-            return {'error': str(e)}
-
-    def enhance_prompt(self, prompt: str) -> str:
-        """تحسين ال prompt تلقائياً"""
-        enhancements = {
-            'low_quality': ', high quality, detailed, professional',
-            'portrait': ', professional lighting, sharp focus',
-            'landscape': ', dramatic lighting, wide angle',
-            'abstract': ', artistic, creative, unique style'
-        }
-        
-        enhanced = prompt
-        for key, enhancement in enhancements.items():
-            if key in prompt.lower():
-                enhanced += enhancement
-                
-        return enhanced + ', trending on artstation, 4k'
-
-    def speech_to_text(self, audio_file: str = None, use_mic: bool = False) -> Dict:
-       """تحويل الكلام إلى نص"""
-        try:
-            if use_mic:
-                with self.microphone as source:
-                    logger.info("Listening...")
-                    audio = self.recognizer.listen(source)
-                text = self.recognizer.recognize_google(audio, language="ar-AR")
-            else:
-                with open(audio_file, "rb") as f:
-                    audio_data = f.read()
-                inputs = self.whisper_processor(audio_data, return_tensors="pt")
-                predicted_ids = self.whisper_model.generate(inputs.input_ids)
-                text = self.whisper_processor.batch_decode(predicted_ids, skip_special_tokens=True)[0]
-            
-            return {'text': text, 'confidence': 0.95}
-            
-        except Exception as e:
-            logger.error(f"Error in speech recognition: {e}")
-            return {'error': str(e)}
-
-    def text_to_speech(self, text: str, language: str = "ar") -> str:
-        """تحويل النص إلى كلام"""
-        try:
-            tts = gTTS(text=text, lang=language, slow=False)
-            filename = f"speech_{datetime.now().strftime('%Y%m%d_%H%M%S')}.mp3"
-            tts.save(filename)
-            
-            # تشغيل الصوت تلقائياً
-            pygame.mixer.init()
-            pygame.mixer.music.load(filename)
-            pygame.mixer.music.play()
-            
-            return filename
-            
-        except Exception as e:
-            logger.error(f"Error in text-to-speech: {e}")
-            return ''
-
-    def analyze_sentiment(self, text: str) -> Dict:
-        """تحليل المشاعر"""
-        try:
-            result = self.sentiment_analyzer(text)[0]
-            return {
-                'sentiment': result['label'],
-                'score': result['score'],
-                'text': text
-            }
-        except Exception as e:
-            logger.error(f"Error in sentiment analysis: {e}")
-            return {'error': str(e)}
-
-    def translate_text(self, text: str, target_lang: str = "ar") -> str:
-        """ترجمة النص"""
-        try:
-            if target_lang == "ar":
-                result = self.translator(text)[0]['translation_text']
-            else:
-                # إضافة مترجم إضافي للغات الأخرى
-                pass
-            return result
-        except Exception as e:
-            logger.error(f"Error in translation: {e}")
-            return text
-
-    def auto_train(self, dataset_name: str, model_type: str = "text") -> Dict:
-        """التدريب التلقائي على بيانات جديدة"""
-        try:
-            dataset = load_dataset(dataset_name)
-            
-            training_args = TrainingArguments(
-                output_dir=f'./results_{model_type}',
-                num_train_epochs=3,
-                per_device_train_batch_size=4,
-                per_device_eval_batch_size=4,
-                warmup_steps=500,
-                weight_decay=0.01,
-                logging_dir=f'./logs_{model_type}',
-                logging_steps=10,
-                evaluation_strategy="epoch",
-                save_strategy="epoch",
-                load_best_model_at_end=True,
-            )
-
-            if model_type == "text":
-                model = self.text_model.model
-            else:
-                model = self.whisper_model
-
-            trainer = Trainer(
-                model=model,
-                args=training_args,
-                train_dataset=dataset['train'],
-                eval_dataset=dataset['validation'] if 'validation' in dataset else dataset['test'],
-            )
-
-            trainer.train()
-            
-            return {
-                'status': 'success',
-                'model': model_type,
-                'training_loss': trainer.state.log_history[-1]['loss'],
-                'model_path': training_args.output_dir
-            }
-            
-        except Exception as e:
-            logger.error(f"Error in training: {e}")
-            return {'error': str(e)}
-
-    def create_logo(self, company_name: str, style: str = "modern") -> str:
-        """إنشاء شعار بسيط"""
-        try:
-            # إنشاء صورة شعار أساسية
-            img = Image.new('RGB', (512, 512), color=(73, 109, 137))
-            d = ImageDraw.Draw(img)
-            
-            # إضافة اسم الشركة
-            try:
-                font = ImageFont.truetype("arial.ttf", 40)
-            except:
-                font = ImageFont.load_default()
-                
-            d.text((100, 256), company_name, fill=(255, 255, 255), font=font)
-            
-            filename = f"logo_{company_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-            img.save(filename)
-            
-            return filename
-            
-        except Exception as e:
-            logger.error(f"Error creating logo: {e}")
-            return ''
-
-    def get_conversation_history(self) -> List[Dict]:
-        """الحصول على تاريخ المحادثة"""
-        return self.conversation_history
-
-    def save_conversation(self, filename: str = None):
-        """حفظ المحادثة"""
-        if not filename:
-            filename = f"conversation_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump(self.conversation_history, f, ensure_ascii=False, indent=2)
-
-# مثال على الاستخدام
-if __name__ == "__main__":
-    # إنشاء النظام
-    ai_system = AdvancedAISystem()
-    
-    # اختبار الوظائف
-    print("🔊 اختبار نظام الذكاء الاصطناعي المتقدم...")
-    
-    # إنشاء نص
-    text_result = ai_system.generate_text(
-        "ما هو مستقبل الذكاء الاصطناعي في العالم العربي؟",
-        context=["أنت مساعد ذكي متخصص في التكنولوجيا."]
-    )
-    print("📝 النص المولد:", text_result['text'])
-    
-    # إنشاء صورة
-    image_result = ai_system.generate_image(
-        "منظر طبيعي جبلي مع بحيرة صافية في الشرق الأوسط",
-        height=512,
-        width=512
-    )
-    print("🖼️ الصورة المولدة:", image_result['filename'])
-    
-    # تحليل المشاعر
-    sentiment = ai_system.analyze_sentiment("أنا سعيد جداً بهذا التقدم التكنولوجي")
-    print("😊 تحليل المشاعر:", sentiment)
-    
-    # إنشاء شعار
-    logo = ai_system.create_logo("شركة التقنية", "modern")
-    print("🎨 الشعار المولد:", logo)
-    
-    # حفظ المحادثة
-    ai_system.save_conversation()
-    print("💾 المحادثة محفوظة!")
