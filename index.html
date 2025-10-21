@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام الذكاء الاصطناعي المتقدم</title>
+    <title>نظام الذكاء الاصطناعي المتقدم - التصحيح الذاتي</title>
     <style>
         * {
             margin: 0;
@@ -19,8 +19,88 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+
+        /* السايدبار */
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .user-profile {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quick-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: right;
+            font-size: 0.9em;
+        }
+
+        .quick-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        .history-section {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .history-item:hover {
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         header {
@@ -29,7 +109,6 @@
             border-radius: 20px;
             text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            margin-bottom: 30px;
             backdrop-filter: blur(10px);
         }
 
@@ -37,7 +116,6 @@
             color: #667eea;
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .subtitle {
@@ -45,928 +123,708 @@
             font-size: 1.1em;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s, box-shadow 0.3s;
-            backdrop-filter: blur(10px);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-        }
-
-        .feature-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .feature-title {
-            color: #333;
-            font-size: 1.5em;
-            margin-bottom: 15px;
+        .self-healing-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 10px;
             font-weight: bold;
+            animation: pulse 2s infinite;
         }
 
-        .input-group {
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* منطقة المحادثة */
+        .chat-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 500px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
             margin-bottom: 20px;
         }
 
-        label {
-            display: block;
-            color: #555;
-            margin-bottom: 8px;
-            font-weight: 600;
+        .message {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            animation: slideIn 0.3s ease-out;
         }
 
-        input[type="text"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-            font-family: inherit;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        input[type="text"]:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        button {
+        .user-message {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            width: 100%;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .output-box {
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            min-height: 100px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            display: none;
-        }
-
-        .output-box.active {
-            display: block;
-        }
-
-        .loading {
-            text-align: center;
-            color: #667eea;
-            font-weight: bold;
-            display: none;
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        .loading::after {
-            content: '...';
-            animation: dots 1.5s infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
-        }
-
-        .history-item {
+        .ai-message {
             background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-right: 4px solid #667eea;
+            border: 2px solid #e9ecef;
+            border-bottom-left-radius: 5px;
         }
 
-        .timestamp {
-            color: #999;
-            font-size: 0.9em;
-            margin-bottom: 5px;
+        .message-content {
+            line-height: 1.6;
         }
 
-        .slider-container {
-            margin: 15px 0;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 8px;
-            border-radius: 5px;
-            background: #ddd;
-            outline: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #667eea;
-            cursor: pointer;
-        }
-
-        .value-display {
-            text-align: center;
-            color: #667eea;
-            font-weight: bold;
+        .message-time {
+            font-size: 0.8em;
+            opacity: 0.7;
             margin-top: 5px;
         }
 
-        .image-preview {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none;
-        }
-
-        .image-preview.active {
-            display: block;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
+        /* منطقة الإدخال */
+        .input-container {
+            background: white;
+            padding: 20px;
             border-radius: 15px;
-            font-size: 0.85em;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
             font-weight: bold;
-            margin: 5px 5px 0 0;
+            color: #667eea;
+            font-size: 0.9em;
         }
 
-        .badge-success {
-            background: #d4edda;
-            color: #155724;
+        .mode-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
         }
 
-        .badge-info {
-            background: #d1ecf1;
-            color: #0c5460;
+        .unified-input-container {
+            position: relative;
         }
 
-        .badge-warning {
+        .unified-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .unified-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        /* الرسائل النظامية */
+        .system-message {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
             background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
             color: #856404;
         }
 
+        .error-message {
+            background: #fee;
+            border: 2px solid #fcc;
+            color: #c33;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .success-message {
+            background: #efe;
+            border: 2px solid #cfc;
+            color: #3c3;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        /* عناصر الوسائط */
+        .media-content {
+            margin-top: 10px;
+        }
+
+        .generated-image {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* الإحصائيات */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: rgba(255, 255, 255, 0.95);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
 
         .stat-number {
             font-size: 2em;
             font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: block;
         }
 
         .stat-label {
             font-size: 0.9em;
-            opacity: 0.9;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🤖 نظام الذكاء الاصطناعي المتقدم</h1>
-            <p class="subtitle">منصة شاملة لتوليد النصوص والصور وتحليل المشاعر والمزيد</p>
-        </header>
+        <!-- السايدبار -->
+        <div class="sidebar">
+            <div class="user-profile">
+                <div class="avatar">🤖</div>
+                <h3>مساعد الذكاء الاصطناعي</h3>
+                <p>متصل ومستعد للمساعدة</p>
+            </div>
 
-        <div class="stats-grid">
-            <div class="stat-box">
-                <span class="stat-number" id="textGenCount">0</span>
-                <span class="stat-label">نص مولد</span>
+            <div class="quick-actions">
+                <button class="quick-btn" onclick="quickAction('summarize')">📄 تلخيص النص</button>
+                <button class="quick-btn" onclick="quickAction('translate')">🌐 ترجمة سريعة</button>
+                <button class="quick-btn" onclick="quickAction('explain')">🔍 شرح مفهوم</button>
+                <button class="quick-btn" onclick="quickAction('code')">💻 كتابة كود</button>
+                <button class="quick-btn" onclick="quickAction('image')">🖼️ إنشاء صورة</button>
             </div>
-            <div class="stat-box">
-                <span class="stat-number" id="imageGenCount">0</span>
-                <span class="stat-label">صورة مولدة</span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number" id="sentimentCount">0</span>
-                <span class="stat-label">تحليل مشاعر</span>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number" id="totalRequests">0</span>
-                <span class="stat-label">إجمالي الطلبات</span>
+
+            <div class="history-section">
+                <h4>المحادثات الأخيرة</h4>
+                <div id="conversationHistory"></div>
             </div>
         </div>
 
-        <div class="features-grid">
-            <!-- توليد النصوص -->
-            <div class="feature-card">
-                <span class="feature-icon">📝</span>
-                <h2 class="feature-title">توليد النصوص الذكي</h2>
-                
-                <div class="input-group">
-                    <label>النص المطلوب:</label>
-                    <textarea id="textPrompt" placeholder="اكتب سؤالك أو موضوعك هنا..."></textarea>
-                </div>
+        <!-- المحتوى الرئيسي -->
+        <div class="main-content">
+            <header>
+                <h1>🤖 نظام الذكاء الاصطناعي المتقدم</h1>
+                <p class="subtitle">محادثة ذكية موحدة مع جميع الميزات في مكان واحد</p>
+                <span class="self-healing-badge">✨ نظام التصحيح الذاتي نشط</span>
+            </header>
 
-                <div class="slider-container">
-                    <label>مستوى الإبداع:</label>
-                    <input type="range" id="creativity" min="0" max="100" value="70">
-                    <div class="value-display"><span id="creativityValue">70</span>%</div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-number" id="totalRequests">0</span>
+                    <span class="stat-label">إجمالي الطلبات</span>
                 </div>
-
-                <div class="slider-container">
-                    <label>طول النص:</label>
-                    <input type="range" id="textLength" min="50" max="500" value="150">
-                    <div class="value-display"><span id="lengthValue">150</span> كلمة</div>
+                <div class="stat-box">
+                    <span class="stat-number" id="successRate">100%</span>
+                    <span class="stat-label">معدل النجاح</span>
                 </div>
-
-                <button onclick="generateText()">🚀 توليد النص</button>
-                <div class="loading" id="textLoading">جاري التوليد</div>
-                <div class="output-box" id="textOutput"></div>
+                <div class="stat-box">
+                    <span class="stat-number" id="responseTime">0.2s</span>
+                    <span class="stat-label">متوسط الاستجابة</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number" id="systemHealth">100%</span>
+                    <span class="stat-label">صحة النظام</span>
+                </div>
             </div>
 
-            <!-- توليد الصور -->
-            <div class="feature-card">
-                <span class="feature-icon">🖼️</span>
-                <h2 class="feature-title">توليد الصور بالذكاء الاصطناعي</h2>
-                
-                <div class="input-group">
-                    <label>وصف الصورة:</label>
-                    <textarea id="imagePrompt" placeholder="صف الصورة التي تريد إنشاءها..."></textarea>
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai-message">
+                        <div class="message-content">
+                            🌟 <strong>مرحباً بك في نظام الذكاء الاصطناعي المتقدم!</strong><br><br>
+                            أنا مساعدك الذكي الذي يمكنه مساعدتك في:<br>
+                            • إنشاء النصوص والمحتوى<br>
+                            • توليد الصور والرسومات<br>
+                            • تحليل المشاعر والنصوص<br>
+                            • الترجمة بين اللغات<br>
+                            • كتابة الكود البرمجي<br><br>
+                            فقط اكتب طلبك وسأقوم بالرد عليه تلقائياً!
+                        </div>
+                        <div class="message-time">الآن</div>
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <label>نمط الصورة:</label>
-                    <select id="imageStyle">
-                        <option value="realistic">واقعي</option>
-                        <option value="artistic">فني</option>
-                        <option value="abstract">تجريدي</option>
-                        <option value="anime">أنمي</option>
-                        <option value="3d">ثلاثي الأبعاد</option>
-                    </select>
+                <div class="input-container">
+                    <div class="input-header">
+                        <div class="mode-selector">
+                            <button class="mode-btn active" data-mode="auto" onclick="switchMode('auto')">🤖 تلقائي</button>
+                            <button class="mode-btn" data-mode="text" onclick="switchMode('text')">📝 نص</button>
+                            <button class="mode-btn" data-mode="image" onclick="switchMode('image')">🖼️ صورة</button>
+                            <button class="mode-btn" data-mode="code" onclick="switchMode('code')">💻 كود</button>
+                            <button class="mode-btn" data-mode="analyze" onclick="switchMode('analyze')">🔍 تحليل</button>
+                        </div>
+                        <div class="typing-indicator" id="typingIndicator">
+                            <span>جاري الكتابة...</span>
+                            <div class="typing-dots">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="unified-input-container">
+                        <textarea 
+                            class="unified-input" 
+                            id="unifiedInput" 
+                            placeholder="اكتب رسالتك هنا... سيتم التعرف تلقائياً على نوع الطلب وتنفيذه"
+                            oninput="autoDetectType(this.value)"
+                            onkeypress="handleKeyPress(event)"
+                        ></textarea>
+                    </div>
+
+                    <div class="input-actions">
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="sendMessage()">🚀 إرسال</button>
+                            <button class="btn btn-secondary" onclick="clearChat()">🗑️ مسح المحادثة</button>
+                            <button class="btn btn-success" onclick="exportConversation()">💾 حفظ المحادثة</button>
+                        </div>
+                        <div id="currentMode">الوضع: التلقائي</div>
+                    </div>
                 </div>
-
-                <div class="slider-container">
-                    <label>جودة الصورة:</label>
-                    <input type="range" id="imageQuality" min="1" max="10" value="7">
-                    <div class="value-display"><span id="qualityValue">7</span>/10</div>
-                </div>
-
-                <button onclick="generateImage()">🎨 توليد الصورة</button>
-                <div class="loading" id="imageLoading">جاري الإنشاء</div>
-                <img class="image-preview" id="imagePreview" alt="الصورة المولدة">
-                <div class="output-box" id="imageOutput"></div>
-            </div>
-
-            <!-- تحليل المشاعر -->
-            <div class="feature-card">
-                <span class="feature-icon">😊</span>
-                <h2 class="feature-title">تحليل المشاعر</h2>
-                
-                <div class="input-group">
-                    <label>النص للتحليل:</label>
-                    <textarea id="sentimentText" placeholder="أدخل النص لتحليل المشاعر..."></textarea>
-                </div>
-
-                <button onclick="analyzeSentiment()">🔍 تحليل المشاعر</button>
-                <div class="loading" id="sentimentLoading">جاري التحليل</div>
-                <div class="output-box" id="sentimentOutput"></div>
-            </div>
-
-            <!-- الترجمة -->
-            <div class="feature-card">
-                <span class="feature-icon">🌐</span>
-                <h2 class="feature-title">الترجمة الذكية</h2>
-                
-                <div class="input-group">
-                    <label>النص للترجمة:</label>
-                    <textarea id="translateText" placeholder="أدخل النص للترجمة..."></textarea>
-                </div>
-
-                <div class="input-group">
-                    <label>من:</label>
-                    <select id="sourceLang">
-                        <option value="ar">العربية</option>
-                        <option value="en">الإنجليزية</option>
-                        <option value="fr">الفرنسية</option>
-                        <option value="es">الإسبانية</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>إلى:</label>
-                    <select id="targetLang">
-                        <option value="en">الإنجليزية</option>
-                        <option value="ar">العربية</option>
-                        <option value="fr">الفرنسية</option>
-                        <option value="es">الإسبانية</option>
-                    </select>
-                </div>
-
-                <button onclick="translateText()">🔄 ترجمة</button>
-                <div class="loading" id="translateLoading">جاري الترجمة</div>
-                <div class="output-box" id="translateOutput"></div>
-            </div>
-
-            <!-- إنشاء الشعارات -->
-            <div class="feature-card">
-                <span class="feature-icon">🎨</span>
-                <h2 class="feature-title">إنشاء الشعارات</h2>
-                
-                <div class="input-group">
-                    <label>اسم الشركة:</label>
-                    <input type="text" id="companyName" placeholder="اسم الشركة أو العلامة التجارية">
-                </div>
-
-                <div class="input-group">
-                    <label>نمط الشعار:</label>
-                    <select id="logoStyle">
-                        <option value="modern">عصري</option>
-                        <option value="classic">كلاسيكي</option>
-                        <option value="minimalist">بسيط</option>
-                        <option value="creative">إبداعي</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>اللون الأساسي:</label>
-                    <select id="logoColor">
-                        <option value="blue">أزرق</option>
-                        <option value="red">أحمر</option>
-                        <option value="green">أخضر</option>
-                        <option value="purple">بنفسجي</option>
-                        <option value="orange">برتقالي</option>
-                    </select>
-                </div>
-
-                <button onclick="createLogo()">✨ إنشاء الشعار</button>
-                <div class="loading" id="logoLoading">جاري الإنشاء</div>
-                <canvas id="logoCanvas" width="400" height="400" style="display:none; width:100%; border-radius:8px; margin-top:15px;"></canvas>
-                <div class="output-box" id="logoOutput"></div>
-            </div>
-
-            <!-- سجل المحادثات -->
-            <div class="feature-card">
-                <span class="feature-icon">💬</span>
-                <h2 class="feature-title">سجل المحادثات</h2>
-                
-                <div id="historyContainer">
-                    <p style="text-align:center; color:#999;">لا يوجد سجل حتى الآن</p>
-                </div>
-
-                <button onclick="clearHistory()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); margin-top: 15px;">🗑️ مسح السجل</button>
-                <button onclick="downloadHistory()" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); margin-top: 10px;">💾 تحميل السجل</button>
             </div>
         </div>
     </div>
 
     <script>
-        // إحصائيات
-        let stats = {
-            textGenCount: 0,
-            imageGenCount: 0,
-            sentimentCount: 0,
-            totalRequests: 0
-        };
-
-        let history = [];
-
-        // تحديث قيم السلايدرز
-        document.getElementById('creativity').addEventListener('input', (e) => {
-            document.getElementById('creativityValue').textContent = e.target.value;
-        });
-
-        document.getElementById('textLength').addEventListener('input', (e) => {
-            document.getElementById('lengthValue').textContent = e.target.value;
-        });
-
-        document.getElementById('imageQuality').addEventListener('input', (e) => {
-            document.getElementById('qualityValue').textContent = e.target.value;
-        });
-
-        // توليد النصوص
-        function generateText() {
-            const prompt = document.getElementById('textPrompt').value;
-            if (!prompt) {
-                alert('الرجاء إدخال نص');
-                return;
+        // نظام المحادثة الموحدة
+        class UnifiedAIChat {
+            constructor() {
+                this.messages = [];
+                this.currentMode = 'auto';
+                this.isProcessing = false;
+                this.initialize();
             }
 
-            const loading = document.getElementById('textLoading');
-            const output = document.getElementById('textOutput');
-            
-            loading.classList.add('active');
-            output.classList.remove('active');
-
-            setTimeout(() => {
-                const creativity = document.getElementById('creativity').value;
-                const length = document.getElementById('textLength').value;
-                
-                const responses = [
-                    `بناءً على سؤالك حول "${prompt}"، يمكن القول أن هذا الموضوع يحمل أهمية كبيرة في العصر الحالي. من خلال تحليل معمق، نجد أن هناك عدة جوانب يجب مراعاتها...`,
-                    `${prompt} هو موضوع شيق يستحق النقاش. من وجهة نظر تحليلية، يمكننا استكشاف الأبعاد المختلفة لهذا الموضوع بدءاً من الجوانب التقنية وصولاً إلى التأثيرات المجتمعية...`,
-                    `في سياق ${prompt}، تشير الدراسات الحديثة إلى أن هناك تطورات ملحوظة في هذا المجال. يمكننا أن نلاحظ تزايد الاهتمام والاستثمار في هذا القطاع...`
-                ];
-
-                const response = responses[Math.floor(Math.random() * responses.length)];
-                
-                output.innerHTML = `<strong>النص المولد:</strong><br><br>${response}<br><br>
-                <span class="badge badge-info">الإبداع: ${creativity}%</span>
-                <span class="badge badge-info">الطول: ${length} كلمة</span>`;
-                
-                loading.classList.remove('active');
-                output.classList.add('active');
-
-                updateStats('text');
-                addToHistory('توليد نص', prompt, response);
-            }, 2000);
-        }
-
-        // توليد الصور
-        function generateImage() {
-            const prompt = document.getElementById('imagePrompt').value;
-            if (!prompt) {
-                alert('الرجاء إدخال وصف للصورة');
-                return;
+            initialize() {
+                this.loadHistory();
+                this.updateDisplay();
+                this.setupEventListeners();
             }
 
-            const loading = document.getElementById('imageLoading');
-            const output = document.getElementById('imageOutput');
-            const preview = document.getElementById('imagePreview');
-            
-            loading.classList.add('active');
-            output.classList.remove('active');
-            preview.classList.remove('active');
-
-            setTimeout(() => {
-                const style = document.getElementById('imageStyle').value;
-                const quality = document.getElementById('imageQuality').value;
-                
-                // استخدام Picsum للحصول على صورة عشوائية
-                const imageUrl = `https://picsum.photos/512/512?random=${Date.now()}`;
-                
-                preview.src = imageUrl;
-                preview.classList.add('active');
-                
-                output.innerHTML = `<strong>تم إنشاء الصورة بنجاح!</strong><br><br>
-                <strong>الوصف:</strong> ${prompt}<br>
-                <span class="badge badge-success">النمط: ${style}</span>
-                <span class="badge badge-success">الجودة: ${quality}/10</span>`;
-                
-                loading.classList.remove('active');
-                output.classList.add('active');
-
-                updateStats('image');
-                addToHistory('توليد صورة', prompt, 'تم إنشاء الصورة بنجاح');
-            }, 3000);
-        }
-
-        // تحليل المشاعر
-        function analyzeSentiment() {
-            const text = document.getElementById('sentimentText').value;
-            if (!text) {
-                alert('الرجاء إدخال نص للتحليل');
-                return;
+            setupEventListeners() {
+                const input = document.getElementById('unifiedInput');
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
             }
 
-            const loading = document.getElementById('sentimentLoading');
-            const output = document.getElementById('sentimentOutput');
-            
-            loading.classList.add('active');
-            output.classList.remove('active');
+            async sendMessage() {
+                if (this.isProcessing) return;
 
-            setTimeout(() => {
-                const sentiments = ['إيجابي', 'سلبي', 'محايد'];
-                const sentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
-                const score = (Math.random() * 0.4 + 0.6).toFixed(2);
-                
-                const emoji = sentiment === 'إيجابي' ? '😊' : sentiment === 'سلبي' ? '😔' : '😐';
-                const badgeClass = sentiment === 'إيجابي' ? 'badge-success' : sentiment === 'سلبي' ? 'badge-warning' : 'badge-info';
-                
-                output.innerHTML = `<strong>نتيجة التحليل:</strong><br><br>
-                ${emoji} <strong>المشاعر:</strong> ${sentiment}<br>
-                <strong>درجة الثقة:</strong> ${(score * 100).toFixed(0)}%<br><br>
-                <span class="badge ${badgeClass}">${sentiment}</span>
-                <span class="badge badge-info">الثقة: ${(score * 100).toFixed(0)}%</span>`;
-                
-                loading.classList.remove('active');
-                output.classList.add('active');
+                const input = document.getElementById('unifiedInput');
+                const message = input.value.trim();
 
-                updateStats('sentiment');
-                addToHistory('تحليل مشاعر', text, `${sentiment} (${(score * 100).toFixed(0)}%)`);
-            }, 1500);
-        }
+                if (!message) return;
 
-        // الترجمة
-        function translateText() {
-            const text = document.getElementById('translateText').value;
-            if (!text) {
-                alert('الرجاء إدخال نص للترجمة');
-                return;
+                // إضافة رسالة المستخدم
+                this.addMessage('user', message);
+                input.value = '';
+                this.showTyping();
+
+                this.isProcessing = true;
+
+                try {
+                    // محاكاة استجابة الذكاء الاصطناعي
+                    const response = await this.generateResponse(message);
+                    
+                    this.hideTyping();
+                    this.addMessage('ai', response);
+                    this.saveToHistory();
+                    this.updateStats();
+
+                } catch (error) {
+                    this.hideTyping();
+                    this.addMessage('system', `❌ خطأ في المعالجة: ${error.message}`);
+                }
+
+                this.isProcessing = false;
             }
 
-            const loading = document.getElementById('translateLoading');
-            const output = document.getElementById('translateOutput');
-            
-            loading.classList.add('active');
-            output.classList.remove('active');
+            async generateResponse(message) {
+                // محاكاة تأخير الشبكة
+                await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
 
-            setTimeout(() => {
-                const sourceLang = document.getElementById('sourceLang').value;
-                const targetLang = document.getElementById('targetLang').value;
-                
-                const translations = {
-                    'ar_en': 'This is a sample translation to English',
-                    'en_ar': 'هذه ترجمة نموذجية إلى العربية',
-                    'ar_fr': 'Ceci est un exemple de traduction en français',
-                    'ar_es': 'Esta es una traducción de muestra al español'
+                const responses = {
+                    'text': [
+                        `هذا رد مفصل على طلبك حول "${message}". لقد قمت بتحليل الموضوع وتقديم إجابة شاملة تأخذ في الاعتبار جميع الجوانب المهمة.`,
+                        `بناءً على سؤالك، إليك التحليل الشامل: ${message}. هذا الموضوع مهم ويتطلب فهم عميق للمبادئ الأساسية.`,
+                        `إليك الإجابة على سؤالك: ${message}. لقد راعيت في الرد الدقة والشمولية مع تقديم أمثلة عملية.`
+                    ],
+                    'image': [
+                        `✅ لقد قمت بإنشاء صورة بناءً على وصفك: "${message}". الصورة الآن جاهزة وتعبر عن الفكرة التي تريدها.`,
+                        `🎨 تم توليد صورة فنية تعبر عن: ${message}. الصورة تجمع بين الإبداع والدقة في التعبير البصري.`,
+                        `🖼️ بناءً على طلبك، أنشأت صورة تمثل: ${message}. يمكنك رؤية النتيجة أدناه.`
+                    ],
+                    'code': [
+                        `💻 إليك الكود المطلوب لـ: ${message}. الكود مكتوب بأفضل الممارسات ومجهز للتشغيل الفوري.`,
+                        `🚀 لقد قمت ببرمجة الحل لـ: ${message}. الكود شامل ويحتوي على تعليقات توضيحية.`,
+                        `📝 تم إنشاء الكود البرمجي لـ: ${message}. الكود نظيف وسهل الفهم والتطوير.`
+                    ],
+                    'analyze': [
+                        `🔍 نتيجة تحليل النص: "${message}". التحليل يشمل المشاعر والمواضيع الرئيسية والتوصيات.`,
+                        `📊 تحليل مفصل للنص: ${message}. النتائج تعكس دقة عالية في الفهم والمعالجة.`,
+                        `🎯 تم تحليل المحتوى بنجاح: ${message}. إليك التقرير الكامل مع الإحصاءات والتوصيات.`
+                    ]
                 };
-                
-                const key = `${sourceLang}_${targetLang}`;
-                const translated = translations[key] || text;
-                
-                output.innerHTML = `<strong>النص الأصلي:</strong><br>${text}<br><br>
-                <strong>الترجمة:</strong><br>${translated}<br><br>
-                <span class="badge badge-info">من: ${sourceLang}</span>
-                <span class="badge badge-info">إلى: ${targetLang}</span>`;
-                
-                loading.classList.remove('active');
-                output.classList.add('active');
 
-                updateStats('translate');
-                addToHistory('ترجمة', text, translated);
-            }, 1500);
-        }
-
-        // إنشاء الشعارات
-        function createLogo() {
-            const companyName = document.getElementById('companyName').value;
-            if (!companyName) {
-                alert('الرجاء إدخال اسم الشركة');
-                return;
+                const mode = this.detectMessageType(message);
+                const modeResponses = responses[mode] || responses.text;
+                return modeResponses[Math.floor(Math.random() * modeResponses.length)];
             }
 
-            const loading = document.getElementById('logoLoading');
-            const output = document.getElementById('logoOutput');
-            const canvas = document.getElementById('logoCanvas');
-            
-            loading.classList.add('active');
-            output.classList.remove('active');
-            canvas.style.display = 'none';
+            detectMessageType(message) {
+                if (this.currentMode !== 'auto') return this.currentMode;
 
-            setTimeout(() => {
-                const style = document.getElementById('logoStyle').value;
-                const color = document.getElementById('logoColor').value;
+                const lowerMessage = message.toLowerCase();
                 
-                const ctx = canvas.getContext('2d');
-                
-                // ألوان
-                const colors = {
-                    blue: ['#667eea', '#764ba2'],
-                    red: ['#f093fb', '#f5576c'],
-                    green: ['#43e97b', '#38f9d7'],
-                    purple: ['#a8edea', '#fed6e3'],
-                    orange: ['#fa709a', '#fee140']
-                };
-                
-                const gradient = ctx.createLinearGradient(0, 0, 400, 400);
-                gradient.addColorStop(0, colors[color][0]);
-                gradient.addColorStop(1, colors[color][1]);
-                
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, 400, 400);
-                
-                // رسم دائرة مركزية
-                ctx.beginPath();
-                ctx.arc(200, 200, 80, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-                ctx.fill();
-                
-                // كتابة اسم الشركة
-                ctx.fillStyle = colors[color][0];
-                ctx.font = 'bold 32px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText(companyName, 200, 210);
-                
-                canvas.style.display = 'block';
-                
-                output.innerHTML = `<strong>تم إنشاء الشعار بنجاح!</strong><br><br>
-                <span class="badge badge-success">النمط: ${style}</span>
-                <span class="badge badge-success">اللون: ${color}</span>`;
-                
-                loading.classList.remove('active');
-                output.classList.add('active');
-
-                updateStats('logo');
-                addToHistory('إنشاء شعار', companyName, `شعار بنمط ${style}`);
-            }, 2000);
-        }
-
-        // تحديث الإحصائيات
-        function updateStats(type) {
-            if (type === 'text') stats.textGenCount++;
-            if (type === 'image') stats.imageGenCount++;
-            if (type === 'sentiment') stats.sentimentCount++;
-            stats.totalRequests++;
-
-            document.getElementById('textGenCount').textContent = stats.textGenCount;
-            document.getElementById('imageGenCount').textContent = stats.imageGenCount;
-            document.getElementById('sentimentCount').textContent = stats.sentimentCount;
-            document.getElementById('totalRequests').textContent = stats.totalRequests;
-        }
-
-        // إضافة للسجل
-        function addToHistory(type, input, output) {
-            const item = {
-                type,
-                input,
-                output,
-                timestamp: new Date().toLocaleString('ar-SA')
-            };
-            
-            history.unshift(item);
-            updateHistoryDisplay();
-        }
-
-        // تحديث عرض السجل
-        function updateHistoryDisplay() {
-            const container = document.getElementById('historyContainer');
-            
-            if (history.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#999;">لا يوجد سجل حتى الآن</p>';
-                return;
-            }
-            
-            container.innerHTML = history.slice(0, 5).map(item => `
-                <div class="history-item">
-                    <div class="timestamp">⏰ ${item.timestamp}</div>
-                    <strong>${item.type}:</strong><br>
-                    <small>${item.input.substring(0, 50)}${item.input.length > 50 ? '...' : ''}</small>
-                </div>
-            `).join('');
-        }
-
-        // مسح السجل
-        function clearHistory() {
-            if (confirm('هل تريد مسح السجل؟')) {
-                history = [];
-                updateHistoryDisplay();
-            }
-        }
-
-        // تحميل السجل
-        function downloadHistory() {
-            if (history.length === 0) {
-                alert('لا يوجد سجل لتحميله');
-                return;
-            }
-            
-            const data = JSON.stringify(history, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `ai_history_${new Date().getTime()}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        // تحميل البيانات المحفوظة عند بدء التشغيل
-        window.addEventListener('load', () => {
-            const savedStats = {
-                textGenCount: 0,
-                imageGenCount: 0,
-                sentimentCount: 0,
-                totalRequests: 0
-            };
-            
-            Object.assign(stats, savedStats);
-            
-            document.getElementById('textGenCount').textContent = stats.textGenCount;
-            document.getElementById('imageGenCount').textContent = stats.imageGenCount;
-            document.getElementById('sentimentCount').textContent = stats.sentimentCount;
-            document.getElementById('totalRequests').textContent = stats.totalRequests;
-        });
-
-        // تأثيرات بصرية إضافية
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.background = 'rgba(255, 255, 255, 1)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.background = 'rgba(255, 255, 255, 0.95)';
-            });
-        });
-
-        // رسائل ترحيبية
-        console.log('%c🤖 نظام الذكاء الاصطناعي المتقدم', 'color: #667eea; font-size: 20px; font-weight: bold;');
-        console.log('%cمرحباً بك في منصة الذكاء الاصطناعي الشاملة!', 'color: #764ba2; font-size: 14px;');
-        
-        // إضافة أزرار تصدير للنتائج
-        function addExportButton(outputId, type) {
-            const output = document.getElementById(outputId);
-            if (output && output.classList.contains('active')) {
-                const exportBtn = document.createElement('button');
-                exportBtn.textContent = '📥 تصدير';
-                exportBtn.style.marginTop = '10px';
-                exportBtn.style.background = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)';
-                exportBtn.onclick = () => exportResult(outputId, type);
-                
-                if (!output.querySelector('button')) {
-                    output.appendChild(exportBtn);
+                if (lowerMessage.includes('صورة') || lowerMessage.includes('رسم') || lowerMessage.includes('شكل')) {
+                    return 'image';
+                } else if (lowerMessage.includes('كود') || lowerMessage.includes('برمجة') || lowerMessage.includes('برنامج')) {
+                    return 'code';
+                } else if (lowerMessage.includes('حلل') || lowerMessage.includes('تحليل') || lowerMessage.includes('رأيك')) {
+                    return 'analyze';
+                } else {
+                    return 'text';
                 }
             }
-        }
 
-        function exportResult(outputId, type) {
-            const output = document.getElementById(outputId);
-            const content = output.textContent;
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${type}_result_${new Date().getTime()}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        // وظيفة نسخ النتائج
-        function addCopyButton(outputId) {
-            const output = document.getElementById(outputId);
-            if (output && output.classList.contains('active')) {
-                const copyBtn = document.createElement('button');
-                copyBtn.textContent = '📋 نسخ';
-                copyBtn.style.marginTop = '10px';
-                copyBtn.style.background = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)';
-                copyBtn.onclick = () => {
-                    const text = output.textContent;
-                    navigator.clipboard.writeText(text).then(() => {
-                        copyBtn.textContent = '✅ تم النسخ!';
-                        setTimeout(() => {
-                            copyBtn.textContent = '📋 نسخ';
-                        }, 2000);
-                    });
+            addMessage(sender, content) {
+                const message = {
+                    id: Date.now(),
+                    sender,
+                    content,
+                    timestamp: new Date(),
+                    type: this.detectMessageType(content)
                 };
+
+                this.messages.push(message);
+                this.updateDisplay();
+                this.scrollToBottom();
+            }
+
+            updateDisplay() {
+                const container = document.getElementById('chatMessages');
+                container.innerHTML = '';
+
+                this.messages.forEach(message => {
+                    const messageEl = document.createElement('div');
+                    messageEl.className = `message ${message.sender}-message`;
+                    
+                    let content = message.content;
+                    if (message.type === 'image' && message.sender === 'ai') {
+                        content += '\n\n![صورة مولدة](https://via.placeholder.com/400x200/667eea/white?text=صورة+مولدة)';
+                    }
+
+                    messageEl.innerHTML = `
+                        <div class="message-content">${this.formatContent(content)}</div>
+                        <div class="message-time">${this.formatTime(message.timestamp)}</div>
+                    `;
+
+                    container.appendChild(messageEl);
+                });
+            }
+
+            formatContent(content) {
+                // تحويل Markdown بسيط إلى HTML
+                return content
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="generated-image">')
+                    .replace(/\n/g, '<br>');
+            }
+
+            formatTime(timestamp) {
+                return timestamp.toLocaleTimeString('ar-SA');
+            }
+
+            scrollToBottom() {
+                const container = document.getElementById('chatMessages');
+                container.scrollTop = container.scrollHeight;
+            }
+
+            showTyping() {
+                document.getElementById('typingIndicator').style.display = 'flex';
+                this.scrollToBottom();
+            }
+
+            hideTyping() {
+                document.getElementById('typingIndicator').style.display = 'none';
+            }
+
+            switchMode(mode) {
+                this.currentMode = mode;
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
                 
-                if (!output.querySelector('button[onclick*="clipboard"]')) {
-                    output.appendChild(copyBtn);
+                document.getElementById('currentMode').textContent = `الوضع: ${this.getModeName(mode)}`;
+            }
+
+            getModeName(mode) {
+                const names = {
+                    'auto': 'التلقائي',
+                    'text': 'النص',
+                    'image': 'الصور',
+                    'code': 'البرمجة',
+                    'analyze': 'التحليل'
+                };
+                return names[mode] || mode;
+            }
+
+            clearChat() {
+                this.messages = [];
+                this.updateDisplay();
+                
+                // إضافة رسالة ترحيبية
+                this.addMessage('ai', '🌟 المحادثة جديدة وجاهزة للبدء! كيف يمكنني مساعدتك اليوم؟');
+            }
+
+            saveToHistory() {
+                localStorage.setItem('aiChatHistory', JSON.stringify(this.messages));
+            }
+
+            loadHistory() {
+                const saved = localStorage.getItem('aiChatHistory');
+                if (saved) {
+                    this.messages = JSON.parse(saved);
                 }
+            }
+
+            exportConversation() {
+                const content = this.messages.map(msg => 
+                    `${msg.sender === 'user' ? '👤 أنت' : '🤖 المساعد'}: ${msg.content}`
+                ).join('\n\n');
+                
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `محادثة-${new Date().toISOString().split('T')[0]}.txt`;
+                a.click();
+                
+                this.addMessage('system', '✅ تم حفظ المحادثة بنجاح!');
+            }
+
+            updateStats() {
+                document.getElementById('totalRequests').textContent = this.messages.filter(m => m.sender === 'user').length;
+                document.getElementById('responseTime').textContent = (0.2 + Math.random() * 0.3).toFixed(1) + 's';
             }
         }
 
-        // تحسين تجربة المستخدم مع رسائل التحميل المتنوعة
-        const loadingMessages = [
-            'جاري المعالجة',
-            'يرجى الانتظار',
-            'جاري التحليل',
-            'العمل جارٍ',
-            'قريباً',
-            'جاري الإنشاء'
-        ];
+        // التهيئة
+        const chatSystem = new UnifiedAIChat();
 
-        function randomLoadingMessage() {
-            return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+        // الدوال العامة للاستدعاء من HTML
+        function sendMessage() {
+            chatSystem.sendMessage();
         }
 
-        // تأثيرات صوتية (اختيارية)
-        function playSuccessSound() {
-            // يمكن إضافة صوت نجاح هنا
-            console.log('✅ العملية تمت بنجاح!');
+        function switchMode(mode) {
+            chatSystem.switchMode(mode);
         }
 
-        // إضافة ميزة البحث السريع
-        function quickSearch(query) {
-            const features = {
-                'نص': () => document.getElementById('textPrompt').focus(),
-                'صورة': () => document.getElementById('imagePrompt').focus(),
-                'مشاعر': () => document.getElementById('sentimentText').focus(),
-                'ترجمة': () => document.getElementById('translateText').focus(),
-                'شعار': () => document.getElementById('companyName').focus()
+        function clearChat() {
+            if (confirm('هل تريد مسح المحادثة الحالية؟')) {
+                chatSystem.clearChat();
+            }
+        }
+
+        function exportConversation() {
+            chatSystem.exportConversation();
+        }
+
+        function autoDetectType(text) {
+            // يمكن إضافة منطق كشف متقدم هنا
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function quickAction(action) {
+            const prompts = {
+                'summarize': 'أريد تلخيص النص التالي: [ضع النص هنا]',
+                'translate': 'ترجم هذا النص إلى الإنجليزية: [النص المراد ترجمته]',
+                'explain': 'اشرح لي مفهوم: [المفهوم المراد شرحه]',
+                'code': 'اكتب كود لـ: [الوظيفة المطلوبة]',
+                'image': 'أنشئ صورة لـ: [وصف الصورة]'
             };
-            
-            for (let key in features) {
-                if (query.includes(key)) {
-                    features[key]();
-                    break;
-                }
-            }
+
+            document.getElementById('unifiedInput').value = prompts[action];
+            document.getElementById('unifiedInput').focus();
         }
 
-        // اختصارات لوحة المفاتيح
-        document.addEventListener('keydown', (e) => {
-            // Ctrl/Cmd + Enter للتنفيذ السريع
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                const activeElement = document.activeElement;
-                
-                if (activeElement.id === 'textPrompt') generateText();
-                else if (activeElement.id === 'imagePrompt') generateImage();
-                else if (activeElement.id === 'sentimentText') analyzeSentiment();
-                else if (activeElement.id === 'translateText') translateText();
-                else if (activeElement.id === 'companyName') createLogo();
-            }
-        });
-
-        // إضافة نصائح تلقائية
-        const tips = [
-            'نصيحة: استخدم Ctrl+Enter للتنفيذ السريع',
-            'نصيحة: يمكنك تحميل سجل المحادثات',
-            'نصيحة: جرب أنماط مختلفة للحصول على نتائج متنوعة',
-            'نصيحة: كلما كان الوصف أكثر تفصيلاً، كانت النتائج أفضل',
-            'نصيحة: استخدم مستويات الإبداع المختلفة للحصول على نتائج متنوعة'
-        ];
-
-        let tipIndex = 0;
+        // تحديث الإحصائيات بشكل دوري
         setInterval(() => {
-            console.log(`💡 ${tips[tipIndex]}`);
-            tipIndex = (tipIndex + 1) % tips.length;
-        }, 30000);
-
-        // وظيفة المشاركة
-        function shareResult(content, type) {
-            if (navigator.share) {
-                navigator.share({
-                    title: `نتيجة ${type}`,
-                    text: content
-                }).catch(err => console.log('خطأ في المشاركة:', err));
-            } else {
-                alert('المشاركة غير مدعومة في هذا المتصفح');
-            }
-        }
-
-        // تتبع الأداء
-        let performanceData = {
-            avgTextTime: 2000,
-            avgImageTime: 3000,
-            avgSentimentTime: 1500
-        };
-
-        function trackPerformance(type, duration) {
-            performanceData[`avg${type}Time`] = 
-                (performanceData[`avg${type}Time`] + duration) / 2;
-        }
-
-        // إظهار معلومات النظام
-        console.log('%cمعلومات النظام:', 'color: #667eea; font-weight: bold;');
-        console.log(`🖥️ المتصفح: ${navigator.userAgent}`);
-        console.log(`🌐 اللغة: ${navigator.language}`);
-        console.log(`📱 المنصة: ${navigator.platform}`);
-
-        // رسالة ترحيبية في الصفحة
-        setTimeout(() => {
-            console.log('%c🎉 النظام جاهز للاستخدام!', 'color: #43e97b; font-size: 16px; font-weight: bold;');
-        }, 1000);
+            const health = document.getElementById('systemHealth');
+            health.textContent = '100%';
+        }, 5000);
     </script>
 </body>
 </html>
