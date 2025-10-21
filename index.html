@@ -3,23 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProK - متجر إلكتروني</title>
+    <title>نظام الذكاء الاصطناعي المتقدم</title>
     <style>
-        /* styles.css - تنسيقات متجاوبة لموقع ProK */
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #f8fafc;
-            --accent: #f59e0b;
-            --accent-dark: #d97706;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --light: #ffffff;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -28,785 +13,960 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8fafc;
-            color: var(--text);
-            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        [dir="rtl"] {
-            text-align: right;
-        }
-
-        [dir="ltr"] {
-            text-align: left;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* شريط التنقل */
-        .navbar {
-            background: var(--light);
-            padding: 1rem 0;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-brand h2 {
-            color: var(--primary);
-            font-size: 1.5rem;
-        }
-
-        .nav-menu {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--primary);
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text);
-        }
-
-        /* الأزرار */
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .lang-btn {
-            background: var(--secondary);
-            color: var(--text);
-            border: 1px solid var(--border);
-            padding: 0.5rem 1rem;
-        }
-
-        .lang-btn:hover {
-            background: var(--primary);
-            color: var(--light);
-        }
-
-        .admin-btn {
-            background: var(--accent);
-            color: var(--light);
-        }
-
-        .admin-btn:hover {
-            background: var(--accent-dark);
-        }
-
-        .cta-btn {
-            background: var(--primary);
-            color: var(--light);
-            font-size: 1.1rem;
-            padding: 1rem 2rem;
-        }
-
-        .cta-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        /* قسم الهيرو */
-        .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--light);
-            padding: 4rem 1rem;
-            text-align: center;
-        }
-
-        .hero-content {
-            max-width: 800px;
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
         }
 
-        .hero-title {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        /* الأقسام */
-        .section {
-            padding: 4rem 1rem;
-        }
-
-        .section-title {
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: var(--text);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
         }
 
-        /* شبكة المنتجات */
-        .products-grid {
-            max-width: 1200px;
-            margin: 0 auto;
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 0 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
         }
 
-        .product-card {
-            background: var(--light);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            border: 1px solid var(--border);
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(10px);
         }
 
-        .product-card:hover {
+        .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
         }
 
-        .product-image {
-            width: 100%;
-            height: 200px;
-            background: var(--secondary);
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-light);
-        }
-
-        .product-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-        }
-
-        .product-description {
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        .product-price {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .product-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        /* شبكة الفئات */
-        .categories-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            padding: 0 1rem;
-        }
-
-        .category-card {
-            background: var(--light);
-            border-radius: 12px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            border: 1px solid var(--border);
-        }
-
-        .category-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .category-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-
-        .category-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        /* النافذة المنبثقة */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            padding: 1rem;
-        }
-
-        .modal-content {
-            background: var(--light);
-            border-radius: 12px;
-            padding: 2rem;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-light);
-        }
-
-        .modal-title {
-            margin-bottom: 1.5rem;
-            text-align: center;
-            color: var(--text);
-        }
-
-        /* النماذج */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text);
         }
 
-        .form-input {
+        .feature-title {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border);
+            padding: 12px;
+            border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            font-family: inherit;
         }
 
-        .form-input:focus {
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #667eea;
         }
 
-        .form-textarea {
-            resize: vertical;
+        textarea {
             min-height: 100px;
+            resize: vertical;
         }
 
-        /* لوحة التحكم */
-        .admin-panel {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            max-width: 400px;
-            height: 100vh;
-            background: var(--light);
-            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1500;
-            overflow-y: auto;
-            padding: 2rem;
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .admin-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .action-btn {
-            background: var(--primary);
-            color: var(--light);
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
             border: none;
-            padding: 1rem;
             border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
         }
 
-        .action-btn:hover {
-            background: var(--primary-dark);
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .action-btn.secondary {
-            background: var(--secondary);
-            color: var(--text);
-        }
-
-        .action-btn.secondary:hover {
-            background: var(--border);
-        }
-
-        /* التحميل والرسائل */
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-light);
-        }
-
-        .error-message {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border: 1px solid #fecaca;
-        }
-
-        .success-message {
-            background: #dcfce7;
-            color: #16a34a;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border: 1px solid #bbf7d0;
-        }
-
-        /* التجاوب مع الجوال */
-        @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: var(--light);
-                flex-direction: column;
-                padding: 1rem;
-                box-shadow: var(--shadow);
-                gap: 1rem;
-            }
-            
-            .nav-menu.active {
-                display: flex;
-            }
-            
-            .menu-toggle {
-                display: block;
-            }
-            
-            .nav-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-            
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .products-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            
-            .categories-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .admin-panel {
-                max-width: 100%;
-            }
-            
-            .modal-content {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero {
-                padding: 3rem 1rem;
-            }
-            
-            .section {
-                padding: 2rem 1rem;
-            }
-            
-            .product-card {
-                padding: 1rem;
-            }
-            
-            .category-card {
-                padding: 1.5rem;
-            }
-        }
-
-        /* تأثيرات التمرير */
-        .scroll-fade {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .scroll-fade.visible {
-            opacity: 1;
+        button:active {
             transform: translateY(0);
         }
 
-        /* تخصيص شريط التمرير */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .output-box {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            display: none;
         }
 
-        ::-webkit-scrollbar-track {
-            background: var(--secondary);
+        .output-box.active {
+            display: block;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            display: none;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
+        .loading.active {
+            display: block;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .history-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-right: 4px solid #667eea;
+        }
+
+        .timestamp {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .slider-container {
+            margin: 15px 0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .value-display {
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .image-preview.active {
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 5px 5px 0 0;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
-    <!-- شريط التنقل -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <h2>ProK</h2>
+    <div class="container">
+        <header>
+            <h1>🤖 نظام الذكاء الاصطناعي المتقدم</h1>
+            <p class="subtitle">منصة شاملة لتوليد النصوص والصور وتحليل المشاعر والمزيد</p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-number" id="textGenCount">0</span>
+                <span class="stat-label">نص مولد</span>
             </div>
-            <div class="nav-menu" id="navMenu">
-                <a href="#home" class="nav-link">الرئيسية</a>
-                <a href="#products" class="nav-link">المنتجات</a>
-                <a href="#categories" class="nav-link">الفئات</a>
-                <div class="nav-actions">
-                    <button class="lang-btn" onclick="toggleLanguage()">EN</button>
-                    <button class="admin-btn" onclick="showLogin()">المسؤول</button>
-                </div>
+            <div class="stat-box">
+                <span class="stat-number" id="imageGenCount">0</span>
+                <span class="stat-label">صورة مولدة</span>
             </div>
-            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <div class="stat-box">
+                <span class="stat-number" id="sentimentCount">0</span>
+                <span class="stat-label">تحليل مشاعر</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number" id="totalRequests">0</span>
+                <span class="stat-label">إجمالي الطلبات</span>
+            </div>
         </div>
-    </nav>
 
-    <!-- قسم الهيرو -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1 class="hero-title">عروض وتنفيذات حصرية</h1>
-            <p class="hero-subtitle">بخصومات مميزة على جميع المنتجات</p>
-            <button class="cta-btn" onclick="scrollToProducts()">عرض المنتجات</button>
-        </div>
-    </section>
+        <div class="features-grid">
+            <!-- توليد النصوص -->
+            <div class="feature-card">
+                <span class="feature-icon">📝</span>
+                <h2 class="feature-title">توليد النصوص الذكي</h2>
+                
+                <div class="input-group">
+                    <label>النص المطلوب:</label>
+                    <textarea id="textPrompt" placeholder="اكتب سؤالك أو موضوعك هنا..."></textarea>
+                </div>
 
-    <!-- قسم الفئات -->
-    <section class="section categories" id="categories">
-        <h2 class="section-title">الفئات</h2>
-        <div class="categories-grid" id="categoriesContainer">
-            <!-- سيتم تعبئة الفئات تلقائياً -->
-        </div>
-    </section>
+                <div class="slider-container">
+                    <label>مستوى الإبداع:</label>
+                    <input type="range" id="creativity" min="0" max="100" value="70">
+                    <div class="value-display"><span id="creativityValue">70</span>%</div>
+                </div>
 
-    <!-- قسم المنتجات -->
-    <section class="section products" id="products">
-        <h2 class="section-title">المنتجات</h2>
-        <div class="products-grid" id="productsContainer">
-            <!-- سيتم تعبئة المنتجات تلقائياً -->
-        </div>
-    </section>
+                <div class="slider-container">
+                    <label>طول النص:</label>
+                    <input type="range" id="textLength" min="50" max="500" value="150">
+                    <div class="value-display"><span id="lengthValue">150</span> كلمة</div>
+                </div>
 
-    <!-- نافذة تسجيل الدخول -->
-    <div id="loginModal" class="modal hidden">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeLogin()">&times;</button>
-            <h2 class="modal-title">تسجيل الدخول للمسؤول</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label class="form-label">البريد الإلكتروني</label>
-                    <input type="email" class="form-input" id="loginEmail" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">كلمة المرور</label>
-                    <input type="password" class="form-input" id="loginPassword" required>
-                </div>
-                <button type="submit" class="action-btn" style="width: 100%;">تسجيل الدخول</button>
-            </form>
-            <div id="loginMessage" class="error-message hidden"></div>
-        </div>
-    </div>
+                <button onclick="generateText()">🚀 توليد النص</button>
+                <div class="loading" id="textLoading">جاري التوليد</div>
+                <div class="output-box" id="textOutput"></div>
+            </div>
 
-    <!-- لوحة تحكم المسؤول -->
-    <div id="adminPanel" class="admin-panel hidden">
-        <div class="admin-header">
-            <h3>لوحة التحكم</h3>
-            <button class="btn lang-btn" onclick="logout()">تسجيل خروج</button>
-        </div>
-        <div class="admin-actions">
-            <button class="action-btn" onclick="showAddProduct()">إضافة منتج جديد</button>
-            <button class="action-btn secondary" onclick="showAddCategory()">إضافة فئة جديدة</button>
-            <button class="action-btn secondary" onclick="showManageProducts()">إدارة المنتجات</button>
-        </div>
-        
-        <!-- نموذج إضافة منتج -->
-        <div id="addProductForm" class="hidden" style="margin-top: 2rem;">
-            <h4>إضافة منتج جديد</h4>
-            <form id="productForm">
-                <div class="form-group">
-                    <label class="form-label">اسم المنتج</label>
-                    <input type="text" class="form-input" id="productName" required>
+            <!-- توليد الصور -->
+            <div class="feature-card">
+                <span class="feature-icon">🖼️</span>
+                <h2 class="feature-title">توليد الصور بالذكاء الاصطناعي</h2>
+                
+                <div class="input-group">
+                    <label>وصف الصورة:</label>
+                    <textarea id="imagePrompt" placeholder="صف الصورة التي تريد إنشاءها..."></textarea>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">السعر</label>
-                    <input type="number" class="form-input" id="productPrice" required>
+
+                <div class="input-group">
+                    <label>نمط الصورة:</label>
+                    <select id="imageStyle">
+                        <option value="realistic">واقعي</option>
+                        <option value="artistic">فني</option>
+                        <option value="abstract">تجريدي</option>
+                        <option value="anime">أنمي</option>
+                        <option value="3d">ثلاثي الأبعاد</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">الوصف</label>
-                    <textarea class="form-input form-textarea" id="productDescription"></textarea>
+
+                <div class="slider-container">
+                    <label>جودة الصورة:</label>
+                    <input type="range" id="imageQuality" min="1" max="10" value="7">
+                    <div class="value-display"><span id="qualityValue">7</span>/10</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">الفئة</label>
-                    <input type="text" class="form-input" id="productCategory">
+
+                <button onclick="generateImage()">🎨 توليد الصورة</button>
+                <div class="loading" id="imageLoading">جاري الإنشاء</div>
+                <img class="image-preview" id="imagePreview" alt="الصورة المولدة">
+                <div class="output-box" id="imageOutput"></div>
+            </div>
+
+            <!-- تحليل المشاعر -->
+            <div class="feature-card">
+                <span class="feature-icon">😊</span>
+                <h2 class="feature-title">تحليل المشاعر</h2>
+                
+                <div class="input-group">
+                    <label>النص للتحليل:</label>
+                    <textarea id="sentimentText" placeholder="أدخل النص لتحليل المشاعر..."></textarea>
                 </div>
-                <button type="submit" class="action-btn">إضافة المنتج</button>
-            </form>
+
+                <button onclick="analyzeSentiment()">🔍 تحليل المشاعر</button>
+                <div class="loading" id="sentimentLoading">جاري التحليل</div>
+                <div class="output-box" id="sentimentOutput"></div>
+            </div>
+
+            <!-- الترجمة -->
+            <div class="feature-card">
+                <span class="feature-icon">🌐</span>
+                <h2 class="feature-title">الترجمة الذكية</h2>
+                
+                <div class="input-group">
+                    <label>النص للترجمة:</label>
+                    <textarea id="translateText" placeholder="أدخل النص للترجمة..."></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>من:</label>
+                    <select id="sourceLang">
+                        <option value="ar">العربية</option>
+                        <option value="en">الإنجليزية</option>
+                        <option value="fr">الفرنسية</option>
+                        <option value="es">الإسبانية</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>إلى:</label>
+                    <select id="targetLang">
+                        <option value="en">الإنجليزية</option>
+                        <option value="ar">العربية</option>
+                        <option value="fr">الفرنسية</option>
+                        <option value="es">الإسبانية</option>
+                    </select>
+                </div>
+
+                <button onclick="translateText()">🔄 ترجمة</button>
+                <div class="loading" id="translateLoading">جاري الترجمة</div>
+                <div class="output-box" id="translateOutput"></div>
+            </div>
+
+            <!-- إنشاء الشعارات -->
+            <div class="feature-card">
+                <span class="feature-icon">🎨</span>
+                <h2 class="feature-title">إنشاء الشعارات</h2>
+                
+                <div class="input-group">
+                    <label>اسم الشركة:</label>
+                    <input type="text" id="companyName" placeholder="اسم الشركة أو العلامة التجارية">
+                </div>
+
+                <div class="input-group">
+                    <label>نمط الشعار:</label>
+                    <select id="logoStyle">
+                        <option value="modern">عصري</option>
+                        <option value="classic">كلاسيكي</option>
+                        <option value="minimalist">بسيط</option>
+                        <option value="creative">إبداعي</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>اللون الأساسي:</label>
+                    <select id="logoColor">
+                        <option value="blue">أزرق</option>
+                        <option value="red">أحمر</option>
+                        <option value="green">أخضر</option>
+                        <option value="purple">بنفسجي</option>
+                        <option value="orange">برتقالي</option>
+                    </select>
+                </div>
+
+                <button onclick="createLogo()">✨ إنشاء الشعار</button>
+                <div class="loading" id="logoLoading">جاري الإنشاء</div>
+                <canvas id="logoCanvas" width="400" height="400" style="display:none; width:100%; border-radius:8px; margin-top:15px;"></canvas>
+                <div class="output-box" id="logoOutput"></div>
+            </div>
+
+            <!-- سجل المحادثات -->
+            <div class="feature-card">
+                <span class="feature-icon">💬</span>
+                <h2 class="feature-title">سجل المحادثات</h2>
+                
+                <div id="historyContainer">
+                    <p style="text-align:center; color:#999;">لا يوجد سجل حتى الآن</p>
+                </div>
+
+                <button onclick="clearHistory()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); margin-top: 15px;">🗑️ مسح السجل</button>
+                <button onclick="downloadHistory()" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); margin-top: 10px;">💾 تحميل السجل</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // تكوين Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDfy48kwyj8iAu20hx3uJtzcbRGcfcKKn0",
-            authDomain: "prok-58f05.firebaseapp.com",
-            projectId: "prok-58f05",
-            storageBucket: "prok-58f05.firebasestorage.app",
-            messagingSenderId: "978563434886",
-            appId: "1:978563434886:web:d16c70551240a05c81c407",
-            measurementId: "G-PWTGTT2VJT"
+        // إحصائيات
+        let stats = {
+            textGenCount: 0,
+            imageGenCount: 0,
+            sentimentCount: 0,
+            totalRequests: 0
         };
 
-        // تهيئة التطبيق
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
+        let history = [];
 
-        // بيانات التطبيق
-        let currentLanguage = 'ar';
-        let currentUser = null;
-
-        // الدوال الأساسية
-        function toggleMenu() {
-            document.getElementById('navMenu').classList.toggle('active');
-        }
-
-        function toggleLanguage() {
-            currentLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
-            document.documentElement.dir = currentLanguage === 'ar' ? 'rtl' : 'ltr';
-            document.documentElement.lang = currentLanguage;
-            updateLanguageTexts();
-        }
-
-        function updateLanguageTexts() {
-            // يمكن إضافة ترجمة للنصوص هنا
-            const elements = document.querySelectorAll('[data-translate]');
-            elements.forEach(el => {
-                const key = el.getAttribute('data-translate');
-                el.textContent = translations[currentLanguage][key];
-            });
-        }
-
-        function showLogin() {
-            document.getElementById('loginModal').classList.remove('hidden');
-        }
-
-        function closeLogin() {
-            document.getElementById('loginModal').classList.add('hidden');
-        }
-
-        function scrollToProducts() {
-            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // نظام المصادقة
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                currentUser = userCredential.user;
-                document.getElementById('adminPanel').classList.remove('hidden');
-                closeLogin();
-                loadAdminData();
-            } catch (error) {
-                document.getElementById('loginMessage').textContent = 'خطأ في تسجيل الدخول: ' + error.message;
-                document.getElementById('loginMessage').classList.remove('hidden');
-            }
+        // تحديث قيم السلايدرز
+        document.getElementById('creativity').addEventListener('input', (e) => {
+            document.getElementById('creativityValue').textContent = e.target.value;
         });
 
-        function logout() {
-            auth.signOut();
-            document.getElementById('adminPanel').classList.add('hidden');
-            currentUser = null;
-        }
+        document.getElementById('textLength').addEventListener('input', (e) => {
+            document.getElementById('lengthValue').textContent = e.target.value;
+        });
 
-        // إدارة المنتجات
-        function loadProducts() {
-            db.collection('products').onSnapshot(snapshot => {
-                const container = document.getElementById('productsContainer');
-                container.innerHTML = '';
-                
-                snapshot.forEach(doc => {
-                    const product = doc.data();
-                    const productElement = `
-                        <div class="product-card">
-                            <div class="product-image">صورة المنتج</div>
-                            <h3 class="product-title">${product.name}</h3>
-                            <p class="product-description">${product.description || ''}</p>
-                            <div class="product-price">${product.price} ر.س</div>
-                            <div class="product-actions">
-                                <button class="btn" style="background: var(--primary); color: white;">شراء</button>
-                            </div>
-                        </div>
-                    `;
-                    container.innerHTML += productElement;
-                });
-            });
-        }
+        document.getElementById('imageQuality').addEventListener('input', (e) => {
+            document.getElementById('qualityValue').textContent = e.target.value;
+        });
 
-        function showAddProduct() {
-            document.getElementById('addProductForm').classList.remove('hidden');
-        }
+        // توليد النصوص
+        function generateText() {
+            const prompt = document.getElementById('textPrompt').value;
+            if (!prompt) {
+                alert('الرجاء إدخال نص');
+                return;
+            }
 
-        document.getElementById('productForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+            const loading = document.getElementById('textLoading');
+            const output = document.getElementById('textOutput');
             
-            const productData = {
-                name: document.getElementById('productName').value,
-                price: document.getElementById('productPrice').value,
-                description: document.getElementById('productDescription').value,
-                category: document.getElementById('productCategory').value,
-                createdAt: new Date()
+            loading.classList.add('active');
+            output.classList.remove('active');
+
+            setTimeout(() => {
+                const creativity = document.getElementById('creativity').value;
+                const length = document.getElementById('textLength').value;
+                
+                const responses = [
+                    `بناءً على سؤالك حول "${prompt}"، يمكن القول أن هذا الموضوع يحمل أهمية كبيرة في العصر الحالي. من خلال تحليل معمق، نجد أن هناك عدة جوانب يجب مراعاتها...`,
+                    `${prompt} هو موضوع شيق يستحق النقاش. من وجهة نظر تحليلية، يمكننا استكشاف الأبعاد المختلفة لهذا الموضوع بدءاً من الجوانب التقنية وصولاً إلى التأثيرات المجتمعية...`,
+                    `في سياق ${prompt}، تشير الدراسات الحديثة إلى أن هناك تطورات ملحوظة في هذا المجال. يمكننا أن نلاحظ تزايد الاهتمام والاستثمار في هذا القطاع...`
+                ];
+
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                
+                output.innerHTML = `<strong>النص المولد:</strong><br><br>${response}<br><br>
+                <span class="badge badge-info">الإبداع: ${creativity}%</span>
+                <span class="badge badge-info">الطول: ${length} كلمة</span>`;
+                
+                loading.classList.remove('active');
+                output.classList.add('active');
+
+                updateStats('text');
+                addToHistory('توليد نص', prompt, response);
+            }, 2000);
+        }
+
+        // توليد الصور
+        function generateImage() {
+            const prompt = document.getElementById('imagePrompt').value;
+            if (!prompt) {
+                alert('الرجاء إدخال وصف للصورة');
+                return;
+            }
+
+            const loading = document.getElementById('imageLoading');
+            const output = document.getElementById('imageOutput');
+            const preview = document.getElementById('imagePreview');
+            
+            loading.classList.add('active');
+            output.classList.remove('active');
+            preview.classList.remove('active');
+
+            setTimeout(() => {
+                const style = document.getElementById('imageStyle').value;
+                const quality = document.getElementById('imageQuality').value;
+                
+                // استخدام Picsum للحصول على صورة عشوائية
+                const imageUrl = `https://picsum.photos/512/512?random=${Date.now()}`;
+                
+                preview.src = imageUrl;
+                preview.classList.add('active');
+                
+                output.innerHTML = `<strong>تم إنشاء الصورة بنجاح!</strong><br><br>
+                <strong>الوصف:</strong> ${prompt}<br>
+                <span class="badge badge-success">النمط: ${style}</span>
+                <span class="badge badge-success">الجودة: ${quality}/10</span>`;
+                
+                loading.classList.remove('active');
+                output.classList.add('active');
+
+                updateStats('image');
+                addToHistory('توليد صورة', prompt, 'تم إنشاء الصورة بنجاح');
+            }, 3000);
+        }
+
+        // تحليل المشاعر
+        function analyzeSentiment() {
+            const text = document.getElementById('sentimentText').value;
+            if (!text) {
+                alert('الرجاء إدخال نص للتحليل');
+                return;
+            }
+
+            const loading = document.getElementById('sentimentLoading');
+            const output = document.getElementById('sentimentOutput');
+            
+            loading.classList.add('active');
+            output.classList.remove('active');
+
+            setTimeout(() => {
+                const sentiments = ['إيجابي', 'سلبي', 'محايد'];
+                const sentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
+                const score = (Math.random() * 0.4 + 0.6).toFixed(2);
+                
+                const emoji = sentiment === 'إيجابي' ? '😊' : sentiment === 'سلبي' ? '😔' : '😐';
+                const badgeClass = sentiment === 'إيجابي' ? 'badge-success' : sentiment === 'سلبي' ? 'badge-warning' : 'badge-info';
+                
+                output.innerHTML = `<strong>نتيجة التحليل:</strong><br><br>
+                ${emoji} <strong>المشاعر:</strong> ${sentiment}<br>
+                <strong>درجة الثقة:</strong> ${(score * 100).toFixed(0)}%<br><br>
+                <span class="badge ${badgeClass}">${sentiment}</span>
+                <span class="badge badge-info">الثقة: ${(score * 100).toFixed(0)}%</span>`;
+                
+                loading.classList.remove('active');
+                output.classList.add('active');
+
+                updateStats('sentiment');
+                addToHistory('تحليل مشاعر', text, `${sentiment} (${(score * 100).toFixed(0)}%)`);
+            }, 1500);
+        }
+
+        // الترجمة
+        function translateText() {
+            const text = document.getElementById('translateText').value;
+            if (!text) {
+                alert('الرجاء إدخال نص للترجمة');
+                return;
+            }
+
+            const loading = document.getElementById('translateLoading');
+            const output = document.getElementById('translateOutput');
+            
+            loading.classList.add('active');
+            output.classList.remove('active');
+
+            setTimeout(() => {
+                const sourceLang = document.getElementById('sourceLang').value;
+                const targetLang = document.getElementById('targetLang').value;
+                
+                const translations = {
+                    'ar_en': 'This is a sample translation to English',
+                    'en_ar': 'هذه ترجمة نموذجية إلى العربية',
+                    'ar_fr': 'Ceci est un exemple de traduction en français',
+                    'ar_es': 'Esta es una traducción de muestra al español'
+                };
+                
+                const key = `${sourceLang}_${targetLang}`;
+                const translated = translations[key] || text;
+                
+                output.innerHTML = `<strong>النص الأصلي:</strong><br>${text}<br><br>
+                <strong>الترجمة:</strong><br>${translated}<br><br>
+                <span class="badge badge-info">من: ${sourceLang}</span>
+                <span class="badge badge-info">إلى: ${targetLang}</span>`;
+                
+                loading.classList.remove('active');
+                output.classList.add('active');
+
+                updateStats('translate');
+                addToHistory('ترجمة', text, translated);
+            }, 1500);
+        }
+
+        // إنشاء الشعارات
+        function createLogo() {
+            const companyName = document.getElementById('companyName').value;
+            if (!companyName) {
+                alert('الرجاء إدخال اسم الشركة');
+                return;
+            }
+
+            const loading = document.getElementById('logoLoading');
+            const output = document.getElementById('logoOutput');
+            const canvas = document.getElementById('logoCanvas');
+            
+            loading.classList.add('active');
+            output.classList.remove('active');
+            canvas.style.display = 'none';
+
+            setTimeout(() => {
+                const style = document.getElementById('logoStyle').value;
+                const color = document.getElementById('logoColor').value;
+                
+                const ctx = canvas.getContext('2d');
+                
+                // ألوان
+                const colors = {
+                    blue: ['#667eea', '#764ba2'],
+                    red: ['#f093fb', '#f5576c'],
+                    green: ['#43e97b', '#38f9d7'],
+                    purple: ['#a8edea', '#fed6e3'],
+                    orange: ['#fa709a', '#fee140']
+                };
+                
+                const gradient = ctx.createLinearGradient(0, 0, 400, 400);
+                gradient.addColorStop(0, colors[color][0]);
+                gradient.addColorStop(1, colors[color][1]);
+                
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 400, 400);
+                
+                // رسم دائرة مركزية
+                ctx.beginPath();
+                ctx.arc(200, 200, 80, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fill();
+                
+                // كتابة اسم الشركة
+                ctx.fillStyle = colors[color][0];
+                ctx.font = 'bold 32px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(companyName, 200, 210);
+                
+                canvas.style.display = 'block';
+                
+                output.innerHTML = `<strong>تم إنشاء الشعار بنجاح!</strong><br><br>
+                <span class="badge badge-success">النمط: ${style}</span>
+                <span class="badge badge-success">اللون: ${color}</span>`;
+                
+                loading.classList.remove('active');
+                output.classList.add('active');
+
+                updateStats('logo');
+                addToHistory('إنشاء شعار', companyName, `شعار بنمط ${style}`);
+            }, 2000);
+        }
+
+        // تحديث الإحصائيات
+        function updateStats(type) {
+            if (type === 'text') stats.textGenCount++;
+            if (type === 'image') stats.imageGenCount++;
+            if (type === 'sentiment') stats.sentimentCount++;
+            stats.totalRequests++;
+
+            document.getElementById('textGenCount').textContent = stats.textGenCount;
+            document.getElementById('imageGenCount').textContent = stats.imageGenCount;
+            document.getElementById('sentimentCount').textContent = stats.sentimentCount;
+            document.getElementById('totalRequests').textContent = stats.totalRequests;
+        }
+
+        // إضافة للسجل
+        function addToHistory(type, input, output) {
+            const item = {
+                type,
+                input,
+                output,
+                timestamp: new Date().toLocaleString('ar-SA')
             };
             
-            try {
-                await db.collection('products').add(productData);
-                document.getElementById('productForm').reset();
-                alert('تم إضافة المنتج بنجاح!');
-            } catch (error) {
-                alert('خطأ في إضافة المنتج: ' + error.message);
-            }
-        });
-
-        // تحميل الفئات
-        function loadCategories() {
-            const categories = ['إلكترونيات', 'ملابس', 'أجهزة منزلية', 'رياضة', 'جمال'];
-            const container = document.getElementById('categoriesContainer');
-            
-            categories.forEach(category => {
-                const categoryElement = `
-                    <div class="category-card">
-                        <div class="category-icon">📱</div>
-                        <h3 class="category-title">${category}</h3>
-                    </div>
-                `;
-                container.innerHTML += categoryElement;
-            });
+            history.unshift(item);
+            updateHistoryDisplay();
         }
 
-        // تحميل البيانات عند بدء التشغيل
-        window.addEventListener('DOMContentLoaded', () => {
-            loadProducts();
-            loadCategories();
+        // تحديث عرض السجل
+        function updateHistoryDisplay() {
+            const container = document.getElementById('historyContainer');
             
-            // التحقق من حالة المصادقة
-            auth.onAuthStateChanged(user => {
-                if (user) {
-                    currentUser = user;
-                    document.getElementById('adminPanel').classList.remove('hidden');
-                }
+            if (history.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#999;">لا يوجد سجل حتى الآن</p>';
+                return;
+            }
+            
+            container.innerHTML = history.slice(0, 5).map(item => `
+                <div class="history-item">
+                    <div class="timestamp">⏰ ${item.timestamp}</div>
+                    <strong>${item.type}:</strong><br>
+                    <small>${item.input.substring(0, 50)}${item.input.length > 50 ? '...' : ''}</small>
+                </div>
+            `).join('');
+        }
+
+        // مسح السجل
+        function clearHistory() {
+            if (confirm('هل تريد مسح السجل؟')) {
+                history = [];
+                updateHistoryDisplay();
+            }
+        }
+
+        // تحميل السجل
+        function downloadHistory() {
+            if (history.length === 0) {
+                alert('لا يوجد سجل لتحميله');
+                return;
+            }
+            
+            const data = JSON.stringify(history, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ai_history_${new Date().getTime()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // تحميل البيانات المحفوظة عند بدء التشغيل
+        window.addEventListener('load', () => {
+            const savedStats = {
+                textGenCount: 0,
+                imageGenCount: 0,
+                sentimentCount: 0,
+                totalRequests: 0
+            };
+            
+            Object.assign(stats, savedStats);
+            
+            document.getElementById('textGenCount').textContent = stats.textGenCount;
+            document.getElementById('imageGenCount').textContent = stats.imageGenCount;
+            document.getElementById('sentimentCount').textContent = stats.sentimentCount;
+            document.getElementById('totalRequests').textContent = stats.totalRequests;
+        });
+
+        // تأثيرات بصرية إضافية
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.background = 'rgba(255, 255, 255, 1)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.background = 'rgba(255, 255, 255, 0.95)';
             });
         });
 
-        // إغلاق النافذة عند النقر خارجها
-        document.getElementById('loginModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) {
-                closeLogin();
+        // رسائل ترحيبية
+        console.log('%c🤖 نظام الذكاء الاصطناعي المتقدم', 'color: #667eea; font-size: 20px; font-weight: bold;');
+        console.log('%cمرحباً بك في منصة الذكاء الاصطناعي الشاملة!', 'color: #764ba2; font-size: 14px;');
+        
+        // إضافة أزرار تصدير للنتائج
+        function addExportButton(outputId, type) {
+            const output = document.getElementById(outputId);
+            if (output && output.classList.contains('active')) {
+                const exportBtn = document.createElement('button');
+                exportBtn.textContent = '📥 تصدير';
+                exportBtn.style.marginTop = '10px';
+                exportBtn.style.background = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)';
+                exportBtn.onclick = () => exportResult(outputId, type);
+                
+                if (!output.querySelector('button')) {
+                    output.appendChild(exportBtn);
+                }
+            }
+        }
+
+        function exportResult(outputId, type) {
+            const output = document.getElementById(outputId);
+            const content = output.textContent;
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${type}_result_${new Date().getTime()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // وظيفة نسخ النتائج
+        function addCopyButton(outputId) {
+            const output = document.getElementById(outputId);
+            if (output && output.classList.contains('active')) {
+                const copyBtn = document.createElement('button');
+                copyBtn.textContent = '📋 نسخ';
+                copyBtn.style.marginTop = '10px';
+                copyBtn.style.background = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)';
+                copyBtn.onclick = () => {
+                    const text = output.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        copyBtn.textContent = '✅ تم النسخ!';
+                        setTimeout(() => {
+                            copyBtn.textContent = '📋 نسخ';
+                        }, 2000);
+                    });
+                };
+                
+                if (!output.querySelector('button[onclick*="clipboard"]')) {
+                    output.appendChild(copyBtn);
+                }
+            }
+        }
+
+        // تحسين تجربة المستخدم مع رسائل التحميل المتنوعة
+        const loadingMessages = [
+            'جاري المعالجة',
+            'يرجى الانتظار',
+            'جاري التحليل',
+            'العمل جارٍ',
+            'قريباً',
+            'جاري الإنشاء'
+        ];
+
+        function randomLoadingMessage() {
+            return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+        }
+
+        // تأثيرات صوتية (اختيارية)
+        function playSuccessSound() {
+            // يمكن إضافة صوت نجاح هنا
+            console.log('✅ العملية تمت بنجاح!');
+        }
+
+        // إضافة ميزة البحث السريع
+        function quickSearch(query) {
+            const features = {
+                'نص': () => document.getElementById('textPrompt').focus(),
+                'صورة': () => document.getElementById('imagePrompt').focus(),
+                'مشاعر': () => document.getElementById('sentimentText').focus(),
+                'ترجمة': () => document.getElementById('translateText').focus(),
+                'شعار': () => document.getElementById('companyName').focus()
+            };
+            
+            for (let key in features) {
+                if (query.includes(key)) {
+                    features[key]();
+                    break;
+                }
+            }
+        }
+
+        // اختصارات لوحة المفاتيح
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + Enter للتنفيذ السريع
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                
+                if (activeElement.id === 'textPrompt') generateText();
+                else if (activeElement.id === 'imagePrompt') generateImage();
+                else if (activeElement.id === 'sentimentText') analyzeSentiment();
+                else if (activeElement.id === 'translateText') translateText();
+                else if (activeElement.id === 'companyName') createLogo();
             }
         });
+
+        // إضافة نصائح تلقائية
+        const tips = [
+            'نصيحة: استخدم Ctrl+Enter للتنفيذ السريع',
+            'نصيحة: يمكنك تحميل سجل المحادثات',
+            'نصيحة: جرب أنماط مختلفة للحصول على نتائج متنوعة',
+            'نصيحة: كلما كان الوصف أكثر تفصيلاً، كانت النتائج أفضل',
+            'نصيحة: استخدم مستويات الإبداع المختلفة للحصول على نتائج متنوعة'
+        ];
+
+        let tipIndex = 0;
+        setInterval(() => {
+            console.log(`💡 ${tips[tipIndex]}`);
+            tipIndex = (tipIndex + 1) % tips.length;
+        }, 30000);
+
+        // وظيفة المشاركة
+        function shareResult(content, type) {
+            if (navigator.share) {
+                navigator.share({
+                    title: `نتيجة ${type}`,
+                    text: content
+                }).catch(err => console.log('خطأ في المشاركة:', err));
+            } else {
+                alert('المشاركة غير مدعومة في هذا المتصفح');
+            }
+        }
+
+        // تتبع الأداء
+        let performanceData = {
+            avgTextTime: 2000,
+            avgImageTime: 3000,
+            avgSentimentTime: 1500
+        };
+
+        function trackPerformance(type, duration) {
+            performanceData[`avg${type}Time`] = 
+                (performanceData[`avg${type}Time`] + duration) / 2;
+        }
+
+        // إظهار معلومات النظام
+        console.log('%cمعلومات النظام:', 'color: #667eea; font-weight: bold;');
+        console.log(`🖥️ المتصفح: ${navigator.userAgent}`);
+        console.log(`🌐 اللغة: ${navigator.language}`);
+        console.log(`📱 المنصة: ${navigator.platform}`);
+
+        // رسالة ترحيبية في الصفحة
+        setTimeout(() => {
+            console.log('%c🎉 النظام جاهز للاستخدام!', 'color: #43e97b; font-size: 16px; font-weight: bold;');
+        }, 1000);
     </script>
 </body>
 </html>
