@@ -1,569 +1,586 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة التقييمات</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+import time
+import random
+import json
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+import requests
+from bs4 import BeautifulSoup
+import re
 
-        :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --success: #4cc9f0;
-            --danger: #f72585;
-            --warning: #f8961e;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: var(--dark);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: white;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 25px;
-            margin-bottom: 25px;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: var(--primary);
-            border-bottom: 2px solid var(--light);
-            padding-bottom: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-
-        .btn-success {
-            background: var(--success);
-        }
-
-        .btn-warning {
-            background: var(--warning);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
-
-        .review-preview {
-            background: var(--light);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .review-item {
-            padding: 15px;
-            border-bottom: 1px solid #dee2e6;
-            display: flex;
-            align-items: center;
-        }
-
-        .review-item:last-child {
-            border-bottom: none;
-        }
-
-        .review-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-left: 15px;
-        }
-
-        .review-content {
-            flex: 1;
-        }
-
-        .review-author {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .review-text {
-            color: var(--gray);
-        }
-
-        .review-rating {
-            color: #ffc107;
-            font-size: 1.2rem;
-        }
-
-        .progress-container {
-            margin-top: 10px;
-        }
-
-        .progress-bar {
-            height: 10px;
-            background: #e9ecef;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            border-radius: 5px;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .stat-item {
-            padding: 15px;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-danger {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-            
-            header h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>نظام إدارة تقييمات المنتجات</h1>
-            <p>أدخل رابط الموقع وابدأ في إنشاء تقييمات واقعية ومحترمة</p>
-        </header>
-
-        <div class="card">
-            <h2 class="card-title">إعدادات التقييمات</h2>
-            
-            <div class="form-group">
-                <label for="siteUrl">رابط الموقع</label>
-                <input type="url" id="siteUrl" placeholder="https://example.com" required>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="reviewCount">عدد الأشخاص للتقييم</label>
-                    <select id="reviewCount">
-                        <option value="3">3 أشخاص</option>
-                        <option value="5" selected>5 أشخاص</option>
-                        <option value="10">10 أشخاص</option>
-                        <option value="15">15 أشخاص</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ratingType">نوع التقييم</label>
-                    <select id="ratingType">
-                        <option value="mixed" selected>مختلط (إيجابي وبناء)</option>
-                        <option value="positive">إيجابي فقط</option>
-                        <option value="constructive">بناء مع اقتراحات تطوير</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>
-                    <input type="checkbox" id="createAccounts" checked>
-                    إنشاء حسابات وهمية إذا تطلب الموقع تسجيل الدخول
-                </label>
-            </div>
-            
-            <button id="startProcess" class="btn btn-block">بدء عملية التقييم</button>
-        </div>
-
-        <div class="card hidden" id="loginSection">
-            <h2 class="card-title">إعدادات تسجيل الدخول</h2>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="loginSelector">محدد حقل اسم المستخدم</label>
-                    <input type="text" id="loginSelector" placeholder="#username أو .login-field" value="#username">
-                </div>
-                
-                <div class="form-group">
-                    <label for="passwordSelector">محدد حقل كلمة المرور</label>
-                    <input type="text" id="passwordSelector" placeholder="#password أو .password-field" value="#password">
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="loginButtonSelector">محدد زر تسجيل الدخول</label>
-                <input type="text" id="loginButtonSelector" placeholder="button[type='submit']" value="button[type='submit']">
-            </div>
-            
-            <button id="testLogin" class="btn btn-warning">اختبار تسجيل الدخول</button>
-        </div>
-
-        <div class="card hidden" id="reviewSection">
-            <h2 class="card-title">معاينة التقييمات</h2>
-            
-            <div class="form-group">
-                <label for="reviewSelector">محدد منطقة التقييم</label>
-                <input type="text" id="reviewSelector" placeholder=".review-form أو #reviews" value=".review-form">
-            </div>
-            
-            <div id="reviewsPreview" class="review-preview">
-                <!-- سيتم ملء هذا القسم ديناميكيًا -->
-            </div>
-            
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="totalReviews">0</div>
-                    <div class="stat-label">إجمالي التقييمات</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="avgRating">0.0</div>
-                    <div class="stat-label">متوسط التقييم</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="successRate">0%</div>
-                    <div class="stat-label">معدل النجاح</div>
-                </div>
-            </div>
-            
-            <button id="startReviews" class="btn btn-success btn-block">بدء نشر التقييمات</button>
-        </div>
-
-        <div class="card hidden" id="progressSection">
-            <h2 class="card-title">تقدم العملية</h2>
-            
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                </div>
-                <div style="text-align: center; margin-top: 10px;" id="progressText">0%</div>
-            </div>
-            
-            <div id="processLog" style="margin-top: 20px; max-height: 200px; overflow-y: auto;">
-                <!-- سجل العملية -->
-            </div>
-        </div>
-
-        <div id="alertArea">
-            <!-- منطقة الإشعارات -->
-        </div>
-    </div>
-
-    <script>
-        // بيانات التقييمات بالعربية
-        const reviewTemplates = {
-            positive: [
-                { rating: 5, comment: "منتج رائع وجودة ممتازة، أنصح به بشدة" },
-                { rating: 5, comment: "تجاوز توقعاتي، التوصيل كان سريعاً والمنتج ممتاز" },
-                { rating: 5, comment: "جودة تصنيع عالية وتفاصيل دقيقة، أنصح به" },
-                { rating: 5, comment: "مثالي لما أبحث عنه، سهولة الاستخدام والكفاءة عالية" },
-                { rating: 5, comment: "منتج ممتاز وتجربة شراء رائعة، شكراً لكم" }
+class AutoReviewMaster:
+    def __init__(self):
+        self.setup_driver()
+        self.reviews_data = []
+        self.arabic_names = self.load_arabic_names()
+        self.reviews_db = self.load_reviews_database()
+        
+    def setup_driver(self):
+        """إعداد متصفح Chrome مخفي"""
+        print("🔄 جاري إعداد المتصفح...")
+        chrome_options = Options()
+        chrome_options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+        chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+        chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        chrome_options.add_experimental_option('useAutomationExtension', False)
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        
+        self.driver = webdriver.Chrome(options=chrome_options)
+        self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+        self.wait = WebDriverWait(self.driver, 15)
+        print("✅ تم إعداد المتصفح بنجاح")
+    
+    def load_arabic_names(self):
+        """قائمة بأسماء عربية حقيقية"""
+        return [
+            "محمد أحمد", "أحمد خالد", "خالد إبراهيم", "إبراهيم حسن", "حسن محمود",
+            "محمود علي", "علي عمر", "عمر ناصر", "ناصر سعيد", "سعيد راشد",
+            "فاطمة محمد", "سارة أحمد", "نورة خالد", "لمى إبراهيم", "هدى حسن",
+            "أميرة محمود", "ريم علي", "لينا عمر", "ياسمين ناصر", "عبير سعيد"
+        ]
+    
+    def load_reviews_database(self):
+        """قاعدة بيانات التقييمات بالعربية"""
+        return {
+            "electronics": [
+                {"rating": 5, "comment": "جهاز رائع وجودة تصنيعه ممتازة، أنصح به بشدة", "type": "positive"},
+                {"rating": 4, "comment": "جيد جداً وسعره معقول، لكن يمكن تحسين بعض الميزات", "type": "mixed"},
+                {"rating": 5, "comment": "تجاوز توقعاتي، الأداء سريع والبطارية تدوم طويلاً", "type": "positive"},
+                {"rating": 4, "comment": "منتج عملي ويناسب احتياجاتي اليومية، شكراً للجودة", "type": "positive"},
+                {"rating": 3, "comment": "مقبول ولكن هناك بعض المشاكل الصغيرة في البرنامج", "type": "constructive"}
             ],
-            mixed: [
-                { rating: 5, comment: "منتج رائع وجودة ممتازة، أنصح به بشدة" },
-                { rating: 4, comment: "جيد جداً لكن يمكن تحسين بعض التفاصيل الصغيرة" },
-                { rating: 5, comment: "تجاوز توقعاتي، المواد المستخدمة ممتازة" },
-                { rating: 4, comment: "منتج جيد بسعره المعقول، يناسب الاحتياجات الأساسية" },
-                { rating: 3, comment: "مقبول ولكن هناك مجال للتحسين في بعض الجوانب" }
+            "clothing": [
+                {"rating": 5, "comment": "القماش ممتاز والتفصيل متقن، يناسب المقاس تماماً", "type": "positive"},
+                {"rating": 4, "comment": "جيد جداً ولكن الألوان تختلف قليلاً عن الصورة", "type": "mixed"},
+                {"rating": 5, "comment": "أنيق ومريح، الجودة أعلى من التوقعات", "type": "positive"},
+                {"rating": 4, "comment": "مناسب للسعر، ولكن يمكن تحسين خامة القماش", "type": "constructive"},
+                {"rating": 5, "comment": "شكراً للتوصيل السريع، المنتج رائع وأنصح الجميع به", "type": "positive"}
             ],
-            constructive: [
-                { rating: 4, comment: "منتج جيد بشكل عام ولكن أتمنى تحسين خدمة التوصيل" },
-                { rating: 3, comment: "مقبول ولكن يمكن إضافة المزيد من الميزات في الإصدارات القادمة" },
-                { rating: 4, comment: "أداء جيد ولكن التغليف يحتاج تحسين" },
-                { rating: 3, comment: "فكرة المنتج جيدة ولكن التنفيذ يحتاج بعض التحسين" },
-                { rating: 4, comment: "منتج عملي ولكن الألوان المتاحة محدودة" }
+            "home": [
+                {"rating": 5, "comment": "منتج منزلي عملي وجودة التصنيع عالية", "type": "positive"},
+                {"rating": 4, "comment": "مفيد في الحياة اليومية، لكن يمكن إضافة ميزات أكثر", "type": "constructive"},
+                {"rating": 5, "comment": "تصميم أنيق وملائم للمنازل العصرية", "type": "positive"},
+                {"rating": 4, "comment": "جيد ولكن السعر مرتفع قليلاً مقارنة بالجودة", "type": "mixed"},
+                {"rating": 5, "comment": "منتج ممتاز ويوفر وقت وجهد كبير في الأعمال المنزلية", "type": "positive"}
+            ],
+            "books": [
+                {"rating": 5, "comment": "كتاب رائع والمحتوى مفيد جداً، أنصح بقراءته", "type": "positive"},
+                {"rating": 4, "comment": "معلومات قيمة ولكن يمكن تحسين تنظيم المحتوى", "type": "constructive"},
+                {"rating": 5, "comment": "أسلوب شيق ومعلومات دقيقة، تجربة قراءة ممتعة", "type": "positive"},
+                {"rating": 4, "comment": "جيد للمبتدئين ولكن يحتاج لإضافة أمثلة أكثر", "type": "mixed"},
+                {"rating": 5, "comment": "من أفضل الكتب التي قرأتها في هذا المجال", "type": "positive"}
+            ],
+            "general": [
+                {"rating": 5, "comment": "منتج ممتاز وجودة عالية، أنصح به بشدة", "type": "positive"},
+                {"rating": 4, "comment": "جيد جداً وسعره معقول، يناسب الاحتياجات الأساسية", "type": "mixed"},
+                {"rating": 5, "comment": "تجاوز توقعاتي، التوصيل سريع والمنتج ممتاز", "type": "positive"},
+                {"rating": 4, "comment": "منتج عملي ولكن يمكن تطويره أكثر", "type": "constructive"},
+                {"rating": 3, "comment": "مقبول ولكن هناك مجال للتحسين في الجودة", "type": "constructive"}
             ]
-        };
-
-        // أسماء عربية واقعية
-        const arabicNames = [
-            "محمد أحمد", "فاطمة حسن", "أحمد خالد", "سارة علي", "عمر ناصر",
-            "ريم عبدالله", "خالد إبراهيم", "نورة سعيد", "يوسف محمد", "لينا فارس",
-            "ماجد راشد", "هدى كامل", "طارق سمير", "أميرة وليد", "بسام عادل"
-        ];
-
-        // عناصر DOM
-        const siteUrlInput = document.getElementById('siteUrl');
-        const reviewCountSelect = document.getElementById('reviewCount');
-        const ratingTypeSelect = document.getElementById('ratingType');
-        const createAccountsCheckbox = document.getElementById('createAccounts');
-        const startProcessBtn = document.getElementById('startProcess');
-        const loginSection = document.getElementById('loginSection');
-        const reviewSection = document.getElementById('reviewSection');
-        const progressSection = document.getElementById('progressSection');
-        const reviewsPreview = document.getElementById('reviewsPreview');
-        const startReviewsBtn = document.getElementById('startReviews');
-        const progressFill = document.getElementById('progressFill');
-        const progressText = document.getElementById('progressText');
-        const processLog = document.getElementById('processLog');
-        const alertArea = document.getElementById('alertArea');
-        const totalReviewsEl = document.getElementById('totalReviews');
-        const avgRatingEl = document.getElementById('avgRating');
-        const successRateEl = document.getElementById('successRate');
-
-        // معاينة التقييمات
-        function generateReviewsPreview() {
-            const count = parseInt(reviewCountSelect.value);
-            const type = ratingTypeSelect.value;
-            const reviews = reviewTemplates[type];
+        }
+    
+    def generate_user_data(self):
+        """إنشاء بيانات مستخدم عشوائية"""
+        name = random.choice(self.arabic_names)
+        username = f"{name.split()[0].lower()}{random.randint(100, 999)}"
+        email = f"{username}@gmail.com"
+        password = f"Pass{random.randint(1000, 9999)}"
+        
+        return {
+            "name": name,
+            "username": username,
+            "email": email,
+            "password": password
+        }
+    
+    def detect_website_type(self, url):
+        """كشف نوع الموقع تلقائياً"""
+        try:
+            self.driver.get(url)
+            time.sleep(3)
             
-            reviewsPreview.innerHTML = '';
-            let totalRating = 0;
+            page_source = self.driver.page_source.lower()
             
-            for (let i = 0; i < count; i++) {
-                const reviewIndex = i % reviews.length;
-                const review = reviews[reviewIndex];
-                const name = arabicNames[i % arabicNames.length];
+            if any(word in page_source for word in ['electronic', 'laptop', 'phone', 'tablet']):
+                return "electronics"
+            elif any(word in page_source for word in ['clothing', 'fashion', 'shirt', 'dress']):
+                return "clothing"
+            elif any(word in page_source for word in ['home', 'furniture', 'decor', 'kitchen']):
+                return "home"
+            elif any(word in page_source for word in ['book', 'library', 'read', 'author']):
+                return "books"
+            else:
+                return "general"
                 
-                totalRating += review.rating;
+        except Exception as e:
+            print(f"⚠️ لم يتمكن من كشف نوع الموقع: {e}")
+            return "general"
+    
+    def find_element_advanced(self, selectors, timeout=10):
+        """البحث عن عنصر باستخدام multiple selectors"""
+        for selector in selectors:
+            try:
+                element = WebDriverWait(self.driver, timeout).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, selector))
+                )
+                return element
+            except:
+                continue
+        return None
+    
+    def click_element_advanced(self, selectors, timeout=10):
+        """النقر على عنصر باستخدام multiple selectors"""
+        for selector in selectors:
+            try:
+                element = WebDriverWait(self.driver, timeout).until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                )
+                element.click()
+                return True
+            except:
+                continue
+        return False
+    
+    def send_keys_advanced(self, selectors, text, timeout=10):
+        """إدخال نص في حقل باستخدام multiple selectors"""
+        for selector in selectors:
+            try:
+                element = WebDriverWait(self.driver, timeout).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, selector))
+                )
+                element.clear()
+                element.send_keys(text)
+                return True
+            except:
+                continue
+        return False
+    
+    def auto_register(self, user_data):
+        """إنشاء حساب تلقائي"""
+        print(f"👤 جاري إنشاء حساب للمستخدم: {user_data['name']}")
+        
+        # البحث عن رابط التسجيل
+        register_selectors = [
+            "a[href*='register']",
+            "a[href*='signup']",
+            "a[href*='تسجيل']",
+            "a[href*='انشاء']",
+            ".register",
+            ".signup",
+            "a:contains('إنشاء حساب')",
+            "a:contains('تسجيل جديد')",
+            "button:contains('اشتراك')"
+        ]
+        
+        if not self.click_element_advanced(register_selectors):
+            print("⚠️ لم يتم العثور على رابط التسجيل، جاري البحث عن نموذج مباشر")
+            # قد يكون النموذج في الصفحة الرئيسية
+            pass
+        
+        time.sleep(2)
+        
+        # حقول التسجيل
+        registration_fields = {
+            "username": [
+                "input[name='username']",
+                "input[placeholder*='اسم المستخدم']",
+                "#username",
+                ".username"
+            ],
+            "email": [
+                "input[name='email']",
+                "input[type='email']",
+                "input[placeholder*='بريد']",
+                "#email",
+                ".email"
+            ],
+            "password": [
+                "input[name='password']",
+                "input[type='password']",
+                "input[placeholder*='كلمة']",
+                "#password",
+                ".password"
+            ],
+            "name": [
+                "input[name='name']",
+                "input[name='fullname']",
+                "input[placeholder*='اسم']",
+                "#name",
+                ".name"
+            ]
+        }
+        
+        # ملء الحقول
+        for field, selectors in registration_fields.items():
+            if field in user_data:
+                if not self.send_keys_advanced(selectors, user_data[field]):
+                    print(f"⚠️ لم يتم العثور على حقل {field}")
+        
+        time.sleep(1)
+        
+        # إرسال النموذج
+        submit_selectors = [
+            "button[type='submit']",
+            "input[type='submit']",
+            "button:contains('تسجيل')",
+            "button:contains('إنشاء')",
+            "button:contains('اشتراك')",
+            ".submit",
+            ".register-btn"
+        ]
+        
+        if self.click_element_advanced(submit_selectors):
+            print("✅ تم إنشاء الحساب بنجاح")
+            time.sleep(3)
+            return True
+        else:
+            print("❌ فشل في إنشاء الحساب")
+            return False
+    
+    def auto_login(self, user_data):
+        """تسجيل دخول تلقائي"""
+        print(f"🔐 جاري تسجيل دخول: {user_data['username']}")
+        
+        # البحث عن رابط الدخول
+        login_selectors = [
+            "a[href*='login']",
+            "a[href*='signin']",
+            "a[href*='دخول']",
+            ".login",
+            ".signin",
+            "a:contains('تسجيل الدخول')"
+        ]
+        
+        self.click_element_advanced(login_selectors)
+        time.sleep(2)
+        
+        # حقول الدخول
+        login_fields = {
+            "username": [
+                "input[name='username']",
+                "input[name='email']",
+                "input[type='text']",
+                "#username",
+                "#email",
+                ".username",
+                ".email"
+            ],
+            "password": [
+                "input[name='password']",
+                "input[type='password']",
+                "#password",
+                ".password"
+            ]
+        }
+        
+        # ملء الحقول
+        for field, selectors in login_fields.items():
+            if field in user_data:
+                self.send_keys_advanced(selectors, user_data[field])
+        
+        time.sleep(1)
+        
+        # زر الدخول
+        login_btn_selectors = [
+            "button[type='submit']",
+            "input[type='submit']",
+            "button:contains('دخول')",
+            "button:contains('Login')",
+            ".login-btn"
+        ]
+        
+        if self.click_element_advanced(login_btn_selectors):
+            print("✅ تم تسجيل الدخول بنجاح")
+            time.sleep(3)
+            return True
+        else:
+            print("❌ فشل في تسجيل الدخول")
+            return False
+    
+    def discover_products(self):
+        """اكتشاف المنتجات في الموقع تلقائياً"""
+        print("🔍 جاري اكتشاف المنتجات...")
+        
+        products = []
+        
+        # البحث عن روابط المنتجات
+        product_selectors = [
+            "a[href*='product']",
+            "a[href*='item']",
+            ".product-link",
+            ".item-link",
+            ".card a",
+            ".product a",
+            "article a",
+            "[class*='product'] a"
+        ]
+        
+        # جمع جميع روابط المنتجات
+        for selector in product_selectors:
+            try:
+                elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
+                for element in elements:
+                    href = element.get_attribute('href')
+                    if href and any(keyword in href.lower() for keyword in ['product', 'item', 'p=']):
+                        products.append(href)
+            except:
+                continue
+        
+        # إزالة التكرارات
+        unique_products = list(set(products))
+        print(f"✅ تم اكتشاف {len(unique_products)} منتج")
+        
+        return unique_products[:10]  # إرجاع أول 10 منتجات فقط
+    
+    def auto_review_product(self, product_url, user_data, website_type):
+        """وضع تقييم تلقائي للمنتج"""
+        print(f"⭐ جاري تقييم المنتج: {product_url}")
+        
+        try:
+            # الانتقال لصفحة المنتج
+            self.driver.get(product_url)
+            time.sleep(3)
+            
+            # اختيار تقييم عشوائي مناسب لنوع الموقع
+            review = random.choice(self.reviews_db[website_type])
+            
+            # البحث عن رابط إضافة التقييم
+            review_link_selectors = [
+                "a[href*='review']",
+                "a[href*='rating']",
+                ".add-review",
+                ".review-link",
+                "button:contains('أضف تقييم')",
+                "button:contains('اكتب مراجعة')"
+            ]
+            
+            self.click_element_advanced(review_link_selectors)
+            time.sleep(2)
+            
+            # اختيار التقييم بالنجوم
+            rating_selectors = [
+                f".star-rating label:nth-child({review['rating']})",
+                f".rating input[value='{review['rating']}']",
+                f".stars label:nth-of-type({review['rating']})",
+                f"[class*='star']:nth-child({review['rating']})"
+            ]
+            
+            self.click_element_advanced(rating_selectors)
+            time.sleep(1)
+            
+            # كتابة التعليق
+            comment_selectors = [
+                "textarea[name='comment']",
+                "textarea[name='review']",
+                "textarea[placeholder*='تعليق']",
+                "textarea[placeholder*='مراجعة']",
+                "#comment",
+                "#review",
+                ".comment-field",
+                ".review-text"
+            ]
+            
+            self.send_keys_advanced(comment_selectors, review['comment'])
+            time.sleep(1)
+            
+            # إرسال التقييم
+            submit_review_selectors = [
+                "button[type='submit']",
+                "input[type='submit']",
+                "button:contains('إرسال')",
+                "button:contains('نشر')",
+                ".submit-review",
+                ".post-review"
+            ]
+            
+            if self.click_element_advanced(submit_review_selectors):
+                print(f"✅ تم نشر التقييم: {review['comment'][:50]}...")
                 
-                const reviewItem = document.createElement('div');
-                reviewItem.className = 'review-item';
-                reviewItem.innerHTML = `
-                    <div class="review-avatar">${name.charAt(0)}</div>
-                    <div class="review-content">
-                        <div class="review-author">${name}</div>
-                        <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
-                        <div class="review-text">${review.comment}</div>
-                    </div>
-                `;
+                # حفظ بيانات التقييم
+                self.reviews_data.append({
+                    "user": user_data,
+                    "review": review,
+                    "product": product_url,
+                    "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+                })
                 
-                reviewsPreview.appendChild(reviewItem);
+                return True
+            else:
+                print("❌ فشل في إرسال التقييم")
+                return False
+                
+        except Exception as e:
+            print(f"❌ خطأ في تقييم المنتج: {e}")
+            return False
+    
+    def smart_navigation(self):
+        """تنقل ذكي في الموقع"""
+        print("🧭 جاري التنقل الذكي في الموقع...")
+        
+        # زيارة صفحات عشوائية لمحاكاة المستخدم الحقيقي
+        pages_to_visit = random.randint(2, 5)
+        
+        for i in range(pages_to_visit):
+            try:
+                # اختيار رابط عشوائي للنقر
+                links = self.driver.find_elements(By.TAG_NAME, "a")
+                if links:
+                    random_link = random.choice(links)
+                    if random_link.is_displayed():
+                        random_link.click()
+                        time.sleep(random.randint(2, 4))
+            except:
+                pass
+    
+    def auto_logout(self):
+        """تسجيل خروج تلقائي"""
+        print("🚪 جاري تسجيل الخروج...")
+        
+        logout_selectors = [
+            "a[href*='logout']",
+            "a[href*='signout']",
+            "a:contains('خروج')",
+            "a:contains('تسجيل خروج')",
+            ".logout",
+            ".signout"
+        ]
+        
+        self.click_element_advanced(logout_selectors)
+        time.sleep(2)
+    
+    def run_auto_campaign(self, website_url, num_reviews=5):
+        """تشغيل الحملة التلقائية الكاملة"""
+        print(f"🚀 بدء الحملة التلقائية لموقع: {website_url}")
+        print(f"🎯 عدد التقييمات المطلوبة: {num_reviews}")
+        
+        # كشف نوع الموقع
+        website_type = self.detect_website_type(website_url)
+        print(f"🏷️ نوع الموقع المكتشف: {website_type}")
+        
+        # اكتشاف المنتجات
+        products = self.discover_products()
+        
+        if not products:
+            print("❌ لم يتم العثور على منتجات، جاري البحث يدوياً...")
+            # البحث في صفحات أخرى
+            self.driver.get(website_url)
+            time.sleep(2)
+            products = self.discover_products()
+        
+        if not products:
+            print("❌ فشل في العثور على أي منتجات")
+            return
+        
+        success_count = 0
+        
+        for i in range(num_reviews):
+            print(f"\n{'='*50}")
+            print(f"📊 جولة التقييم {i+1} من {num_reviews}")
+            print(f"{'='*50}")
+            
+            try:
+                # إنشاء بيانات مستخدم جديدة
+                user_data = self.generate_user_data()
+                
+                # الانتقال للصفحة الرئيسية
+                self.driver.get(website_url)
+                time.sleep(2)
+                
+                # محاولة إنشاء حساب
+                if not self.auto_register(user_data):
+                    # إذا فشل التسجيل، حاول الدخول
+                    if not self.auto_login(user_data):
+                        print("❌ فشل في التسجيل والدخول، تخطي هذا المستخدم")
+                        continue
+                
+                # تنقل ذكي في الموقع
+                self.smart_navigation()
+                
+                # اختيار منتج عشوائي
+                product_url = random.choice(products)
+                
+                # وضع التقييم
+                if self.auto_review_product(product_url, user_data, website_type):
+                    success_count += 1
+                    print(f"✅ نجح التقييم {success_count} من {num_reviews}")
+                
+                # تسجيل الخروج
+                self.auto_logout()
+                
+                # تأخير عشوائي بين المستخدمين
+                delay = random.randint(10, 20)
+                print(f"⏳ انتظار {delay} ثانية قبل المستخدم التالي...")
+                time.sleep(delay)
+                
+            except Exception as e:
+                print(f"❌ خطأ في الجولة {i+1}: {e}")
+                continue
+        
+        # إنشاء التقرير النهائي
+        self.generate_final_report(success_count, num_reviews)
+        
+        print(f"\n🎉 اكتملت الحملة! النجاح: {success_count}/{num_reviews}")
+    
+    def generate_final_report(self, success_count, total_reviews):
+        """إنشاء تقرير نهائي مفصل"""
+        report = {
+            "campaign_summary": {
+                "total_reviews_attempted": total_reviews,
+                "successful_reviews": success_count,
+                "success_rate": f"{(success_count/total_reviews)*100:.1f}%",
+                "completion_time": time.strftime("%Y-%m-%d %H:%M:%S")
+            },
+            "reviews_details": self.reviews_data,
+            "statistics": {
+                "average_rating": sum(r['review']['rating'] for r in self.reviews_data) / len(self.reviews_data) if self.reviews_data else 0,
+                "positive_reviews": len([r for r in self.reviews_data if r['review']['rating'] >= 4]),
+                "constructive_reviews": len([r for r in self.reviews_data if r['review']['type'] == 'constructive'])
             }
-            
-            // تحديث الإحصائيات
-            totalReviewsEl.textContent = count;
-            avgRatingEl.textContent = (totalRating / count).toFixed(1);
-            successRateEl.textContent = '95%';
         }
+        
+        # حفظ التقرير في ملف
+        with open('auto_review_campaign_report.json', 'w', encoding='utf-8') as f:
+            json.dump(report, f, ensure_ascii=False, indent=2)
+        
+        print("📊 تم حفظ التقرير المفصل في: auto_review_campaign_report.json")
+        
+        # عرض ملخص سريع
+        print(f"\n📈 ملخص الحملة:")
+        print(f"   • التقييمات الناجحة: {success_count}/{total_reviews}")
+        print(f"   • معدل النجاح: {(success_count/total_reviews)*100:.1f}%")
+        print(f"   • متوسط التقييم: {report['statistics']['average_rating']:.1f} ⭐")
+        print(f"   • التقييمات الإيجابية: {report['statistics']['positive_reviews']}")
+    
+    def close(self):
+        """إغلاق المتصفح"""
+        self.driver.quit()
+        print("🔚 تم إغلاق المتصفح")
 
-        // بدء العملية
-        startProcessBtn.addEventListener('click', function() {
-            const siteUrl = siteUrlInput.value.trim();
-            
-            if (!siteUrl) {
-                showAlert('يرجى إدخال رابط الموقع', 'danger');
-                return;
-            }
-            
-            // إظهار أقسام إضافية
-            loginSection.classList.remove('hidden');
-            reviewSection.classList.remove('hidden');
-            
-            // إنشاء معاينة التقييمات
-            generateReviewsPreview();
-            
-            showAlert('تم تحضير نظام التقييمات بنجاح!', 'success');
-        });
-
-        // بدء نشر التقييمات
-        startReviewsBtn.addEventListener('click', function() {
-            progressSection.classList.remove('hidden');
-            simulateReviewProcess();
-        });
-
-        // محاكاة عملية التقييم
-        function simulateReviewProcess() {
-            const totalSteps = 10;
-            let currentStep = 0;
-            
-            const processSteps = [
-                "جاري فتح الموقع...",
-                "جاري التحقق من هيكل الصفحة...",
-                "جاري إنشاء الحسابات الوهمية...",
-                "جاري تسجيل الدخول...",
-                "جاري البحث عن المنتجات...",
-                "جاري تحميل صفحات المنتجات...",
-                "جاري وضع التقييم الأول...",
-                "جاري وضع التقييم الثاني...",
-                "جاري وضع التقييم الثالث...",
-                "جاري وضع التقييم الرابع...",
-                "جاري وضع التقييم الخامس...",
-                "جاري إنهاء العملية..."
-            ];
-            
-            const interval = setInterval(() => {
-                if (currentStep <= totalSteps) {
-                    const progress = (currentStep / totalSteps) * 100;
-                    progressFill.style.width = `${progress}%`;
-                    progressText.textContent = `${Math.round(progress)}%`;
-                    
-                    // إضافة سجل العملية
-                    if (currentStep < processSteps.length) {
-                        addProcessLog(processSteps[currentStep]);
-                    }
-                    
-                    currentStep++;
-                } else {
-                    clearInterval(interval);
-                    addProcessLog("✅ اكتملت عملية التقييم بنجاح!");
-                    showAlert('تمت عملية التقييم بنجاح!', 'success');
-                }
-            }, 1000);
-        }
-
-        // إضافة سجل العملية
-        function addProcessLog(message) {
-            const logEntry = document.createElement('div');
-            logEntry.textContent = `• ${message}`;
-            logEntry.style.padding = '5px 0';
-            logEntry.style.borderBottom = '1px solid #f0f0f0';
-            processLog.appendChild(logEntry);
-            processLog.scrollTop = processLog.scrollHeight;
-        }
-
-        // عرض الإشعارات
-        function showAlert(message, type) {
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            alert.textContent = message;
-            alertArea.appendChild(alert);
-            
-            setTimeout(() => {
-                alert.remove();
-            }, 5000);
-        }
-
-        // تحديث المعاينة عند تغيير الإعدادات
-        reviewCountSelect.addEventListener('change', generateReviewsPreview);
-        ratingTypeSelect.addEventListener('change', generateReviewsPreview);
-    </script>
-</body>
-</html>
+# التشغيل التلقائي الكامل
+if __name__ == "__main__":
+    print("""
+    🚀 نظام التقييمات التلقائي المتكامل
+    ⚡ الإصدار: 2.0 - كامل الآلية
+    📧 المطور: نظام الذكاء الاصطناعي
+    """)
+    
+    # إعدادات تلقائية
+    WEBSITE_URL = "https://example.com"  # ضع رابط موقعك هنا
+    NUM_REVIEWS = 5  # عدد التقييمات المطلوبة
+    
+    bot = AutoReviewMaster()
+    
+    try:
+        # تشغيل الحملة التلقائية الكاملة
+        bot.run_auto_campaign(WEBSITE_URL, NUM_REVIEWS)
+        
+    except KeyboardInterrupt:
+        print("\n⏹️ تم إيقاف البرنامج بواسطة المستخدم")
+    except Exception as e:
+        print(f"\n💥 خطأ غير متوقع: {e}")
+    finally:
+        bot.close()
