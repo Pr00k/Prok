@@ -1,276 +1,519 @@
-<!doctype html>
-<html lang="ar">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>صفحة التقييمات — تجربة</title>
-  <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --accent:#06b6d4; --muted:#94a3b8; --glass: rgba(255,255,255,0.03);
-      --success:#10b981; --danger:#ef4444;
-      --radius:12px;
-      font-family: "Segoe UI", Tahoma, "Noto Naskh Arabic", system-ui, -apple-system, sans-serif;
-      color-scheme: dark;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071029 0%, #081226 60%);color:#e6eef6}
-    .wrap{max-width:980px;margin:36px auto;padding:20px}
-    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
-    header h1{font-size:20px;margin:0}
-    .card{background:linear-gradient(180deg,var(--card), rgba(8,12,20,0.6));border-radius:var(--radius);padding:16px;box-shadow:0 6px 18px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
-    .grid{display:grid;grid-template-columns:1fr 380px;gap:18px}
-    @media(max-width:880px){.grid{grid-template-columns:1fr}}
-    .reviews-list{display:flex;flex-direction:column;gap:12px}
-    .review{background:var(--glass);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);display:flex;gap:12px;align-items:flex-start}
-    .avatar{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;color:#021018}
-    .meta{flex:1}
-    .meta .name{font-weight:700}
-    .meta .time{font-size:12px;color:var(--muted)}
-    .stars{display:inline-block;margin-top:6px}
-    .stars span{font-size:14px;margin-left:4px}
-    .comment{margin-top:8px;color:#dbeafe}
-    form{display:flex;flex-direction:column;gap:10px}
-    input[type="text"], textarea, select{
-      background:transparent;border:1px solid rgba(255,255,255,0.04);padding:10px;border-radius:8px;color:inherit;font-size:14px
-    }
-    textarea{min-height:100px;resize:vertical}
-    .btn{background:var(--accent);border:none;padding:10px 12px;border-radius:10px;color:#001219;font-weight:700;cursor:pointer}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
-    .actions{display:flex;gap:8px;flex-wrap:wrap}
-    .small{font-size:13px;color:var(--muted)}
-    .summary{display:flex;gap:12px;align-items:center}
-    .big-rating{font-size:36px;font-weight:800;color:#ffd166}
-    .stat{font-size:13px;color:var(--muted)}
-    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
-    .chip{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:999px;font-size:13px;border:1px solid rgba(255,255,255,0.02)}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام التقييم الآلي للمواقع</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .url-input-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .ratings-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .rating-control {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .rating-control h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .counter-btn {
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .counter-btn:hover {
+            background: #5a6fd8;
+            transform: scale(1.1);
+        }
+
+        .counter-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            min-width: 80px;
+        }
+
+        .comments-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .comments-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .auto-comments {
+            margin-top: 30px;
+        }
+
+        .auto-comment {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-right: 4px solid #667eea;
+        }
+
+        .progress-section {
+            margin-top: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .status {
+            text-align: center;
+            padding: 20px;
+            background: #e8f5e8;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #4caf50;
+            color: #2e7d32;
+        }
+
+        .advanced-options {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .advanced-options h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .logs {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 5px;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .success { color: #4caf50; }
+        .warning { color: #ff9800; }
+        .error { color: #f44336; }
+        .info { color: #2196f3; }
+
+        @media (max-width: 768px) {
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .ratings-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="card" style="padding:12px;display:flex;gap:12px;align-items:center">
-        <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:900;color:#021018">Rv</div>
-        <div>
-          <h1>نظام التقييمات — صفحة عرض واختبار</h1>
-          <div class="small">واجهة تجريبية لحث العملاء على إضافة مراجعات حقيقية — آمنة للاختبار</div>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 نظام التقييم الآلي للمواقع</h1>
+            <p>قم بتقييم أي موقع إلكتروني بسهولة وبشكل احترافي</p>
         </div>
-      </div>
-    </header>
 
-    <div class="grid">
-      <!-- العمود الأيسر: قائمة المراجعات -->
-      <section class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div class="summary">
-            <div class="big-rating" id="avgRating">4.6</div>
-            <div>
-              <div class="chip" id="totalCount">5 مراجعات</div>
-              <div class="stat" style="margin-top:8px" id="positiveCount">4 تقييمات إيجابية</div>
+        <div class="main-content">
+            <div class="url-input-section">
+                <h2>أدخل رابط الموقع المراد تقييمه</h2>
+                <div class="input-group">
+                    <input type="url" class="url-input" id="siteUrl" 
+                           placeholder="https://example.com" required>
+                    <button class="btn btn-primary" id="startBtn">بدء التقييم الآلي</button>
+                </div>
+                <div class="status" id="statusArea">
+                    أدخل رابط الموقع واضغط على بدء التقييم
+                </div>
             </div>
-          </div>
-          <div class="actions">
-            <button class="btn ghost" id="seedBtn" title="توليد مراجعات تجريبية">توليد 5 مراجعين تجريبيين</button>
-            <button class="btn" id="clearBtn" title="مسح المراجعات">مسح</button>
-          </div>
-        </div>
 
-        <div class="reviews-list" id="reviewsList">
-          <!-- المراجعات ستُضاف هنا ديناميكياً -->
-        </div>
-      </section>
+            <div class="ratings-section">
+                <div class="rating-control">
+                    <h3>👍 التقييمات الإيجابية</h3>
+                    <div class="counter">
+                        <button class="counter-btn" onclick="changeRating('positive', -10)">-</button>
+                        <span class="counter-value" id="positiveCount">50</span>
+                        <button class="counter-btn" onclick="changeRating('positive', 10)">+</button>
+                    </div>
+                    <small>عدد التقييمات الإيجابية المطلوبة</small>
+                </div>
 
-      <!-- العمود الأيمن: نموذج الإضافة -->
-      <aside class="card">
-        <h3>أضف مراجعتك</h3>
-        <form id="reviewForm" autocomplete="off">
-          <input type="text" id="nameInput" placeholder="اسمك (أو اتركه فارغًا لاسم عشوائي)" />
-          <label class="small">التقييم:</label>
-          <select id="ratingInput">
-            <option value="5">★★★★★ - ممتاز</option>
-            <option value="4">★★★★ - جيد جداً</option>
-            <option value="3">★★★ - مقبول</option>
-            <option value="2">★★ - ضعيف</option>
-            <option value="1">★ - سيئ</option>
-          </select>
-          <textarea id="commentInput" placeholder="اكتب تعليقًا محترمًا وواقعيًا عن المنتج..."></textarea>
-          <div style="display:flex;gap:8px">
-            <button class="btn" type="submit">نشر المراجعة</button>
-            <button class="btn ghost" type="button" id="previewBtn">معاينة</button>
-          </div>
-          <div class="small" style="margin-top:8px">نستخدم التخزين المحلي لحفظ المراجعات في متصفحك (localStorage). هذه الصفحة للاختبار أو كنموذج <strong>قانوني</strong> لجمع مراجعات حقيقية.</div>
-        </form>
-      </aside>
+                <div class="rating-control">
+                    <h3>💬 التعليقات الإيجابية</h3>
+                    <div class="counter">
+                        <button class="counter-btn" onclick="changeRating('comments', -5)">-</button>
+                        <span class="counter-value" id="commentsCount">25</span>
+                        <button class="counter-btn" onclick="changeRating('comments', 5)">+</button>
+                    </div>
+                    <small>عدد التعليقات المطلوبة</small>
+                </div>
+
+                <div class="rating-control">
+                    <h3>⭐ تقييم النجوم</h3>
+                    <div class="counter">
+                        <button class="counter-btn" onclick="changeRating('stars', -1)">-</button>
+                        <span class="counter-value" id="starsCount">5</span>
+                        <button class="counter-btn" onclick="changeRating('stars', 1)">+</button>
+                    </div>
+                    <small>متوسط النجوم المطلوب</small>
+                </div>
+            </div>
+
+            <div class="comments-section">
+                <h2>📝 التعليقات التلقائية</h2>
+                <textarea class="comment-input" id="customComment" 
+                          placeholder="أضف تعليقاً مخصصاً أو اتركه فارغاً لاستخدام تعليقات افتراضية"></textarea>
+                <button class="btn btn-primary" onclick="addCustomComment()">إضافة تعليق مخصص</button>
+                
+                <div class="auto-comments" id="commentsList">
+                    <div class="auto-comment">موقع رائع ومفيد جداً! 👏</div>
+                    <div class="auto-comment">تجربة مستخدم ممتازة، أنصح الجميع به 🌟</div>
+                    <div class="auto-comment">خدمة ممتازة وسريعة، شكراً لكم 💯</div>
+                </div>
+            </div>
+
+            <div class="advanced-options">
+                <h3>⚙️ الخيارات المتقدمة</h3>
+                <div class="options-grid">
+                    <div class="option-item">
+                        <input type="checkbox" id="autoRegister" checked>
+                        <label for="autoRegister">إنشاء حسابات تلقائية</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="randomDelay" checked>
+                        <label for="randomDelay">فترات انتظار عشوائية</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="humanBehavior" checked>
+                        <label for="humanBehavior">محاكاة السلوك البشري</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="proxyUsage">
+                        <label for="proxyUsage">استخدام بروكسي</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <h3>📊 تقدم العملية</h3>
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                <div class="logs" id="logArea">
+                    <div class="log-entry info">✓ النظام جاهز للبدء</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <footer>
-      ✨ تلميح: استخدم زر "توليد 5 مراجعين" لملء الصفحة بأمثلة واقعية للاختبار — لا تستخدمها لنشر مراجعات وهمية على مواقع خارجية.
-    </footer>
-  </div>
+    <script>
+        // بيانات التطبيق
+        const ratings = {
+            positive: 50,
+            comments: 25,
+            stars: 5
+        };
 
-  <script>
-    // بيانات اسماء وتعليقات مبدئية (عربية واقعية)
-    const demoNames = [
-      "محمد أحمد","أحمد خالد","خالد إبراهيم","إبراهيم حسن","حسن محمود",
-      "محمود علي","علي عمر","عمر ناصر","ناصر سعيد","سعيد راشد",
-      "فاطمة محمد","سارة أحمد","نورة خالد","لمى إبراهيم","هدى حسن"
-    ];
-
-    const demoComments = {
-      "electronics": [
-        "جهاز رائع وجودة تصنيعه ممتازة، أنصح به بشدة",
-        "تجاوز توقعاتي، الأداء سريع والبطارية تدوم طويلاً",
-        "جيد جداً وسعره معقول، لكن يمكن تحسين بعض الميزات",
-        "منتج عملي ويناسب احتياجاتي اليومية، شكراً للجودة",
-        "مقبول ولكن هناك بعض المشاكل الصغيرة في البرنامج"
-      ],
-      "clothing": [
-        "القماش ممتاز والتفصيل متقن، يناسب المقاس تماماً",
-        "جيد جداً ولكن الألوان تختلف قليلاً عن الصورة",
-        "أنيق ومريح، الجودة أعلى من التوقعات",
-        "مناسب للسعر، ولكن يمكن تحسين خامة القماش",
-        "شكراً للتوصيل السريع، المنتج رائع وأنصح الجميع به"
-      ]
-    };
-
-    // تحميل/حفظ من localStorage
-    const STORAGE_KEY = "demo_reviews_v1";
-    function loadReviews(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : [];
-      }catch(e){
-        console.error(e);
-        return [];
-      }
-    }
-    function saveReviews(list){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-      renderReviews();
-    }
-
-    // إنشاء عنصر مراجعة في DOM
-    function createReviewElement(r){
-      const el = document.createElement("div");
-      el.className = "review";
-      el.innerHTML = `
-        <div class="avatar">${(r.name||"مستخدم").split(" ")[0].slice(0,2)}</div>
-        <div class="meta">
-          <div><span class="name">${escapeHtml(r.name||"مجهول')}</span> · <span class="time">${r.time}</span></div>
-          <div class="stars">${starsHtml(r.rating)}</div>
-          <div class="comment">${escapeHtml(r.comment)}</div>
-        </div>
-      `;
-      return el;
-    }
-
-    function starsHtml(rating){
-      let s = "";
-      for(let i=0;i<rating;i++) s += "★";
-      for(let i=rating;i<5;i++) s += "☆";
-      return `<span style="color:#ffd166">${s}</span>`;
-    }
-
-    function escapeHtml(text){
-      return String(text).replace(/[&<>"']/g, (m)=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));
-    }
-
-    // عرض المراجعات
-    function renderReviews(){
-      const list = loadReviews();
-      const container = document.getElementById("reviewsList");
-      container.innerHTML = "";
-      // أحدث أولاً
-      list.slice().reverse().forEach(r => container.appendChild(createReviewElement(r)));
-
-      // إحصائيات
-      const total = list.length;
-      const avg = total ? (list.reduce((a,b)=>a+b.rating,0)/total) : 0;
-      const positive = list.filter(x=>x.rating>=4).length;
-      document.getElementById("avgRating").textContent = avg ? avg.toFixed(1) : "0.0";
-      document.getElementById("totalCount").textContent = `${total} مراجعة${total!==1 ? "ات":""}`;
-      document.getElementById("positiveCount").textContent = `${positive} تقييم${positive!==1 ? "ات":""} إيجابية`;
-    }
-
-    // توليد مراجعات تجريبية (خمسة أشخاص)
-    function seedDemoReviews(){
-      const list = loadReviews();
-      const now = Date.now();
-      for(let i=0;i<5;i++){
-        const name = demoNames[Math.floor(Math.random()*demoNames.length)];
-        const type = Math.random() > .5 ? "electronics" : "clothing";
-        const commentPool = demoComments[type];
-        const comment = commentPool[Math.floor(Math.random()*commentPool.length)];
-        const rating = [5,5,4,4,3][Math.floor(Math.random()*5)];
-        list.push({
-          name, rating, comment,
-          time: new Date(now - i*3600*1000).toLocaleString("ar-EG")
-        });
-      }
-      saveReviews(list);
-    }
-
-    // التعامل مع النموذج
-    document.getElementById("reviewForm").addEventListener("submit", (e)=>{
-      e.preventDefault();
-      const name = document.getElementById("nameInput").value.trim() || demoNames[Math.floor(Math.random()*demoNames.length)];
-      const rating = parseInt(document.getElementById("ratingInput").value,10) || 5;
-      const comment = document.getElementById("commentInput").value.trim();
-      if(!comment || comment.length < 6){ alert("اكتب تعليقًا حقيقيًا على الأقل 6 أحرف."); return; }
-
-      const list = loadReviews();
-      list.push({
-        name, rating, comment,
-        time: new Date().toLocaleString("ar-EG")
-      });
-      saveReviews(list);
-      // إعادة تعيين الحقول
-      document.getElementById("commentInput").value = "";
-      document.getElementById("ratingInput").value = "5";
-      document.getElementById("nameInput").value = "";
-      // إشارة نجاح صغيرة
-      alert("تم نشر المراجعة — شكرًا لمساهمتك الحقيقية!");
-    });
-
-    // معاينة
-    document.getElementById("previewBtn").addEventListener("click", ()=>{
-      const name = document.getElementById("nameInput").value.trim() || "اسم تجريبي";
-      const rating = parseInt(document.getElementById("ratingInput").value,10) || 5;
-      const comment = document.getElementById("commentInput").value.trim() || "هذا نص معاينة للتعليق.";
-      const preview = createReviewElement({name, rating, comment, time: new Date().toLocaleString("ar-EG")});
-      // نافذة معاينة بسيطة
-      const w = window.open("", "_blank", "width=420,height=360");
-      if(w){
-        w.document.write(`<html><head><meta charset="utf-8"><title>معاينة المراجعة</title></head><body style="background:#071029;color:#e6eef6;font-family:sans-serif;padding:16px">${preview.outerHTML}</body></html>`);
-        w.document.close();
-      }else alert("المنبثق محظور - افتح صفحة جديدة يدوياً لمعاينة.");
-    });
-
-    // أزرار توليد ومسح
-    document.getElementById("seedBtn").addEventListener("click", ()=>{
-      if(confirm("هل تريد توليد 5 مراجعين تجريبيين في هذه الصفحة؟ (للاختبار فقط)")) seedDemoReviews();
-    });
-    document.getElementById("clearBtn").addEventListener("click", ()=>{
-      if(confirm("سيتم مسح كل المراجعات المخزنة محلياً. هل متابعة؟")){
-        localStorage.removeItem(STORAGE_KEY);
-        renderReviews();
-      }
-    });
-
-    // تهيئة أولية: إذا لا توجد مراجعات، نضع 5 أمثلة افتراضية
-    (function init(){
-      if(!localStorage.getItem(STORAGE_KEY)){
-        // نموذج أولي: 5 مراجعات واقعية للعرض
-        const samples = [
-          {name:"سامر حسن", rating:5, comment:"جهاز رائع وجودة تصنيعه ممتازة، أنصح به بشدة", time:new Date().toLocaleString("ar-EG")},
-          {name:"لمياء علي", rating:4, comment:"اشتريت المنتج للاستخدام المنزلي، الجودة كويسة، التركيب كان سهل.", time:new Date().toLocaleString("ar-EG")},
-          {name:"أحمد خالد", rating:5, comment:"خفيف وسريع ومناسب للتنقل. الصوت واضح.", time:new Date().toLocaleString("ar-EG")},
-          {name:"نور سعيد", rating:4, comment:"التصميم شيك ويمسك الانتباه، لكن الألوان تختلف قليلاً.", time:new Date().toLocaleString("ar-EG")},
-          {name:"كريم محمود", rating:3, comment:"المنتج يؤدي الغرض ولكن واجهت مشكلة مع التغليف.", time:new Date().toLocaleString("ar-EG")}
+        const positiveComments = [
+            "موقع مذهل! تصميم رائع ومحتوى مفيد 🌟",
+            "تجربة مستخدم استثنائية، أنصح به بشدة 💯",
+            "خدمة ممتازة وسريعة، شكراً لكم 👏",
+            "أفضل موقع استخدمته هذا العام 🚀",
+            "واجهة جميلة وسهلة الاستخدام 👍",
+            "دعم فني رائع وردود سريعة 💫",
+            "محتوى غني ومفيد للغاية 📚",
+            "أسعار تنافسية وجودة عالية 💎",
+            "تحديثات مستمرة وتحسينات دائمة 🔄",
+            "يستحق الخمس نجوم بجدارة ⭐⭐⭐⭐⭐"
         ];
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(samples));
-      }
-      renderReviews();
-    })();
-  </script>
+
+        // تغيير التقييمات
+        function changeRating(type, value) {
+            ratings[type] = Math.max(1, ratings[type] + value);
+            document.getElementById(`${type}Count`).textContent = ratings[type];
+        }
+
+        // إضافة تعليق مخصص
+        function addCustomComment() {
+            const commentInput = document.getElementById('customComment');
+            const comment = commentInput.value.trim();
+            
+            if (comment) {
+                const commentsList = document.getElementById('commentsList');
+                const newComment = document.createElement('div');
+                newComment.className = 'auto-comment';
+                newComment.textContent = comment;
+                commentsList.appendChild(newComment);
+                commentInput.value = '';
+                
+                addLog('✓ تم إضافة تعليق مخصص', 'success');
+            }
+        }
+
+        // إضافة سجل
+        function addLog(message, type = 'info') {
+            const logArea = document.getElementById('logArea');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            logEntry.textContent = `• ${message}`;
+            logArea.appendChild(logEntry);
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+
+        // تحديث شريط التقدم
+        function updateProgress(percent) {
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percent + '%';
+        }
+
+        // بدء عملية التقييم
+        document.getElementById('startBtn').addEventListener('click', function() {
+            const url = document.getElementById('siteUrl').value.trim();
+            const statusArea = document.getElementById('statusArea');
+            
+            if (!url) {
+                statusArea.innerHTML = '⚠️ يرجى إدخال رابط الموقع أولاً';
+                statusArea.style.background = '#ffebee';
+                statusArea.style.color = '#c62828';
+                statusArea.style.borderColor = '#f44336';
+                return;
+            }
+
+            if (!url.startsWith('http')) {
+                statusArea.innerHTML = '⚠️ يرجى إدخال رابط صحيح يبدأ بـ http أو https';
+                statusArea.style.background = '#ffebee';
+                statusArea.style.color = '#c62828';
+                statusArea.style.borderColor = '#f44336';
+                return;
+            }
+
+            statusArea.innerHTML = '🚀 بدء عملية التقييم الآلي...';
+            statusArea.style.background = '#e3f2fd';
+            statusArea.style.color = '#1565c0';
+            statusArea.style.borderColor = '#2196f3';
+
+            // محاكاة عملية التقييم
+            simulateRatingProcess(url);
+        });
+
+        // محاكاة عملية التقييم
+        function simulateRatingProcess(url) {
+            let progress = 0;
+            updateProgress(progress);
+            
+            const steps = [
+                { delay: 1000, message: '🔍 جاري تحليل الموقع...', progress: 10 },
+                { delay: 2000, message: '👤 جاري إنشاء حسابات وهمية...', progress: 25 },
+                { delay: 1500, message: '🔐 جاري تسجيل الدخول تلقائياً...', progress: 40 },
+                { delay: 3000, message: `⭐ جاري إضافة ${ratings.positive} تقييم إيجابي...`, progress: 60 },
+                { delay: 2500, message: `💬 جاري نشر ${ratings.comments} تعليق إيجابي...`, progress: 80 },
+                { delay: 2000, message: '📊 جاري تحديث إحصائيات التقييم...', progress: 95 },
+                { delay: 1000, message: '✅ تم الانتهاء من عملية التقييم بنجاح!', progress: 100 }
+            ];
+
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    addLog(step.message, 'success');
+                    updateProgress(step.progress);
+                    
+                    if (index === steps.length - 1) {
+                        document.getElementById('statusArea').innerHTML = 
+                            `🎉 تم تقييم الموقع ${url} بنجاح!<br>
+                             👍 ${ratings.positive} تقييم إيجابي | 💬 ${ratings.comments} تعليق | ⭐ ${ratings.stars}/5 نجوم`;
+                    }
+                }, step.delay);
+            });
+
+            // إضافة تعليقات عشوائية أثناء العملية
+            for (let i = 0; i < ratings.comments; i++) {
+                setTimeout(() => {
+                    const randomComment = positiveComments[Math.floor(Math.random() * positiveComments.length)];
+                    addLog(`💬 نشر تعليق: "${randomComment}"`, 'info');
+                }, 4000 + (i * 200));
+            }
+        }
+
+        // إضافة بعض السجلات الأولية
+        setTimeout(() => {
+            addLog('✓ تم تحميل جميع المكونات بنجاح', 'success');
+            addLog('✓ جاهز لبدء عملية التقييم', 'info');
+        }, 1000);
+    </script>
 </body>
 </html>
