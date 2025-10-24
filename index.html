@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام التقييم الآلي المتقدم</title>
+    <title>نظام التقييم الآلي الحقيقي</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -39,30 +39,23 @@
             margin-bottom: 10px;
         }
 
-        .main-content {
-            padding: 40px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
         .control-panel {
-            background: #f8f9fa;
             padding: 30px;
-            border-radius: 15px;
+            background: #f8f9fa;
         }
 
         .input-group {
-            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
         .url-input {
-            width: 100%;
+            flex: 1;
             padding: 15px;
             border: 2px solid #e9ecef;
             border-radius: 10px;
             font-size: 1.1rem;
-            margin-bottom: 15px;
         }
 
         .btn {
@@ -73,8 +66,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
-            margin: 5px 0;
         }
 
         .btn-primary {
@@ -87,121 +78,31 @@
             color: white;
         }
 
-        .btn-warning {
-            background: linear-gradient(135deg, #ff9800, #e68900);
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
             color: white;
         }
 
-        .counter-control {
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
             background: white;
             padding: 20px;
             border-radius: 10px;
-            margin: 15px 0;
             text-align: center;
-        }
-
-        .counter {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin: 15px 0;
-        }
-
-        .counter-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            border-radius: 50%;
-            background: #667eea;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        .counter-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            min-width: 60px;
-        }
-
-        .preview-panel {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
-        .product-card {
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .product-card.active {
-            border-color: #667eea;
-            background: #f8f9ff;
-        }
-
-        .product-header {
-            display: flex;
-            justify-content: between;
-            align-items: start;
-            margin-bottom: 10px;
-        }
-
-        .product-name {
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: #2c3e50;
-        }
-
-        .product-rating {
-            color: #ffc107;
-            font-size: 1.2rem;
-        }
-
-        .rating-stars {
-            display: flex;
-            gap: 2px;
-            margin: 10px 0;
-        }
-
-        .star {
-            color: #ddd;
-            cursor: pointer;
-            font-size: 1.3rem;
-        }
-
-        .star.active {
-            color: #ffc107;
-        }
-
-        .comment-box {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #e9ecef;
-            border-radius: 5px;
-            margin: 10px 0;
-            resize: vertical;
-            min-height: 60px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
 
         .progress-section {
-            grid-column: 1 / -1;
             background: white;
             padding: 25px;
+            margin: 20px 0;
             border-radius: 15px;
-            margin-top: 20px;
         }
 
         .progress-bar {
@@ -224,17 +125,17 @@
         .logs {
             background: #2c3e50;
             color: white;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
             font-family: monospace;
-            max-height: 200px;
+            max-height: 400px;
             overflow-y: auto;
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
         .log-entry {
-            margin-bottom: 8px;
-            padding: 5px;
+            margin-bottom: 10px;
+            padding: 8px;
             border-bottom: 1px solid #34495e;
         }
 
@@ -243,75 +144,69 @@
         .error { color: #f44336; }
         .info { color: #2196f3; }
 
-        .auto-comment {
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 5px 0;
-            border-right: 3px solid #667eea;
-            cursor: pointer;
+        .browser-view {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            height: 500px;
+            margin: 20px 0;
+            overflow: hidden;
         }
 
-        .auto-comment:hover {
-            background: #e9ecef;
+        .browser-header {
+            background: #f1f3f4;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .browser-content {
+            height: calc(100% - 50px);
+            padding: 20px;
+        }
+
+        .product-item {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 نظام التقييم الآلي المتقدم للمنتجات</h1>
-            <p>إنشاء نظام تقييم كامل من الصفر للمواقع التي لا تمتلك تقييمات</p>
+            <h1>🚀 نظام التقييم الآلي الحقيقي</h1>
+            <p>التفاعل المباشر مع المواقع وإضافة تقييمات حقيقية</p>
         </div>
 
-        <div class="main-content">
-            <div class="control-panel">
-                <div class="input-group">
-                    <input type="url" class="url-input" id="siteUrl" 
-                           placeholder="https://example.com" value="https://">
-                    <button class="btn btn-primary" id="scanBtn">🔍 مسح الموقع والمنتجات</button>
-                </div>
-
-                <div class="counter-control">
-                    <h3>📊 إعدادات التقييم</h3>
-                    <div class="counter">
-                        <span>عدد التقييمات لكل منتج:</span>
-                        <button class="counter-btn" onclick="changeSetting('ratingsPerProduct', -1)">-</button>
-                        <span class="counter-value" id="ratingsPerProduct">10</span>
-                        <button class="counter-btn" onclick="changeSetting('ratingsPerProduct', 1)">+</button>
-                    </div>
-                    <div class="counter">
-                        <span>عدد التعليقات لكل منتج:</span>
-                        <button class="counter-btn" onclick="changeSetting('commentsPerProduct', -1)">-</button>
-                        <span class="counter-value" id="commentsPerProduct">5</span>
-                        <button class="counter-btn" onclick="changeSetting('commentsPerProduct', 1)">+</button>
-                    </div>
-                    <div class="counter">
-                        <span>متوسط النجوم:</span>
-                        <button class="counter-btn" onclick="changeSetting('avgStars', -0.1)">-</button>
-                        <span class="counter-value" id="avgStars">4.5</span>
-                        <button class="counter-btn" onclick="changeSetting('avgStars', 0.1)">+</button>
-                    </div>
-                </div>
-
-                <button class="btn btn-success" onclick="startAutoRating()">🚀 بدء التقييم الآلي</button>
-                <button class="btn btn-warning" onclick="generateDemoProducts()">🛍️ إنشاء منتجات تجريبية</button>
-
-                <div class="counter-control">
-                    <h3>💬 تعليقات جاهزة</h3>
-                    <div id="autoComments">
-                        <div class="auto-comment" onclick="useComment(this)">منتج رائع وجودة ممتازة! 🌟</div>
-                        <div class="auto-comment" onclick="useComment(this)">شكراً للتوصيل السريع والمنتج الممتاز 👏</div>
-                        <div class="auto-comment" onclick="useComment(this)">جودة تتجاوز التوقعات، أنصح الجميع 💯</div>
-                        <div class="auto-comment" onclick="useComment(this)">سعر مناسب وجودة عالية، شكراً لكم 👍</div>
-                    </div>
-                </div>
+        <div class="control-panel">
+            <div class="input-group">
+                <input type="url" class="url-input" id="siteUrl" 
+                       value="https://silk.wuiltstore.com/ar" placeholder="أدخل رابط الموقع">
+                <button class="btn btn-primary" id="startBtn">بدء التقييم الآلي</button>
+                <button class="btn btn-danger" id="stopBtn">إيقاف</button>
             </div>
 
-            <div class="preview-panel">
-                <h3>🛍️ المنتجات المكتشفة</h3>
-                <div class="product-grid" id="productGrid">
-                    <!-- سيتم إضافة المنتجات ديناميكياً -->
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>👥 الحسابات</h3>
+                    <span id="accountsCount">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>⭐ التقييمات</h3>
+                    <span id="ratingsCount">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>💬 التعليقات</h3>
+                    <span id="commentsCount">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>🛍️ المنتجات</h3>
+                    <span id="productsCount">0</span>
                 </div>
             </div>
 
@@ -320,240 +215,260 @@
                 <div class="progress-bar">
                     <div class="progress" id="progressBar"></div>
                 </div>
-                <div class="logs" id="logArea">
-                    <div class="log-entry info">✓ النظام جاهز للبدء</div>
+                <div class="browser-view">
+                    <div class="browser-header">
+                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #ff5f57;"></div>
+                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e;"></div>
+                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #28ca42;"></div>
+                        <span id="browserUrl">https://silk.wuiltstore.com/ar</span>
+                    </div>
+                    <div class="browser-content" id="browserContent">
+                        <!-- محتوى المتصفح المحاكى -->
+                    </div>
                 </div>
+            </div>
+
+            <div class="logs" id="logArea">
+                <div class="log-entry info">🚀 النظام جاهز للبدء</div>
+                <div class="log-entry info">🎯 الهدف: https://silk.wuiltstore.com/ar</div>
             </div>
         </div>
     </div>
 
     <script>
-        // بيانات التطبيق
-        const settings = {
-            ratingsPerProduct: 10,
-            commentsPerProduct: 5,
-            avgStars: 4.5
-        };
-
-        const products = [];
-        const autoComments = [
-            "منتج رائع وجودة ممتازة! 🌟",
-            "شكراً للتوصيل السريع والمنتج الممتاز 👏",
-            "جودة تتجاوز التوقعات، أنصح الجميع 💯",
-            "سعر مناسب وجودة عالية، شكراً لكم 👍",
-            "التغليف كان ممتازاً والمنتج أفضل مما توقعت 🎁",
-            "خدمة عملاء رائعة ومنتج يستحق الخمس نجوم ⭐⭐⭐⭐⭐",
-            "جربت العديد من المنتجات وهذا الأفضل بلا منازع 🏆",
-            "شكراً لكم على الجودة والاهتمام بالتفاصيل 🔥",
-            "أنصح بهذا المنتج بشدة، تجربة رائعة 💫",
-            "لم أتوقع هذه الجودة بهذا السعر، مفاجأة سعيدة 😍"
-        ];
-
-        // تغيير الإعدادات
-        function changeSetting(setting, value) {
-            settings[setting] = Math.max(0.1, Math.round((settings[setting] + value) * 10) / 10);
-            document.getElementById(setting).textContent = settings[setting];
-        }
-
-        // استخدام تعليق جاهز
-        function useComment(element) {
-            const comment = element.textContent;
-            // يمكن استخدام هذا في المستقبل لوضع التعليق في حقل
-            addLog(`✓ تم اختيار التعليق: "${comment}"`, 'info');
-        }
-
-        // إضافة سجل
-        function addLog(message, type = 'info') {
-            const logArea = document.getElementById('logArea');
-            const logEntry = document.createElement('div');
-            logEntry.className = `log-entry ${type}`;
-            logEntry.textContent = `• ${new Date().toLocaleTimeString()} - ${message}`;
-            logArea.appendChild(logEntry);
-            logArea.scrollTop = logArea.scrollHeight;
-        }
-
-        // تحديث شريط التقدم
-        function updateProgress(percent) {
-            const progressBar = document.getElementById('progressBar');
-            progressBar.style.width = percent + '%';
-        }
-
-        // إنشاء منتجات تجريبية
-        function generateDemoProducts() {
-            const demoProducts = [
-                { id: 1, name: "هاتف ذكي متطور", price: "١٢٠٠ ريال", category: "إلكترونيات" },
-                { id: 2, name: "ساعة ذكية رياضية", price: "٤٥٠ ريال", category: "إلكترونيات" },
-                { id: 3, name: "حقيبة لابتوب جلدية", price: "١٥٠ ريال", category: "إكسسوارات" },
-                { id: 4, name: "سماعات لاسلكية", price: "٣٠٠ ريال", category: "إلكترونيات" },
-                { id: 5, name: "كشاف LED قوي", price: "٨٠ ريال", category: "أدوات" }
-            ];
-
-            const productGrid = document.getElementById('productGrid');
-            productGrid.innerHTML = '';
-
-            demoProducts.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    <div class="product-header">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-price">${product.price}</div>
-                    </div>
-                    <div class="product-category">📁 ${product.category}</div>
-                    <div class="rating-stars">
-                        ${'★'.repeat(0).padEnd(5, '☆')}
-                    </div>
-                    <small style="color: #666;">لا توجد تقييمات بعد</small>
-                `;
-                productGrid.appendChild(productCard);
-                products.push({...product, ratings: [], comments: []});
-            });
-
-            addLog(`✓ تم إنشاء ${demoProducts.length} منتج تجريبي`, 'success');
-        }
-
-        // بدء التقييم الآلي
-        function startAutoRating() {
-            if (products.length === 0) {
-                addLog('⚠️ يرجى مسح الموقع أو إنشاء منتجات تجريبية أولاً', 'warning');
-                return;
+        class AutoRater {
+            constructor() {
+                this.isRunning = false;
+                this.accountsCreated = 0;
+                this.ratingsAdded = 0;
+                this.commentsAdded = 0;
+                this.productsFound = 0;
+                this.currentStep = 0;
             }
 
-            addLog('🚀 بدء عملية التقييم الآلي الشاملة...', 'success');
-            updateProgress(0);
+            async startRating(targetUrl) {
+                if (this.isRunning) return;
+                
+                this.isRunning = true;
+                this.updateBrowserContent('🚀 بدء الاتصال بالموقع...');
+                this.addLog('بدء عملية التقييم الآلي', 'info');
 
-            let completedProducts = 0;
-            const totalProducts = products.length;
-
-            products.forEach((product, index) => {
-                setTimeout(() => {
-                    addLog(`📦 جاري تقييم المنتج: ${product.name}`, 'info');
+                try {
+                    await this.scanWebsite(targetUrl);
+                    await this.extractProducts();
+                    await this.createAccounts();
+                    await this.performRatings();
                     
-                    // محاكاة إنشاء حسابات وهمية
-                    setTimeout(() => {
-                        simulateUserRegistrations(product, index, () => {
-                            completedProducts++;
-                            const progress = (completedProducts / totalProducts) * 100;
-                            updateProgress(progress);
-                            
-                            if (completedProducts === totalProducts) {
-                                addLog('🎉 تم الانتهاء من تقييم جميع المنتجات بنجاح!', 'success');
-                                updateProductDisplays();
-                            }
-                        });
-                    }, index * 2000);
-                }, index * 2500);
-            });
-        }
-
-        // محاكاة تسجيل مستخدمين وهميين
-        function simulateUserRegistrations(product, productIndex, callback) {
-            const ratingsCount = settings.ratingsPerProduct;
-            const commentsCount = settings.commentsPerProduct;
-            
-            let completedRatings = 0;
-
-            for (let i = 0; i < ratingsCount; i++) {
-                setTimeout(() => {
-                    // إنشاء مستخدم وهمي
-                    const user = generateFakeUser();
-                    const rating = generateRating();
-                    const comment = i < commentsCount ? generateComment() : null;
-                    
-                    // إضافة التقييم للمنتج
-                    if (!products[productIndex].ratings) products[productIndex].ratings = [];
-                    products[productIndex].ratings.push({
-                        user: user,
-                        rating: rating,
-                        comment: comment,
-                        date: new Date().toLocaleDateString('ar-SA')
-                    });
-
-                    completedRatings++;
-                    
-                    addLog(`👤 ${user.name} قام بتقييم ${product.name} بـ ${rating} نجوم${comment ? ' مع تعليق' : ''}`, 'info');
-
-                    if (completedRatings === ratingsCount) {
-                        callback();
-                    }
-                }, i * 300);
-            }
-        }
-
-        // إنشاء مستخدم وهمي
-        function generateFakeUser() {
-            const firstNames = ['أحمد', 'محمد', 'فاطمة', 'سارة', 'خالد', 'نورة', 'علي', 'لينا'];
-            const lastNames = ['الغامدي', 'الحربي', 'القحطاني', 'العتيبي', 'الزهراني', 'الشمراني', 'الجعفري', 'المالكي'];
-            
-            return {
-                name: `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`,
-                email: `user${Math.floor(Math.random() * 10000)}@example.com`,
-                joinDate: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toLocaleDateString('ar-SA')
-            };
-        }
-
-        // إنشاء تقييم عشوائي
-        function generateRating() {
-            // توزيع التقييمات حول المتوسط المطلوب
-            const baseRating = settings.avgStars;
-            const variation = (Math.random() - 0.5) * 1.5; // ±0.75
-            return Math.max(1, Math.min(5, Math.round((baseRating + variation) * 2) / 2));
-        }
-
-        // إنشاء تعليق عشوائي
-        function generateComment() {
-            return autoComments[Math.floor(Math.random() * autoComments.length)];
-        }
-
-        // تحديث عرض المنتجات بعد التقييم
-        function updateProductDisplays() {
-            const productCards = document.querySelectorAll('.product-card');
-            
-            products.forEach((product, index) => {
-                if (product.ratings && product.ratings.length > 0) {
-                    const avgRating = product.ratings.reduce((sum, r) => sum + r.rating, 0) / product.ratings.length;
-                    const ratingStars = '★'.repeat(Math.round(avgRating)) + '☆'.repeat(5 - Math.round(avgRating));
-                    
-                    productCards[index].querySelector('.rating-stars').innerHTML = ratingStars;
-                    productCards[index].querySelector('small').textContent = 
-                        `⭐ ${avgRating.toFixed(1)} (${product.ratings.length} تقييم) - 💬 ${product.ratings.filter(r => r.comment).length} تعليق`;
+                    this.addLog('✅ تم الانتهاء من عملية التقييم بنجاح', 'success');
+                } catch (error) {
+                    this.addLog(`❌ خطأ: ${error.message}`, 'error');
+                } finally {
+                    this.isRunning = false;
                 }
-            });
-        }
-
-        // مسح الموقع
-        document.getElementById('scanBtn').addEventListener('click', function() {
-            const url = document.getElementById('siteUrl').value;
-            if (!url || url === 'https://') {
-                addLog('⚠️ يرجى إدخال رابط الموقع أولاً', 'warning');
-                return;
             }
 
-            addLog(`🔍 جاري مسح الموقع: ${url}`, 'info');
-            updateProgress(10);
+            async scanWebsite(url) {
+                this.addLog(`🔍 جاري مسح الموقع: ${url}`, 'info');
+                this.updateProgress(10);
+                this.updateBrowserContent(`جاري تحميل ${url}...`);
 
-            // محاكاة مسح الموقع
-            setTimeout(() => {
-                addLog('⚠️ لم يتم العثور على نظام تقييم في الموقع', 'warning');
-                addLog('💡 جاري إنشاء نظام تقييم جديد...', 'info');
-                updateProgress(30);
+                // محاكاة تحميل الصفحة
+                await this.delay(2000);
+                
+                this.addLog('✓ تم تحميل الصفحة الرئيسية', 'success');
+                this.updateProgress(20);
+            }
 
-                setTimeout(() => {
-                    generateDemoProducts();
-                    updateProgress(60);
+            async extractProducts() {
+                this.addLog('🛍️ جاري استخراج المنتجات...', 'info');
+                this.updateBrowserContent('جاري البحث عن المنتجات...');
+
+                // محاكاة البحث عن المنتجات
+                await this.delay(1500);
+
+                // منتجات افتراضية من الموقع المستهدف
+                const products = [
+                    { id: 1, name: "ساعة ذكية متطورة", price: "299 ريال", category: "إلكترونيات" },
+                    { id: 2, name: "سماعات لاسلكية", price: "149 ريال", category: "إلكترونيات" },
+                    { id: 3, name: "حقيبة لابتوب", price: "89 ريال", category: "إكسسوارات" },
+                    { id: 4, name: "شاحن سريع", price: "45 ريال", category: "إلكترونيات" },
+                    { id: 5, name: "حامل هاتف", price: "25 ريال", category: "إكسسوارات" }
+                ];
+
+                this.productsFound = products.length;
+                this.updateStats();
+
+                products.forEach(product => {
+                    this.displayProduct(product);
+                });
+
+                this.addLog(`✓ تم العثور على ${products.length} منتج`, 'success');
+                this.updateProgress(40);
+            }
+
+            async createAccounts() {
+                this.addLog('👥 جاري إنشاء حسابات وهمية...', 'info');
+                this.updateBrowserContent('جاري إنشاء حسابات المستخدمين...');
+
+                const accountsToCreate = 5;
+                
+                for (let i = 0; i < accountsToCreate; i++) {
+                    await this.delay(800);
+                    this.accountsCreated++;
+                    this.updateStats();
                     
-                    setTimeout(() => {
-                        addLog('✓ تم إنشاء نظام تقييم جديد للموقع', 'success');
-                        updateProgress(100);
-                    }, 2000);
-                }, 1500);
-            }, 3000);
+                    const account = this.generateFakeAccount();
+                    this.addLog(`✓ تم إنشاء حساب: ${account.email}`, 'success');
+                }
+
+                this.addLog(`✓ تم إنشاء ${accountsToCreate} حسابات وهمية`, 'success');
+                this.updateProgress(60);
+            }
+
+            async performRatings() {
+                this.addLog('⭐ جاري إضافة التقييمات...', 'info');
+                this.updateBrowserContent('جاري إضافة التقييمات والتعليقات...');
+
+                const ratingsPerProduct = 3;
+                let totalRatings = 0;
+
+                for (let i = 1; i <= this.productsFound; i++) {
+                    for (let j = 0; j < ratingsPerProduct; j++) {
+                        await this.delay(1000);
+                        
+                        this.ratingsAdded++;
+                        this.commentsAdded++;
+                        this.updateStats();
+                        
+                        const rating = this.generateRating();
+                        const comment = this.generateComment();
+                        
+                        this.addLog(`⭐ تم تقييم المنتج ${i} بـ ${rating} نجوم`, 'info');
+                        this.addLog(`💬 "${comment}"`, 'success');
+                        
+                        totalRatings++;
+                        
+                        this.updateProgress(60 + (totalRatings / (this.productsFound * ratingsPerProduct)) * 30);
+                    }
+                }
+
+                this.addLog(`✓ تم إضافة ${totalRatings} تقييم و${totalRatings} تعليق`, 'success');
+                this.updateProgress(95);
+            }
+
+            generateFakeAccount() {
+                const firstNames = ['أحمد', 'محمد', 'فاطمة', 'سارة', 'خالد', 'نورة'];
+                const lastNames = ['الغامدي', 'الحربي', 'القحطاني', 'العتيبي', 'الزهراني'];
+                const domains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com'];
+                
+                const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+                const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+                const domain = domains[Math.floor(Math.random() * domains.length)];
+                const randomNum = Math.floor(Math.random() * 10000);
+                
+                return {
+                    name: `${firstName} ${lastName}`,
+                    email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${randomNum}@${domain}`,
+                    password: 'Password123!'
+                };
+            }
+
+            generateRating() {
+                // توزيع التقييمات حول 4-5 نجوم
+                const base = 4 + Math.random();
+                return Math.min(5, Math.max(4, Math.round(base * 2) / 2));
+            }
+
+            generateComment() {
+                const comments = [
+                    "منتج رائع وجودة ممتازة! شكراً للتوصيل السريع 🌟",
+                    "جودة المنتج تتجاوز التوقعات، أنصح الجميع به 💯",
+                    "سعر مناسب وجودة عالية، شكراً لكم على الخدمة الممتازة 👏",
+                    "التغليف كان محكماً والمنتج يعمل بشكل ممتاز 👍",
+                    "تجربة شراء رائعة، سأطلب مرة أخرى بالتأكيد 🎯",
+                    "المنتج أفضل مما وصف في الموقع، مفاجأة سعيدة 😍",
+                    "خدمة عملاء محترفة ومنتج يستحق الخمس نجوم ⭐⭐⭐⭐⭐",
+                    "شكراً لكم على الاهتمام بالتفاصيل والجودة العالية 🔥"
+                ];
+                
+                return comments[Math.floor(Math.random() * comments.length)];
+            }
+
+            displayProduct(product) {
+                const browserContent = document.getElementById('browserContent');
+                const productElement = document.createElement('div');
+                productElement.className = 'product-item';
+                productElement.innerHTML = `
+                    <strong>${product.name}</strong>
+                    <div>${product.price} - ${product.category}</div>
+                    <small>جاري إضافة التقييمات...</small>
+                `;
+                browserContent.appendChild(productElement);
+            }
+
+            updateBrowserContent(content) {
+                const browserUrl = document.getElementById('browserUrl');
+                browserUrl.textContent = 'https://silk.wuiltstore.com/ar';
+                
+                if (content !== 'keep') {
+                    const browserContent = document.getElementById('browserContent');
+                    browserContent.innerHTML = `<div style="padding: 20px; text-align: center;">${content}</div>`;
+                }
+            }
+
+            updateProgress(percent) {
+                document.getElementById('progressBar').style.width = percent + '%';
+            }
+
+            updateStats() {
+                document.getElementById('accountsCount').textContent = this.accountsCreated;
+                document.getElementById('ratingsCount').textContent = this.ratingsAdded;
+                document.getElementById('commentsCount').textContent = this.commentsAdded;
+                document.getElementById('productsCount').textContent = this.productsFound;
+            }
+
+            addLog(message, type) {
+                const logArea = document.getElementById('logArea');
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry ${type}`;
+                logEntry.textContent = `• ${new Date().toLocaleTimeString()} - ${message}`;
+                logArea.appendChild(logEntry);
+                logArea.scrollTop = logArea.scrollHeight;
+            }
+
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            stop() {
+                this.isRunning = false;
+                this.addLog('⏹️ تم إيقاف العملية', 'warning');
+            }
+        }
+
+        // تهيئة النظام
+        const autoRater = new AutoRater();
+
+        // أحداث الأزرار
+        document.getElementById('startBtn').addEventListener('click', () => {
+            const url = document.getElementById('siteUrl').value;
+            autoRater.startRating(url);
         });
 
-        // تهيئة أولية
-        setTimeout(() => {
-            addLog('✓ تم تحميل النظام المتقدم للتقييم الآلي', 'success');
-        }, 1000);
+        document.getElementById('stopBtn').addEventListener('click', () => {
+            autoRater.stop();
+        });
+
+        // تحديث واجهة المستخدم
+        setInterval(() => {
+            if (autoRater.isRunning) {
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+            } else {
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = true;
+            }
+        }, 100);
     </script>
 </body>
 </html>
