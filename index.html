@@ -3,1470 +3,567 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام الذكاء الاصطناعي المتقدم - النسخة المحترفة</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>نظام إدارة التقييمات</title>
     <style>
-        :root {
-            --primary: #667eea;
-            --primary-dark: #5a6fd8;
-            --secondary: #764ba2;
-            --success: #43e97b;
-            --warning: #ffd166;
-            --danger: #f5576c;
-            --dark: #2d3748;
-            --light: #f8f9fa;
-            --gray: #718096;
-            --gray-light: #e2e8f0;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            --radius: 12px;
-            --transition: all 0.3s ease;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
         }
 
         body {
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
             min-height: 100vh;
             padding: 20px;
-            color: var(--dark);
-            line-height: 1.6;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 20px;
-            height: calc(100vh - 40px);
-        }
-
-        /* السايدبار */
-        .sidebar {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: var(--radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .user-profile {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 2px solid var(--gray-light);
-            margin-bottom: 25px;
-        }
-
-        .avatar {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2em;
-            color: white;
-            box-shadow: var(--shadow);
-        }
-
-        .user-name {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 5px;
-        }
-
-        .user-status {
-            font-size: 0.9em;
-            color: var(--success);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .quick-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .quick-btn {
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background: var(--light);
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: right;
-            font-size: 0.95em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--dark);
-            font-weight: 500;
-        }
-
-        .quick-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateX(-5px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .history-section {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px 0;
-        }
-
-        .section-title {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .history-item {
-            padding: 12px;
-            border-bottom: 1px solid var(--gray-light);
-            cursor: pointer;
-            transition: var(--transition);
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-
-        .history-item:hover {
-            background: var(--light);
-        }
-
-        .history-preview {
-            font-size: 0.9em;
-            color: var(--gray);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .history-time {
-            font-size: 0.8em;
-            color: var(--gray);
-            margin-top: 5px;
-        }
-
-        /* المحتوى الرئيسي */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
         }
 
         header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 25px 30px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            color: var(--primary);
-            font-size: 2.4em;
-            font-weight: 800;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .subtitle {
-            color: var(--gray);
-            font-size: 1.1em;
-            margin-bottom: 15px;
-        }
-
-        .self-healing-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, var(--success) 0%, #38f9d7 100%);
+            text-align: center;
+            margin-bottom: 30px;
             color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            animation: pulse 2s infinite;
-            box-shadow: 0 4px 15px rgba(67, 233, 123, 0.4);
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
             margin-bottom: 20px;
         }
 
-        .stat-box {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: var(--radius);
-            text-align: center;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .stat-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .stat-number {
-            font-size: 2.2em;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        label {
             display: block;
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            color: var(--gray);
-            margin-top: 8px;
-        }
-
-        /* منطقة المحادثة */
-        .chat-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .chat-header {
-            padding: 20px 25px;
-            border-bottom: 2px solid var(--gray-light);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-title {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .mode-selector {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .mode-btn {
-            padding: 10px 18px;
-            border: 2px solid var(--primary);
-            background: white;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: var(--transition);
+            margin-bottom: 8px;
             font-weight: 600;
-            color: var(--primary);
-            font-size: 0.9em;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            color: var(--dark);
         }
 
-        .mode-btn.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border-color: transparent;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .mode-btn:hover:not(.active) {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 25px;
-            background: var(--light);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .message {
-            max-width: 80%;
-            animation: slideIn 0.4s ease-out;
-            display: flex;
-            flex-direction: column;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .user-message {
-            align-self: flex-end;
-        }
-
-        .ai-message {
-            align-self: flex-start;
-        }
-
-        .message-bubble {
-            padding: 16px 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            position: relative;
-        }
-
-        .user-message .message-bubble {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: white;
-            border-bottom-right-radius: 5px;
-        }
-
-        .ai-message .message-bubble {
-            background: white;
-            border: 1px solid var(--gray-light);
-            border-bottom-left-radius: 5px;
-        }
-
-        .message-content {
-            line-height: 1.6;
-        }
-
-        .message-time {
-            font-size: 0.8em;
-            opacity: 0.7;
-            margin-top: 8px;
-            text-align: right;
-        }
-
-        .ai-message .message-time {
-            text-align: left;
-        }
-
-        .message-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-        }
-
-        .action-btn {
-            padding: 6px 12px;
-            border: 1px solid var(--gray-light);
-            background: white;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 0.8em;
-            transition: var(--transition);
-            color: var(--gray);
-        }
-
-        .action-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        /* منطقة الإدخال */
-        .input-container {
-            background: white;
-            padding: 20px 25px;
-            border-top: 2px solid var(--gray-light);
-        }
-
-        .input-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .typing-indicator {
-            display: none;
-            align-items: center;
-            gap: 10px;
-            color: var(--gray);
-            font-size: 0.9em;
-        }
-
-        .typing-dots {
-            display: flex;
-            gap: 3px;
-        }
-
-        .typing-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--primary);
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-5px); }
-        }
-
-        .unified-input-container {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        .unified-input {
+        input, select, textarea {
             width: 100%;
-            min-height: 120px;
-            padding: 16px;
-            border: 2px solid var(--gray-light);
-            border-radius: 15px;
-            font-size: 1.1em;
-            font-family: inherit;
-            resize: vertical;
-            transition: var(--transition);
-            line-height: 1.6;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
         }
 
-        .unified-input:focus {
-            outline: none;
+        input:focus, select:focus, textarea:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .input-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
         }
 
         .btn {
-            padding: 12px 24px;
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
             border: none;
             border-radius: 10px;
-            font-size: 1em;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: all 0.3s;
+            text-align: center;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        .btn-secondary {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        .btn-block {
+            display: block;
+            width: 100%;
         }
 
         .btn-success {
-            background: linear-gradient(135deg, var(--success) 0%, #38f9d7 100%);
+            background: var(--success);
         }
 
         .btn-warning {
-            background: linear-gradient(135deg, var(--warning) 0%, #ff9a9e 100%);
+            background: var(--warning);
         }
 
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .btn-danger {
+            background: var(--danger);
         }
 
-        .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .current-mode {
-            font-size: 0.9em;
-            color: var(--gray);
+        .form-row {
             display: flex;
-            align-items: center;
-            gap: 5px;
+            gap: 15px;
         }
 
-        /* محتوى الوسائط */
-        .media-content {
-            margin-top: 15px;
-        }
-
-        .generated-image {
-            max-width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--gray-light);
-        }
-
-        .code-block {
-            background: var(--dark);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-        }
-
-        /* نظام التصحيح الذاتي */
-        .self-healing-panel {
-            background: #fff3cd;
-            border: 2px solid var(--warning);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 10px 0;
-            display: none;
-        }
-
-        .self-healing-panel.active {
-            display: block;
-        }
-
-        .healing-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .healing-title {
-            font-weight: 700;
-            color: #856404;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .healing-log {
-            max-height: 150px;
-            overflow-y: auto;
-            font-size: 0.9em;
-        }
-
-        .log-entry {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(133, 100, 4, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .log-entry:last-child {
-            border-bottom: none;
-        }
-
-        .log-time {
-            font-size: 0.8em;
-            color: #856404;
-            min-width: 60px;
-        }
-
-        .log-message {
+        .form-row .form-group {
             flex: 1;
         }
 
-        /* التجاوب */
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                display: none;
-            }
+        .review-preview {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .review-item {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+        .review-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-left: 15px;
+        }
+
+        .review-content {
+            flex: 1;
+        }
+
+        .review-author {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .review-text {
+            color: var(--gray);
+        }
+
+        .review-rating {
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+
+        .progress-container {
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            padding: 15px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8em;
-            }
-            
-            .message {
-                max-width: 95%;
-            }
-            
-            .mode-selector {
-                justify-content: center;
-            }
-            
-            .input-footer {
+            .form-row {
                 flex-direction: column;
-                gap: 15px;
+                gap: 0;
             }
             
-            .action-buttons {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .btn {
-                flex: 1;
-                justify-content: center;
+            header h1 {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- السايدبار -->
-        <div class="sidebar">
-            <div class="user-profile">
-                <div class="avatar">🤖</div>
-                <div class="user-name">المساعد الذكي</div>
-                <div class="user-status">
-                    <div class="status-dot"></div>
-                    <span>متصل وجاهز للمساعدة</span>
+        <header>
+            <h1>نظام إدارة تقييمات المنتجات</h1>
+            <p>أدخل رابط الموقع وابدأ في إنشاء تقييمات واقعية ومحترمة</p>
+        </header>
+
+        <div class="card">
+            <h2 class="card-title">إعدادات التقييمات</h2>
+            
+            <div class="form-group">
+                <label for="siteUrl">رابط الموقع</label>
+                <input type="url" id="siteUrl" placeholder="https://example.com" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reviewCount">عدد الأشخاص للتقييم</label>
+                    <select id="reviewCount">
+                        <option value="3">3 أشخاص</option>
+                        <option value="5" selected>5 أشخاص</option>
+                        <option value="10">10 أشخاص</option>
+                        <option value="15">15 أشخاص</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ratingType">نوع التقييم</label>
+                    <select id="ratingType">
+                        <option value="mixed" selected>مختلط (إيجابي وبناء)</option>
+                        <option value="positive">إيجابي فقط</option>
+                        <option value="constructive">بناء مع اقتراحات تطوير</option>
+                    </select>
                 </div>
             </div>
-
-            <div class="quick-actions">
-                <button class="quick-btn" onclick="quickAction('summarize')">
-                    <i class="fas fa-file-alt"></i>
-                    <span>تلخيص النص</span>
-                </button>
-                <button class="quick-btn" onclick="quickAction('translate')">
-                    <i class="fas fa-globe"></i>
-                    <span>ترجمة سريعة</span>
-                </button>
-                <button class="quick-btn" onclick="quickAction('explain')">
-                    <i class="fas fa-lightbulb"></i>
-                    <span>شرح مفهوم</span>
-                </button>
-                <button class="quick-btn" onclick="quickAction('code')">
-                    <i class="fas fa-code"></i>
-                    <span>كتابة كود</span>
-                </button>
-                <button class="quick-btn" onclick="quickAction('image')">
-                    <i class="fas fa-image"></i>
-                    <span>إنشاء صورة</span>
-                </button>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="createAccounts" checked>
+                    إنشاء حسابات وهمية إذا تطلب الموقع تسجيل الدخول
+                </label>
             </div>
+            
+            <button id="startProcess" class="btn btn-block">بدء عملية التقييم</button>
+        </div>
 
-            <div class="history-section">
-                <div class="section-title">
-                    <i class="fas fa-history"></i>
-                    <span>المحادثات الأخيرة</span>
+        <div class="card hidden" id="loginSection">
+            <h2 class="card-title">إعدادات تسجيل الدخول</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="loginSelector">محدد حقل اسم المستخدم</label>
+                    <input type="text" id="loginSelector" placeholder="#username أو .login-field" value="#username">
                 </div>
-                <div id="conversationHistory"></div>
+                
+                <div class="form-group">
+                    <label for="passwordSelector">محدد حقل كلمة المرور</label>
+                    <input type="text" id="passwordSelector" placeholder="#password أو .password-field" value="#password">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="loginButtonSelector">محدد زر تسجيل الدخول</label>
+                <input type="text" id="loginButtonSelector" placeholder="button[type='submit']" value="button[type='submit']">
+            </div>
+            
+            <button id="testLogin" class="btn btn-warning">اختبار تسجيل الدخول</button>
+        </div>
+
+        <div class="card hidden" id="reviewSection">
+            <h2 class="card-title">معاينة التقييمات</h2>
+            
+            <div class="form-group">
+                <label for="reviewSelector">محدد منطقة التقييم</label>
+                <input type="text" id="reviewSelector" placeholder=".review-form أو #reviews" value=".review-form">
+            </div>
+            
+            <div id="reviewsPreview" class="review-preview">
+                <!-- سيتم ملء هذا القسم ديناميكيًا -->
+            </div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalReviews">0</div>
+                    <div class="stat-label">إجمالي التقييمات</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="avgRating">0.0</div>
+                    <div class="stat-label">متوسط التقييم</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="successRate">0%</div>
+                    <div class="stat-label">معدل النجاح</div>
+                </div>
+            </div>
+            
+            <button id="startReviews" class="btn btn-success btn-block">بدء نشر التقييمات</button>
+        </div>
+
+        <div class="card hidden" id="progressSection">
+            <h2 class="card-title">تقدم العملية</h2>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div style="text-align: center; margin-top: 10px;" id="progressText">0%</div>
+            </div>
+            
+            <div id="processLog" style="margin-top: 20px; max-height: 200px; overflow-y: auto;">
+                <!-- سجل العملية -->
             </div>
         </div>
 
-        <!-- المحتوى الرئيسي -->
-        <div class="main-content">
-            <header>
-                <div class="header-top">
-                    <h1>نظام الذكاء الاصطناعي المتقدم</h1>
-                    <span class="self-healing-badge">
-                        <i class="fas fa-magic"></i>
-                        نظام التصحيح الذاتي نشط
-                    </span>
-                </div>
-                <p class="subtitle">منصة ذكية موحدة مع جميع الميزات المتقدمة في مكان واحد</p>
-                
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <span class="stat-number" id="totalRequests">0</span>
-                        <span class="stat-label">إجمالي الطلبات</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-number" id="successRate">100%</span>
-                        <span class="stat-label">معدل النجاح</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-number" id="responseTime">0.2s</span>
-                        <span class="stat-label">متوسط الاستجابة</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-number" id="systemHealth">100%</span>
-                        <span class="stat-label">صحة النظام</span>
-                    </div>
-                </div>
-            </header>
-
-            <div class="chat-container">
-                <div class="chat-header">
-                    <div class="chat-title">
-                        <i class="fas fa-comments"></i>
-                        المحادثة الذكية
-                    </div>
-                    <div class="mode-selector">
-                        <button class="mode-btn active" data-mode="auto" onclick="switchMode('auto')">
-                            <i class="fas fa-robot"></i>
-                            تلقائي
-                        </button>
-                        <button class="mode-btn" data-mode="text" onclick="switchMode('text')">
-                            <i class="fas fa-font"></i>
-                            نص
-                        </button>
-                        <button class="mode-btn" data-mode="image" onclick="switchMode('image')">
-                            <i class="fas fa-image"></i>
-                            صورة
-                        </button>
-                        <button class="mode-btn" data-mode="code" onclick="switchMode('code')">
-                            <i class="fas fa-code"></i>
-                            كود
-                        </button>
-                        <button class="mode-btn" data-mode="analyze" onclick="switchMode('analyze')">
-                            <i class="fas fa-chart-bar"></i>
-                            تحليل
-                        </button>
-                    </div>
-                </div>
-
-                <div class="self-healing-panel" id="healingPanel">
-                    <div class="healing-header">
-                        <div class="healing-title">
-                            <i class="fas fa-tools"></i>
-                            نظام التصحيح الذاتي
-                        </div>
-                        <button class="action-btn" onclick="toggleHealingPanel()">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div class="healing-log" id="healingLog"></div>
-                </div>
-
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message ai-message">
-                        <div class="message-bubble">
-                            <div class="message-content">
-                                🌟 <strong>مرحباً بك في نظام الذكاء الاصطناعي المتقدم!</strong><br><br>
-                                أنا مساعدك الذكي المتكامل الذي يمكنه مساعدتك في:<br><br>
-                                • 📝 <strong>إنشاء النصوص والمحتوى</strong> بجودة عالية<br>
-                                • 🖼️ <strong>توليد الصور والرسومات</strong> بناءً على الوصف<br>
-                                • 💻 <strong>كتابة الكود البرمجي</strong> بلغات متعددة<br>
-                                • 📊 <strong>تحليل البيانات والنصوص</strong> بدقة عالية<br>
-                                • 🔍 <strong>البحث والإجابة على الأسئلة</strong> المعقدة<br><br>
-                                فقط اكتب طلبك وسأقوم بالرد عليه تلقائياً بأفضل طريقة ممكنة!
-                            </div>
-                            <div class="message-time" id="welcomeTime"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-container">
-                    <div class="input-header">
-                        <div class="typing-indicator" id="typingIndicator">
-                            <span>جاري المعالجة والكتابة...</span>
-                            <div class="typing-dots">
-                                <div class="typing-dot"></div>
-                                <div class="typing-dot"></div>
-                                <div class="typing-dot"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="unified-input-container">
-                        <textarea 
-                            class="unified-input" 
-                            id="unifiedInput" 
-                            placeholder="اكتب رسالتك هنا... سيتم التعرف تلقائياً على نوع الطلب وتنفيذه بأفضل طريقة"
-                            oninput="autoDetectType(this.value)"
-                            onkeypress="handleKeyPress(event)"
-                        ></textarea>
-                    </div>
-
-                    <div class="input-footer">
-                        <div class="action-buttons">
-                            <button class="btn btn-primary" onclick="sendMessage()">
-                                <i class="fas fa-paper-plane"></i>
-                                إرسال
-                            </button>
-                            <button class="btn btn-secondary" onclick="clearChat()">
-                                <i class="fas fa-trash"></i>
-                                مسح المحادثة
-                            </button>
-                            <button class="btn btn-success" onclick="exportConversation()">
-                                <i class="fas fa-download"></i>
-                                حفظ المحادثة
-                            </button>
-                            <button class="btn btn-warning" onclick="toggleHealingPanel()">
-                                <i class="fas fa-tools"></i>
-                                التصحيح الذاتي
-                            </button>
-                        </div>
-                        <div class="current-mode">
-                            <i class="fas fa-cog"></i>
-                            <span id="currentMode">الوضع: التلقائي</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div id="alertArea">
+            <!-- منطقة الإشعارات -->
         </div>
     </div>
 
     <script>
-        // نظام الذكاء الاصطناعي المتقدم مع التصحيح الذاتي
-        class AdvancedAISystem {
-            constructor() {
-                this.messages = [];
-                this.currentMode = 'auto';
-                this.isProcessing = false;
-                this.selfHealingEnabled = true;
-                this.errorCount = 0;
-                this.successCount = 0;
-                this.initialize();
-            }
+        // بيانات التقييمات بالعربية
+        const reviewTemplates = {
+            positive: [
+                { rating: 5, comment: "منتج رائع وجودة ممتازة، أنصح به بشدة" },
+                { rating: 5, comment: "تجاوز توقعاتي، التوصيل كان سريعاً والمنتج ممتاز" },
+                { rating: 5, comment: "جودة تصنيع عالية وتفاصيل دقيقة، أنصح به" },
+                { rating: 5, comment: "مثالي لما أبحث عنه، سهولة الاستخدام والكفاءة عالية" },
+                { rating: 5, comment: "منتج ممتاز وتجربة شراء رائعة، شكراً لكم" }
+            ],
+            mixed: [
+                { rating: 5, comment: "منتج رائع وجودة ممتازة، أنصح به بشدة" },
+                { rating: 4, comment: "جيد جداً لكن يمكن تحسين بعض التفاصيل الصغيرة" },
+                { rating: 5, comment: "تجاوز توقعاتي، المواد المستخدمة ممتازة" },
+                { rating: 4, comment: "منتج جيد بسعره المعقول، يناسب الاحتياجات الأساسية" },
+                { rating: 3, comment: "مقبول ولكن هناك مجال للتحسين في بعض الجوانب" }
+            ],
+            constructive: [
+                { rating: 4, comment: "منتج جيد بشكل عام ولكن أتمنى تحسين خدمة التوصيل" },
+                { rating: 3, comment: "مقبول ولكن يمكن إضافة المزيد من الميزات في الإصدارات القادمة" },
+                { rating: 4, comment: "أداء جيد ولكن التغليف يحتاج تحسين" },
+                { rating: 3, comment: "فكرة المنتج جيدة ولكن التنفيذ يحتاج بعض التحسين" },
+                { rating: 4, comment: "منتج عملي ولكن الألوان المتاحة محدودة" }
+            ]
+        };
 
-            initialize() {
-                this.loadHistory();
-                this.updateDisplay();
-                this.setupEventListeners();
-                this.startHealthMonitoring();
-                this.log('✅ نظام الذكاء الاصطناعي تم تهيئته بنجاح', 'success');
+        // أسماء عربية واقعية
+        const arabicNames = [
+            "محمد أحمد", "فاطمة حسن", "أحمد خالد", "سارة علي", "عمر ناصر",
+            "ريم عبدالله", "خالد إبراهيم", "نورة سعيد", "يوسف محمد", "لينا فارس",
+            "ماجد راشد", "هدى كامل", "طارق سمير", "أميرة وليد", "بسام عادل"
+        ];
+
+        // عناصر DOM
+        const siteUrlInput = document.getElementById('siteUrl');
+        const reviewCountSelect = document.getElementById('reviewCount');
+        const ratingTypeSelect = document.getElementById('ratingType');
+        const createAccountsCheckbox = document.getElementById('createAccounts');
+        const startProcessBtn = document.getElementById('startProcess');
+        const loginSection = document.getElementById('loginSection');
+        const reviewSection = document.getElementById('reviewSection');
+        const progressSection = document.getElementById('progressSection');
+        const reviewsPreview = document.getElementById('reviewsPreview');
+        const startReviewsBtn = document.getElementById('startReviews');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const processLog = document.getElementById('processLog');
+        const alertArea = document.getElementById('alertArea');
+        const totalReviewsEl = document.getElementById('totalReviews');
+        const avgRatingEl = document.getElementById('avgRating');
+        const successRateEl = document.getElementById('successRate');
+
+        // معاينة التقييمات
+        function generateReviewsPreview() {
+            const count = parseInt(reviewCountSelect.value);
+            const type = ratingTypeSelect.value;
+            const reviews = reviewTemplates[type];
+            
+            reviewsPreview.innerHTML = '';
+            let totalRating = 0;
+            
+            for (let i = 0; i < count; i++) {
+                const reviewIndex = i % reviews.length;
+                const review = reviews[reviewIndex];
+                const name = arabicNames[i % arabicNames.length];
                 
-                // تعيين وقت الترحيب
-                document.getElementById('welcomeTime').textContent = this.formatTime(new Date());
-            }
-
-            setupEventListeners() {
-                const input = document.getElementById('unifiedInput');
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        this.sendMessage();
-                    }
-                });
-
-                // مراقبة الأخطاء
-                window.addEventListener('error', (e) => {
-                    this.handleSystemError(e.error);
-                });
-
-                window.addEventListener('unhandledrejection', (e) => {
-                    this.handleSystemError(e.reason);
-                });
-            }
-
-            async sendMessage() {
-                if (this.isProcessing) {
-                    this.log('⚠️ النظام مشغول حالياً، يرجى الانتظار', 'warning');
-                    return;
-                }
-
-                const input = document.getElementById('unifiedInput');
-                const message = input.value.trim();
-
-                if (!message) {
-                    this.showError('الرجاء إدخال نص قبل الإرسال');
-                    return;
-                }
-
-                // إضافة رسالة المستخدم
-                this.addMessage('user', message);
-                input.value = '';
-                this.showTyping();
-
-                this.isProcessing = true;
-
-                try {
-                    // محاكاة استجابة الذكاء الاصطناعي مع تحسينات
-                    const response = await this.generateAIResponse(message);
-                    
-                    this.hideTyping();
-                    this.addMessage('ai', response);
-                    this.successCount++;
-                    this.saveToHistory();
-                    this.updateStats();
-                    this.log('✅ تم معالجة الطلب بنجاح', 'success');
-
-                } catch (error) {
-                    this.hideTyping();
-                    this.handleError(error);
-                }
-
-                this.isProcessing = false;
-            }
-
-            async generateAIResponse(message) {
-                // محاكاة تأخير الشبكة مع تحسينات
-                const processingTime = 800 + Math.random() * 1500;
-                await new Promise(resolve => setTimeout(resolve, processingTime));
-
-                const detectedType = this.detectMessageType(message);
-                const responses = this.getResponseTemplates(detectedType, message);
-                const selectedResponse = responses[Math.floor(Math.random() * responses.length)];
+                totalRating += review.rating;
                 
-                return this.enhanceResponse(selectedResponse, message, detectedType);
-            }
-
-            detectMessageType(message) {
-                if (this.currentMode !== 'auto') return this.currentMode;
-
-                const lowerMessage = message.toLowerCase();
-                
-                if (lowerMessage.includes('صورة') || lowerMessage.includes('رسم') || 
-                    lowerMessage.includes('شكل') || lowerMessage.includes('صمم')) {
-                    return 'image';
-                } else if (lowerMessage.includes('كود') || lowerMessage.includes('برمجة') || 
-                           lowerMessage.includes('برنامج') || lowerMessage.includes('function')) {
-                    return 'code';
-                } else if (lowerMessage.includes('حلل') || lowerMessage.includes('تحليل') || 
-                           lowerMessage.includes('رأيك') || lowerMessage.includes('ما تقييمك')) {
-                    return 'analyze';
-                } else {
-                    return 'text';
-                }
-            }
-
-            getResponseTemplates(type, message) {
-                const templates = {
-                    'text': [
-                        `هذا رد مفصل على طلبك حول "${message}". لقد قمت بتحليل الموضوع من جميع الجوانب وتقديم إجابة شاملة تأخذ في الاعتبار النقاط الرئيسية والتفاصيل الدقيقة.`,
-                        
-                        `بناءً على سؤالك الدقيق، إليك التحليل الشامل: ${message}. هذا الموضوع مهم ويتطلب فهم عميق للمبادئ الأساسية والتطبيقات العملية.`,
-                        
-                        `إليك الإجابة المتكاملة على استفسارك: ${message}. لقد راعيت في الرد الدقة العلمية والشمولية مع تقديم أمثلة عملية وتطبيقات واقعية.`
-                    ],
-                    'image': [
-                        `🖼️ <strong>تم إنشاء الصورة بنجاح!</strong><br><br>
-                         بناءً على وصفك الدقيق: "${message}"، قمت بتوليد صورة فنية تعبر عن الفكرة التي تريدها.<br><br>
-                         <div class="media-content">
-                             <img src="https://picsum.photos/500/300?random=1&grayscale" alt="الصورة المولدة" class="generated-image">
-                         </div>`,
-                         
-                        `🎨 <strong>الصورة جاهزة!</strong><br><br>
-                         لقد أنشأت صورة بناءً على طلبك: ${message}. الصورة تجمع بين الإبداع الفني والدقة في التعبير البصري.<br><br>
-                         <div class="media-content">
-                             <img src="https://picsum.photos/500/300?random=2" alt="الصورة المولدة" class="generated-image">
-                         </div>`
-                    ],
-                    'code': [
-                        `💻 <strong>الكود البرمجي جاهز!</strong><br><br>
-                         إليك الحل البرمجي المتكامل لـ: ${message}<br><br>
-                         <div class="code-block">
-// كود مخصص بناءً على طلبك
-function solveProblem() {
-    // التنفيذ الأمثل
-    console.log("تم حل المشكلة بنجاح");
-    return "نتيجة مرضية";
-}
-                         </div>`,
-                         
-                        `🚀 <strong>تمت البرمجة بنجاح</strong><br><br>
-                         لقد قمت ببرمجة الحل لـ: ${message}<br><br>
-                         <div class="code-block">
-# حل متقدم ومحسن
-def advanced_solution():
-    """
-    تنفيذ متطور مع معالجة الأخطاء
-    """
-    try:
-        result = process_data()
-        return result
-    except Exception as e:
-        return f"خطأ: {e}"
-                         </div>`
-                    ],
-                    'analyze': [
-                        `🔍 <strong>تحليل متقدم</strong><br><br>
-                         <strong>النص المدخل:</strong> "${message}"<br><br>
-                         <strong>نتيجة التحليل:</strong><br>
-                         • المشاعر: إيجابية بنسبة 85%<br>
-                         • الموضوعات الرئيسية: تقنية، ابتكار، مستقبل<br>
-                         • التوصيات: مواصلة التطوير والبحث<br><br>
-                         <strong>التقييم النهائي:</strong> ممتاز مع إمكانيات تطوير كبيرة`,
-
-                        `📊 <strong>تقرير التحليل</strong><br><br>
-                         <strong>البيانات المدخلة:</strong> ${message}<br><br>
-                         <strong>الإحصائيات:</strong><br>
-                         ✓ الدقة: 94%<br>
-                         ✓ الثقة: 88%<br>
-                         ✓ التعقيد: متوسط<br><br>
-                         <strong>الخلاصة:</strong> النتائج تعكس جودة عالية مع فرص تحسين طفيفة`
-                    ]
-                };
-
-                return templates[type] || templates.text;
-            }
-
-            enhanceResponse(response, originalMessage, type) {
-                // إضافة تحسينات ديناميكية على الرد
-                const enhancements = {
-                    'text': ` ${response}<br><br>
-                             <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; border-right: 4px solid var(--primary);">
-                                 <strong>💡 ملاحظة إضافية:</strong> هل تريد المزيد من التفاصيل حول أي نقطة محددة؟`,
-                    'image': ` ${response}<br><br>
-                              <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                  <button class="action-btn" onclick="regenerateImage()"><i class="fas fa-redo"></i> إعادة生成</button>
-                                  <button class="action-btn" onclick="downloadImage()"><i class="fas fa-download"></i> تحميل</button>
-                              </div>`,
-                    'code': ` ${response}<br><br>
-                             <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                 <button class="action-btn" onclick="testCode()"><i class="fas fa-play"></i> تجربة</button>
-                                 <button class="action-btn" onclick="explainCode()"><i class="fas fa-info-circle"></i> شرح</button>
-                             </div>`
-                };
-
-                return response + (enhancements[type] || '');
-            }
-
-            addMessage(sender, content) {
-                const message = {
-                    id: Date.now(),
-                    sender,
-                    content,
-                    timestamp: new Date(),
-                    type: this.detectMessageType(content)
-                };
-
-                this.messages.push(message);
-                this.updateDisplay();
-                this.scrollToBottom();
-            }
-
-            updateDisplay() {
-                const container = document.getElementById('chatMessages');
-                // الحفاظ على رسالة الترحيب
-                const welcomeMsg = container.firstElementChild;
-                container.innerHTML = '';
-                if (welcomeMsg) container.appendChild(welcomeMsg);
-
-                this.messages.forEach(message => {
-                    const messageEl = document.createElement('div');
-                    messageEl.className = `message ${message.sender}-message`;
-                    messageEl.innerHTML = this.createMessageHTML(message);
-                    container.appendChild(messageEl);
-                });
-            }
-
-            createMessageHTML(message) {
-                return `
-                    <div class="message-bubble">
-                        <div class="message-content">${this.formatContent(message.content)}</div>
-                        <div class="message-time">${this.formatTime(message.timestamp)}</div>
-                        ${message.sender === 'ai' ? `
-                            <div class="message-actions">
-                                <button class="action-btn" onclick="copyToClipboard('${this.escapeHtml(message.content)}')">
-                                    <i class="fas fa-copy"></i> نسخ
-                                </button>
-                                <button class="action-btn" onclick="regenerateResponse(${message.id})">
-                                    <i class="fas fa-redo"></i> إعادة生成
-                                </button>
-                            </div>
-                        ` : ''}
+                const reviewItem = document.createElement('div');
+                reviewItem.className = 'review-item';
+                reviewItem.innerHTML = `
+                    <div class="review-avatar">${name.charAt(0)}</div>
+                    <div class="review-content">
+                        <div class="review-author">${name}</div>
+                        <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
+                        <div class="review-text">${review.comment}</div>
                     </div>
                 `;
-            }
-
-            formatContent(content) {
-                // تحويل Markdown بسيط إلى HTML
-                return content
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                    .replace(/`(.*?)`/g, '<code>$1</code>')
-                    .replace(/\n/g, '<br>');
-            }
-
-            escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-
-            formatTime(timestamp) {
-                return timestamp.toLocaleTimeString('ar-SA', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
-            }
-
-            scrollToBottom() {
-                const container = document.getElementById('chatMessages');
-                container.scrollTop = container.scrollHeight;
-            }
-
-            showTyping() {
-                document.getElementById('typingIndicator').style.display = 'flex';
-                this.scrollToBottom();
-            }
-
-            hideTyping() {
-                document.getElementById('typingIndicator').style.display = 'none';
-            }
-
-            switchMode(mode) {
-                this.currentMode = mode;
-                document.querySelectorAll('.mode-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
                 
-                const modeNames = {
-                    'auto': 'التلقائي',
-                    'text': 'النص',
-                    'image': 'الصور',
-                    'code': 'البرمجة',
-                    'analyze': 'التحليل'
-                };
-                
-                document.getElementById('currentMode').textContent = `الوضع: ${modeNames[mode]}`;
-                this.log(`🔄 تم التبديل إلى وضع: ${modeNames[mode]}`, 'info');
+                reviewsPreview.appendChild(reviewItem);
             }
+            
+            // تحديث الإحصائيات
+            totalReviewsEl.textContent = count;
+            avgRatingEl.textContent = (totalRating / count).toFixed(1);
+            successRateEl.textContent = '95%';
+        }
 
-            clearChat() {
-                if (this.messages.length > 0 && confirm('هل تريد مسح المحادثة الحالية؟ سيتم الاحتفاظ بالسجل.')) {
-                    this.messages = [];
-                    this.updateDisplay();
-                    this.log('🗑️ تم مسح المحادثة الحالية', 'info');
+        // بدء العملية
+        startProcessBtn.addEventListener('click', function() {
+            const siteUrl = siteUrlInput.value.trim();
+            
+            if (!siteUrl) {
+                showAlert('يرجى إدخال رابط الموقع', 'danger');
+                return;
+            }
+            
+            // إظهار أقسام إضافية
+            loginSection.classList.remove('hidden');
+            reviewSection.classList.remove('hidden');
+            
+            // إنشاء معاينة التقييمات
+            generateReviewsPreview();
+            
+            showAlert('تم تحضير نظام التقييمات بنجاح!', 'success');
+        });
+
+        // بدء نشر التقييمات
+        startReviewsBtn.addEventListener('click', function() {
+            progressSection.classList.remove('hidden');
+            simulateReviewProcess();
+        });
+
+        // محاكاة عملية التقييم
+        function simulateReviewProcess() {
+            const totalSteps = 10;
+            let currentStep = 0;
+            
+            const processSteps = [
+                "جاري فتح الموقع...",
+                "جاري التحقق من هيكل الصفحة...",
+                "جاري إنشاء الحسابات الوهمية...",
+                "جاري تسجيل الدخول...",
+                "جاري البحث عن المنتجات...",
+                "جاري تحميل صفحات المنتجات...",
+                "جاري وضع التقييم الأول...",
+                "جاري وضع التقييم الثاني...",
+                "جاري وضع التقييم الثالث...",
+                "جاري وضع التقييم الرابع...",
+                "جاري وضع التقييم الخامس...",
+                "جاري إنهاء العملية..."
+            ];
+            
+            const interval = setInterval(() => {
+                if (currentStep <= totalSteps) {
+                    const progress = (currentStep / totalSteps) * 100;
+                    progressFill.style.width = `${progress}%`;
+                    progressText.textContent = `${Math.round(progress)}%`;
                     
-                    // إضافة رسالة ترحيبية جديدة
-                    this.addMessage('ai', '🌟 المحادثة جديدة وجاهزة للبدء! كيف يمكنني مساعدتك اليوم؟');
-                }
-            }
-
-            saveToHistory() {
-                const history = {
-                    messages: this.messages,
-                    timestamp: new Date(),
-                    summary: this.messages.slice(-3).map(m => m.content.substring(0, 50) + '...').join(' | ')
-                };
-                
-                let histories = JSON.parse(localStorage.getItem('aiChatHistories') || '[]');
-                histories.unshift(history);
-                histories = histories.slice(0, 10); // الاحتفاظ بآخر 10 محادثات فقط
-                localStorage.setItem('aiChatHistories', JSON.stringify(histories));
-                this.updateHistoryDisplay();
-            }
-
-            loadHistory() {
-                const saved = localStorage.getItem('aiChatHistories');
-                if (saved) {
-                    const histories = JSON.parse(saved);
-                    if (histories.length > 0) {
-                        this.messages = histories[0].messages || [];
+                    // إضافة سجل العملية
+                    if (currentStep < processSteps.length) {
+                        addProcessLog(processSteps[currentStep]);
                     }
-                }
-            }
-
-            updateHistoryDisplay() {
-                const container = document.getElementById('conversationHistory');
-                const histories = JSON.parse(localStorage.getItem('aiChatHistories') || '[]');
-                
-                container.innerHTML = '';
-                
-                histories.forEach((history, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'history-item';
-                    item.innerHTML = `
-                        <div class="history-preview">${history.summary}</div>
-                        <div class="history-time">${new Date(history.timestamp).toLocaleString('ar-SA')}</div>
-                    `;
-                    item.onclick = () => this.loadConversation(index);
-                    container.appendChild(item);
-                });
-            }
-
-            loadConversation(index) {
-                const histories = JSON.parse(localStorage.getItem('aiChatHistories') || '[]');
-                if (histories[index]) {
-                    this.messages = histories[index].messages;
-                    this.updateDisplay();
-                    this.scrollToBottom();
-                    this.log(`📂 تم تحميل المحادثة من السجل`, 'info');
-                }
-            }
-
-            exportConversation() {
-                const content = this.messages.map(msg => 
-                    `${msg.sender === 'user' ? '👤 أنت' : '🤖 المساعد'}: ${msg.content.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '')}`
-                ).join('\n\n');
-                
-                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `محادثة-ذكاء-اصطناعي-${new Date().toISOString().split('T')[0]}.txt`;
-                a.click();
-                
-                this.addMessage('system', '✅ تم حفظ المحادثة بنجاح! يمكنك العثور على الملف في مجلد التحميلات.');
-                this.log('💾 تم تصدير المحادثة', 'success');
-            }
-
-            updateStats() {
-                document.getElementById('totalRequests').textContent = this.messages.filter(m => m.sender === 'user').length;
-                const total = this.successCount + this.errorCount;
-                const successRate = total > 0 ? Math.round((this.successCount / total) * 100) : 100;
-                document.getElementById('successRate').textContent = `${successRate}%`;
-                document.getElementById('responseTime').textContent = (0.2 + Math.random() * 0.3).toFixed(1) + 's';
-                
-                const health = 100 - (this.errorCount * 5);
-                document.getElementById('systemHealth').textContent = `${Math.max(health, 0)}%`;
-            }
-
-            // نظام التصحيح الذاتي
-            handleSystemError(error) {
-                this.errorCount++;
-                this.log(`❌ خطأ في النظام: ${error.message || error}`, 'error');
-                this.attemptAutoFix(error);
-                this.updateStats();
-            }
-
-            handleError(error) {
-                this.errorCount++;
-                const errorMessage = `❌ عذراً، حدث خطأ أثناء معالجة طلبك: ${error.message || 'خطأ غير معروف'}`;
-                this.addMessage('system', errorMessage);
-                this.log(`❌ خطأ في المعالجة: ${error.message || error}`, 'error');
-                this.attemptAutoFix(error);
-                this.updateStats();
-            }
-
-            attemptAutoFix(error) {
-                if (!this.selfHealingEnabled) return;
-
-                this.log('🔧 بدء محاولة التصحيح الذاتي...', 'info');
-                
-                setTimeout(() => {
-                    const fixes = [
-                        'إعادة تهيئة متغيرات النظام',
-                        'تنظيف ذاكرة التخزين المؤقت',
-                        'إعادة تحميل الوحدات المعطلة',
-                        'تطبيق إصلاحات الأمان',
-                        'تحسين أداء الخوارزميات'
-                    ];
                     
-                    const randomFix = fixes[Math.floor(Math.random() * fixes.length)];
-                    this.log(`✅ تم تطبيق الإصلاح: ${randomFix}`, 'success');
-                    
-                    // تحسين صحة النظام بعد الإصلاح
-                    this.successCount++;
-                    this.updateStats();
-                }, 1000);
-            }
-
-            log(message, type = 'info') {
-                const logContainer = document.getElementById('healingLog');
-                if (!logContainer) return;
-
-                const icon = {
-                    'info': '🔵',
-                    'success': '✅',
-                    'warning': '⚠️',
-                    'error': '❌'
-                }[type] || '🔵';
-
-                const entry = document.createElement('div');
-                entry.className = 'log-entry';
-                entry.innerHTML = `
-                    <span class="log-time">${new Date().toLocaleTimeString('ar-SA')}</span>
-                    <span class="log-message">${icon} ${message}</span>
-                `;
-
-                logContainer.appendChild(entry);
-                logContainer.scrollTop = logContainer.scrollHeight;
-
-                // إظهار لوحة التصحيح عند وجود أخطاء
-                if (type === 'error' || type === 'warning') {
-                    this.showHealingPanel();
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                    addProcessLog("✅ اكتملت عملية التقييم بنجاح!");
+                    showAlert('تمت عملية التقييم بنجاح!', 'success');
                 }
-            }
-
-            showHealingPanel() {
-                document.getElementById('healingPanel').classList.add('active');
-            }
-
-            hideHealingPanel() {
-                document.getElementById('healingPanel').classList.remove('active');
-            }
-
-            startHealthMonitoring() {
-                setInterval(() => {
-                    // فحص صحة النظام بشكل دوري
-                    const elements = ['unifiedInput', 'chatMessages', 'typingIndicator'];
-                    let healthy = true;
-
-                    elements.forEach(id => {
-                        if (!document.getElementById(id)) {
-                            healthy = false;
-                            this.log(`⚠️ عنصر مفقود: ${id}`, 'warning');
-                            this.recreateElement(id);
-                        }
-                    });
-
-                    if (healthy && this.errorCount > 0) {
-                        this.errorCount = Math.max(0, this.errorCount - 1);
-                        this.updateStats();
-                    }
-                }, 10000);
-            }
-
-            recreateElement(id) {
-                this.log(`🔨 إعادة إنشاء العنصر: ${id}`, 'info');
-                // في تطبيق حقيقي، هنا سيتم إعادة إنشاء العناصر المعطوبة
-            }
-
-            showError(message) {
-                const errorEl = document.createElement('div');
-                errorEl.className = 'message system-message';
-                errorEl.textContent = message;
-                document.getElementById('chatMessages').appendChild(errorEl);
-                this.scrollToBottom();
-            }
-        }
-
-        // التهيئة وإنشاء النظام
-        const aiSystem = new AdvancedAISystem();
-
-        // الدوال العامة للاستدعاء من HTML
-        function sendMessage() {
-            aiSystem.sendMessage();
-        }
-
-        function switchMode(mode) {
-            aiSystem.switchMode(mode);
-        }
-
-        function clearChat() {
-            aiSystem.clearChat();
-        }
-
-        function exportConversation() {
-            aiSystem.exportConversation();
-        }
-
-        function toggleHealingPanel() {
-            const panel = document.getElementById('healingPanel');
-            if (panel.classList.contains('active')) {
-                aiSystem.hideHealingPanel();
-            } else {
-                aiSystem.showHealingPanel();
-            }
-        }
-
-        function autoDetectType(text) {
-            // يمكن إضافة منطق كشف متقدم هنا
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        }
-
-        function quickAction(action) {
-            const prompts = {
-                'summarize': 'أريد تلخيص النص التالي: [ضع النص هنا]',
-                'translate': 'ترجم هذا النص إلى الإنجليزية: [النص المراد ترجمته]',
-                'explain': 'اشرح لي مفهوم: [المفهوم المراد شرحه]',
-                'code': 'اكتب كود لـ: [الوظيفة المطلوبة]',
-                'image': 'أنشئ صورة لـ: [وصف الصورة]'
-            };
-
-            document.getElementById('unifiedInput').value = prompts[action];
-            document.getElementById('unifiedInput').focus();
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '')).then(() => {
-                // إشعار بنسخ النص (يمكن إضافة toast notification)
-                console.log('تم نسخ النص إلى الحافظة');
-            });
-        }
-
-        function regenerateResponse(messageId) {
-            const message = aiSystem.messages.find(m => m.id === messageId);
-            if (message && message.sender === 'user') {
-                document.getElementById('unifiedInput').value = message.content;
-                sendMessage();
-            }
-        }
-
-        // وظائف وسائط إضافية
-        function regenerateImage() {
-            aiSystem.addMessage('system', '🔄 جاري إعادة إنشاء الصورة بناءً على طلبك...');
-            setTimeout(() => {
-                aiSystem.addMessage('ai', '🖼️ <strong>تم إعادة إنشاء الصورة!</strong><br><br><div class="media-content"><img src="https://picsum.photos/500/300?random=' + Date.now() + '" alt="الصورة المولدة" class="generated-image"></div>');
-            }, 1500);
-        }
-
-        function downloadImage() {
-            aiSystem.addMessage('system', '⏬ جاري تحضير الصورة للتحميل...');
-            setTimeout(() => {
-                aiSystem.addMessage('system', '✅ تم تحميل الصورة بنجاح! (محاكاة)');
             }, 1000);
         }
 
-        function testCode() {
-            aiSystem.addMessage('system', '🧪 جاري اختبار الكود البرمجي...');
-            setTimeout(() => {
-                aiSystem.addMessage('system', '✅ تم تنفيذ الكود بنجاح! جميع الاختبارات passed.');
-            }, 2000);
+        // إضافة سجل العملية
+        function addProcessLog(message) {
+            const logEntry = document.createElement('div');
+            logEntry.textContent = `• ${message}`;
+            logEntry.style.padding = '5px 0';
+            logEntry.style.borderBottom = '1px solid #f0f0f0';
+            processLog.appendChild(logEntry);
+            processLog.scrollTop = processLog.scrollHeight;
         }
 
-        function explainCode() {
-            aiSystem.addMessage('system', '📖 جاري تحضير شرح مفصل للكود...');
+        // عرض الإشعارات
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertArea.appendChild(alert);
+            
             setTimeout(() => {
-                aiSystem.addMessage('ai', '🔍 <strong>شرح الكود:</strong><br><br>هذا الكود يقوم بـ [...] ويستخدم تقنيات متقدمة في [...] مع معالجة الأخطاء بشكل احترافي.');
-            }, 1500);
+                alert.remove();
+            }, 5000);
         }
 
-        // تحديث عرض التاريخ عند التحميل
-        aiSystem.updateHistoryDisplay();
+        // تحديث المعاينة عند تغيير الإعدادات
+        reviewCountSelect.addEventListener('change', generateReviewsPreview);
+        ratingTypeSelect.addEventListener('change', generateReviewsPreview);
     </script>
 </body>
 </html>
